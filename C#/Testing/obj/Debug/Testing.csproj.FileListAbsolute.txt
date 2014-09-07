@@ -1,0 +1,7 @@
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\Testing\bin\Debug\Testing.dll
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\Testing\bin\Debug\Testing.pdb
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\Testing\bin\Debug\Cipher.pdb
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\Testing\obj\Debug\Testing.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\Testing\obj\Debug\Testing.dll
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\Testing\obj\Debug\Testing.pdb
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\Testing\bin\Debug\Cipher.dll

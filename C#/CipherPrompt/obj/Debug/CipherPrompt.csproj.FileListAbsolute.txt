@@ -1,0 +1,7 @@
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\obj\Debug\CipherPrompt.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\bin\Debug\CipherPrompt.exe
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\bin\Debug\CipherPrompt.pdb
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\bin\Debug\Cipher.dll
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\bin\Debug\Cipher.pdb
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\obj\Debug\CipherPrompt.exe
+C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\obj\Debug\CipherPrompt.pdb
