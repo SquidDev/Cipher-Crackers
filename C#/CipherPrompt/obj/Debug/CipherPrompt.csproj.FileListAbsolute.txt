@@ -1,8 +1,0 @@
-C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\obj\Debug\CipherPrompt.csprojResolveAssemblyReference.cache
-C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\bin\Debug\Cipher.dll
-C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\bin\Debug\Cipher.pdb
-C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\bin\Debug\Cipher.Prompt.exe
-C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\bin\Debug\Cipher.Prompt.pdb
-C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\bin\Debug\NDesk.Options.dll
-C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\obj\Debug\Cipher.Prompt.exe
-C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\CipherPrompt\obj\Debug\Cipher.Prompt.pdb
