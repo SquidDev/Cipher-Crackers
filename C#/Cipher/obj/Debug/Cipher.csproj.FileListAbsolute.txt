@@ -1,5 +1,0 @@
-C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\Cipher\bin\Debug\Cipher.dll
-C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\Cipher\bin\Debug\Cipher.pdb
-C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\Cipher\obj\Debug\Cipher.dll
-C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\Cipher\obj\Debug\Cipher.pdb
-C:\Users\Administrator\Documents\GitHub\Cipher-Crackers\C#\Cipher\obj\Debug\Cipher.csprojResolveAssemblyReference.cache
