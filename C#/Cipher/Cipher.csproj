@@ -47,10 +47,20 @@
     <Compile Include="Ciphers\Vigenere.cs" />
     <Compile Include="Frequency\QuadgramStatistics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MathsUtilities.cs" />
+    <Compile Include="Text\WordParser\BasicFrequencyDistribution.cs" />
+    <Compile Include="Text\WordParser\FrequencyStorage.cs" />
+    <Compile Include="Text\WordParser\IFrequencyDistribution.cs" />
+    <Compile Include="Text\WordParser\ScoreInstance.cs" />
+    <Compile Include="Text\WordParser\Storage\GuessLoader.cs" />
+    <Compile Include="Text\WordParser\Storage\Loading.cs" />
+    <Compile Include="Text\WordParser\Storage\Structures.cs" />
+    <Compile Include="Text\WordParser\WordGuesser.cs" />
+    <Compile Include="Utils\DefaultDict.cs" />
+    <Compile Include="Utils\MathsUtilities.cs" />
     <Compile Include="Text\ScoredLetterArray.cs" />
     <Compile Include="Text\TextArray.cs" />
     <Compile Include="Text\TextExtensions.cs" />
+    <Compile Include="Text\WordParser\FrequencyDistribution.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

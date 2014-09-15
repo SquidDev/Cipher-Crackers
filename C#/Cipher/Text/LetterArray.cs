@@ -35,5 +35,17 @@ namespace Cipher.Text
             // Need to throw as errors
             throw new NotImplementedException();
         }
+
+        public override string Substring(int Start, int Length)
+        {
+            int End = Start + Length;
+            StringBuilder Out = new StringBuilder();
+            for (int Pos = Start; Pos < End; Pos++)
+            {
+                Out.Append((char)(this[Pos] + 'A'));
+            }
+
+            return Out.ToString();
+        }
     }
 }

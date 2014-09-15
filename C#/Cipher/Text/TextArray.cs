@@ -57,5 +57,11 @@ namespace Cipher.Text
             Characters[A] = Characters[B];
             Characters[B] = Temp;
         }
+
+        public string Substring(int Start)
+        {
+            return Substring(Start, Length - Start);
+        }
+        public abstract string Substring(int Start, int Length);
     }
 }

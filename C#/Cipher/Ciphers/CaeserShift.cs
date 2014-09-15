@@ -1,5 +1,6 @@
 ﻿using Cipher.Frequency;
 using Cipher.Text;
+using Cipher.Utils;
 using System;
 
 namespace Cipher.Ciphers

@@ -1,4 +1,5 @@
 ﻿using Cipher.Text;
+using Cipher.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,32 @@ namespace Cipher.Ciphers
     public class Vigenere<TArray> : BaseCipher<LetterArray, TArray, byte>
         where TArray : TextArray<byte>, new()
     {
+        #region Guessing variables
+        /// <summary>
+        /// Maximum length used for finding repeated sequences when guessing the key length
+        /// </summary>
+        /// /// <seealso cref="MinWordLength"/>
+        public int MaxWordLength = 5;
+
+        /// <summary>
+        /// Minimum length used for finding repeated sequences when guessing the key length
+        /// </summary>
+        /// <seealso cref="MaxWordLength"/>
+        public int MinWordLength = 3;
+
+        /// <summary>
+        /// Minimum length used for key length the key length
+        /// </summary>
+        /// <seealso cref="MaxKeyLength"/>
+        public int MinKeyLength = 2;
+
+        /// <summary>
+        /// Maximum length used for key length the key length
+        /// </summary>
+        /// <seealso cref="MaxKeyLength"/>
+        public int MaxKeyLength = 20;
+        #endregion
+
         public Vigenere(string Text) : base(Text) { }
         public Vigenere(TArray Text) : base(Text) { }
 
@@ -29,6 +56,47 @@ namespace Cipher.Ciphers
         {
  	        throw new NotImplementedException();
         }
+
+        public int GuessKeyLength()
+        {
+            BasicDefaultDict<string, List<int>> Positions = new BasicDefaultDict<string, List<int>>();
+            int Length = Text.Length;
+            for (int WordLength = MinWordLength; WordLength <= MaxWordLength; WordLength++)
+            {
+                int End = Length - WordLength;
+                for (int Position = 0; Position < End; Position++)
+                {
+                    Positions.GetOrDefault(Text.Substring(Position, WordLength)).Add(Position);
+                }
+            }
+
+            // Calculate position differences
+            int[] Factors = new int[MaxKeyLength - MinKeyLength];
+            foreach(KeyValuePair<string, List<int>> Word in Positions)
+            {
+                int PositionLength = Word.Value.Count;
+                // Cull non-repeating sequences
+                if (PositionLength > 1)
+                {
+                    PositionLength--;
+
+                    for (int Position = 0; Position < PositionLength; Position++)
+                    {
+                        int Diff = Word.Value[Position + 1] - Word.Value[Position];
+                        for (int N = MinKeyLength; N < MaxKeyLength; N++)
+                        {
+                            if (Diff % N == 0)
+                            {
+                                Factors[N - MinKeyLength]++;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            return Factors.MaxIndex() + MinKeyLength;
+        }
     }
 
     public class MonogramVigenere : Vigenere<LetterArray>
@@ -36,9 +104,9 @@ namespace Cipher.Ciphers
         public MonogramVigenere(string CipherText) : base(CipherText) { }
         public MonogramVigenere(LetterArray CipherText) : base(CipherText) { }
 
-        public override CipherResult Crack()
+        public CipherResult Crack(int KeyLength = -1)
         {
-            int KeyLength = 7;
+            if(KeyLength <= 0) KeyLength = GuessKeyLength();
             
             LetterArray Key = new LetterArray(KeyLength);
             int Length = Text.Length;

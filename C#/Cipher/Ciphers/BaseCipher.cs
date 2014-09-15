@@ -83,6 +83,25 @@ namespace Cipher.Ciphers
             {
                 return Text.ToString();
             }
+
+            public static explicit operator GenericCipherResult(CipherResult Result)
+            {
+                return new GenericCipherResult(Result.Key.ToString(), Result.Text.ToString(), Result.Score);
+            }
+        }
+    }
+
+    public class GenericCipherResult
+    {
+        public readonly string Key;
+        public readonly string Text;
+        public readonly double Score;
+
+        public GenericCipherResult(string Key, string Text, double Score)
+        {
+            this.Key = Key;
+            this.Score = Score;
+            this.Text = Text;
         }
     }
 }

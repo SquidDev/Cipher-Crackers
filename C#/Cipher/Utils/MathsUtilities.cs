@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Cipher
+namespace Cipher.Utils
 {
     public static class MathsUtilities
     {
@@ -38,6 +38,25 @@ namespace Cipher
         public static double Chai(int Value, double Expected)
         {
             return Math.Pow((Value - Expected), 2) / Expected;
+        }
+
+        public static int MaxIndex<T>(this IEnumerable<T> Enumerable)
+            where T : IComparable<T>
+        {
+            int MaxIndex = -1;
+            T MaxValue = default(T);
+
+            int Index = 0;
+            foreach (T Value in Enumerable)
+            {
+                if (MaxIndex == -1 || Value.CompareTo(MaxValue) > 0)
+                {
+                    MaxIndex = Index;
+                    MaxValue = Value;
+                }
+                Index++;
+            }
+            return MaxIndex;
         }
     }
 }
