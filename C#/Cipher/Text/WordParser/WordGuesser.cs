@@ -69,11 +69,11 @@ namespace Cipher.Text.WordParser
                     ScoreInstance ThisResult = GuessAndScore(Position + Word.Length, Match)
                         .CreateChild(Word, ScoreSingle(Match, Previous));
 
-                    ThisResult.Score /= ThisResult.Count;
+                    double ThisScore = ThisResult.Score / ThisResult.Count;
 
-                    if (ThisResult.Score > BestScore)
+                    if (ThisScore > BestScore)
                     {
-                        BestScore = ThisResult.Score;
+                        BestScore = ThisScore;
                         Result = ThisResult;
                     }
                 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -78,6 +79,10 @@ namespace Cipher.Text.WordParser.Storage
                 }
             }
 
+            if (Frequencies.Count == 0)
+            {
+                throw new InvalidOperationException("You must load some sample texts before loading dictionaries");
+            }
             double AverageScore = Frequencies.Average(KV => KV.Value.N);
             // Normalise
             Frequencies.Normalise();
