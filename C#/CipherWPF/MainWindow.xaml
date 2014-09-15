@@ -1,0 +1,93 @@
+﻿<Metro:MetroWindow
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:Cipher.WPF.Controls"
+		xmlns:local1="clr-namespace:Cipher.WPF"
+		x:Class="Cipher.WPF.MainWindow"
+        Title="Cipher-Crackers" Height="400" Width="600">
+    <Metro:MetroWindow.Resources>
+        <local1:StringLengthToBooleanConverter x:Key="StringLengthToBoolean"/>
+    </Metro:MetroWindow.Resources>
+    <Grid>
+        <TabControl Padding="0">
+            <TabItem Header="Ciphers">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="100" />
+                        </Grid.ColumnDefinitions>
+
+                        <TabControl ItemContainerStyle="{DynamicResource SmallTabs}" x:Name="CipherPanels">
+                            <TabItem Header="CaeserShift">
+                                <local:CaeserShiftControl/>
+                            </TabItem>
+                            <TabItem Header="Substitution">
+                                <local:SubstitutionControl/>
+                            </TabItem>
+                            <TabItem Header="Vigenere">
+                                <local:VigenereControl/>
+                            </TabItem>
+                        </TabControl>
+
+                        <Button Content="Decode" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,5,5,35" Click="Decode_Click" IsEnabled="{Binding Text, Converter={StaticResource StringLengthToBoolean}, ElementName=InputText}"/>
+                        <Button Content="Crack" Grid.Column="1" VerticalAlignment="Bottom" Margin="5" Click="Crack_Click" IsEnabled="{Binding Text, Converter={StaticResource StringLengthToBoolean}, ElementName=InputText}"/>
+                    </Grid>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="100" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition MinWidth="100" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox
+							x:Name="InputText" TextWrapping="Wrap"
+							Margin="5" Metro:TextboxHelper.Watermark="Cipher text"
+							VerticalScrollBarVisibility="Auto"
+                        />
+
+                        <GridSplitter Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch" 
+                            ShowsPreview="True"
+                            Margin="0,2,0,2"
+                            Width="5"
+                        />
+                        <TextBox
+							x:Name="ResultText" TextWrapping="Wrap" Grid.Column="2"
+							Margin="5" Metro:TextboxHelper.Watermark="Plain text"
+							VerticalScrollBarVisibility="Auto"
+                        />
+
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Analysis" >
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="100" />
+                    </Grid.RowDefinitions>
+
+					<TabControl ItemContainerStyle="{DynamicResource SmallTabs}">
+                        <TabItem Header="AutoSpace">
+                            <local:AutoSpaceControl Input="{Binding Text, ElementName=AnalysisText}"/>
+                        </TabItem>
+                    </TabControl>
+
+                    <TextBox
+						x:Name="AnalysisText" TextWrapping="Wrap" Grid.Row="1"
+						Margin="5" Metro:TextboxHelper.Watermark="Input text"
+						VerticalScrollBarVisibility="Auto"
+                    />
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Metro:MetroWindow>

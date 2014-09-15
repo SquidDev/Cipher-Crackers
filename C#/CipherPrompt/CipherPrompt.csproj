@@ -7,8 +7,8 @@
     <ProjectGuid>{84777BB9-5DC4-43BD-97C2-1CAC75BC9854}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CipherPrompt</RootNamespace>
-    <AssemblyName>CipherPrompt</AssemblyName>
+    <RootNamespace>Cipher.Prompt</RootNamespace>
+    <AssemblyName>Cipher.Prompt</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,9 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>CipherPrompt.Program</StartupObject>
+    <StartupObject>Cipher.Prompt.CipherPrompt</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NDesk.Options">
+      <HintPath>..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,7 +47,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CipherCommand.cs" />
+    <Compile Include="Commands\AutoSpaceCommand.cs" />
+    <Compile Include="Commands\HelpCommand.cs" />
+    <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="StdInWrapper.cs" />
+    <Compile Include="TestingProg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +61,12 @@
       <Project>{366d90a5-44ef-41f8-8bb1-8961cf16d815}</Project>
       <Name>Cipher</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
