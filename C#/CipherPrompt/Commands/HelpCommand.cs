@@ -19,7 +19,7 @@ namespace Cipher.Prompt.Commands
 
         public override void Run(IEnumerable<string> Args, TextReader Reader, TextWriter Writer)
         {
-            if (Args != null && Args.Count() > 1)
+            if (Args != null && Args.Count() > 0)
             {
                 foreach (string Arg in Args)
                 {
@@ -32,6 +32,8 @@ namespace Cipher.Prompt.Commands
 
                 return;
             }
+
+            Console.WriteLine(Args.Count());
 
             Console.WriteLine("Usage: CipherPrompt [MODE] [OPTIONS]");
             Console.WriteLine("Use `CipherPrompt help COMMAND` for help on a specific command");
