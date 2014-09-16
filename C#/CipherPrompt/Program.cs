@@ -64,6 +64,7 @@ namespace Cipher.Prompt
                 Crack = (Enc) => (GenericCipherResult)new MonogramVigenere(Enc).Crack(),
             });
 
+            AddCommand(new NGramCommand());
             AddCommand(new AutoSpaceCommand());
 
             AddCommand(new HelpCommand(this));

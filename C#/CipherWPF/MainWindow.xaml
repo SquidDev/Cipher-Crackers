@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:Cipher.WPF.Controls"
 		xmlns:local1="clr-namespace:Cipher.WPF"
 		x:Class="Cipher.WPF.MainWindow"
-        Title="Cipher-Crackers" Height="400" Width="600">
+        Title="Cipher-Crackers" Height="400" Width="600" MinHeight="300" MinWidth="400">
     <Metro:MetroWindow.Resources>
         <local1:StringLengthToBooleanConverter x:Key="StringLengthToBoolean"/>
     </Metro:MetroWindow.Resources>
@@ -71,14 +71,20 @@
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
                         <RowDefinition />
-                        <RowDefinition Height="100" />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
 
 					<TabControl ItemContainerStyle="{DynamicResource SmallTabs}">
                         <TabItem Header="AutoSpace">
                             <local:AutoSpaceControl Input="{Binding Text, ElementName=AnalysisText}"/>
                         </TabItem>
+
+                        <TabItem Header="NGrams">
+                            <local:NGramControl Input="{Binding Text, ElementName=AnalysisText}"/>
+                        </TabItem>
                     </TabControl>
+                    
+                    
 
                     <TextBox
 						x:Name="AnalysisText" TextWrapping="Wrap" Grid.Row="1"

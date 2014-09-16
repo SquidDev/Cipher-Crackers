@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis\NGrams.cs" />
     <Compile Include="Ciphers\BaseCipher.cs" />
     <Compile Include="Ciphers\CaeserShift.cs" />
     <Compile Include="Ciphers\Substitution.cs" />

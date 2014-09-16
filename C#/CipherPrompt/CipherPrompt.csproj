@@ -51,6 +51,8 @@
     <Compile Include="Commands\AutoSpaceCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\InlineCommand.cs" />
+    <Compile Include="Commands\NGramCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="StdInWrapper.cs" />
     <Compile Include="TestingProg.cs" />
