@@ -53,6 +53,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Analysis\CipherAnalysisTest.cs" />
+    <Compile Include="AssertUtils.cs" />
     <Compile Include="Ciphers\SubstitutionTest.cs" />
     <Compile Include="Ciphers\CaeserTest.cs" />
     <Compile Include="Ciphers\VigenereTest.cs" />

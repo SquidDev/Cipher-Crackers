@@ -39,11 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis\CipherGues\CipherData.cs" />
+    <Compile Include="Analysis\CipherGues\CipherType.cs" />
+    <Compile Include="Analysis\CipherGues\CipherAnalysis.cs" />
     <Compile Include="Analysis\NGrams.cs" />
     <Compile Include="Ciphers\BaseCipher.cs" />
     <Compile Include="Ciphers\CaeserShift.cs" />
     <Compile Include="Ciphers\Substitution.cs" />
     <Compile Include="Frequency\MonogramStatistics.cs" />
+    <Compile Include="Text\LetterNumberArray.cs" />
     <Compile Include="Text\LetterArray.cs" />
     <Compile Include="Ciphers\Vigenere.cs" />
     <Compile Include="Frequency\QuadgramStatistics.cs" />

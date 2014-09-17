@@ -16,7 +16,19 @@ namespace Cipher.Text
             foreach (char Character in Text)
             {
                 byte BChar = Character.ToLetterByte();
-                if(BChar != byte.MaxValue) Chars.Add(BChar);
+                if(BChar != byte.MaxValue && BChar < 26) Chars.Add(BChar);
+            }
+
+            return Chars.ToArray();
+        }
+
+        public static byte[] ToLetterNumber(this String Text)
+        {
+            List<byte> Chars = new List<byte>();
+            foreach (char Character in Text)
+            {
+                byte BChar = Character.ToLetterByte();
+                if (BChar != byte.MaxValue) Chars.Add(BChar);
             }
 
             return Chars.ToArray();
@@ -31,6 +43,14 @@ namespace Cipher.Text
             else if (Character >= 'a' && Character <= 'z')
             {
                 return (byte)(Character - 'z');
+            }
+            else if (Character == '#')
+            {
+                return 26;
+            }
+            else if (Character >= '0' && Character <= '9')
+            {
+                return (byte)(Character - '0' + 27); // After '#' symbol
             }
 
             return byte.MaxValue;

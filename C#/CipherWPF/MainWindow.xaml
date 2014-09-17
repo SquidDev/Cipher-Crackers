@@ -82,6 +82,10 @@
                         <TabItem Header="NGrams">
                             <local:NGramControl Input="{Binding Text, ElementName=AnalysisText}"/>
                         </TabItem>
+
+                        <TabItem Header="CipherAnalysis">
+                            <local:CipherAnalysisControl Input="{Binding Text, ElementName=AnalysisText}"/>
+                        </TabItem>
                     </TabControl>
                     
                     

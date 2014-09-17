@@ -72,6 +72,9 @@
     <Compile Include="Controls\AutoSpaceControl.xaml.cs">
       <DependentUpon>AutoSpaceControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CipherAnalysisControl.xaml.cs">
+      <DependentUpon>CipherAnalysisControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FileBrowserControl.xaml.cs">
       <DependentUpon>FileBrowserControl.xaml</DependentUpon>
     </Compile>
@@ -86,6 +89,10 @@
     <Page Include="Controls\CaeserShiftControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CipherAnalysisControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\FileBrowserControl.xaml">
       <SubType>Designer</SubType>
