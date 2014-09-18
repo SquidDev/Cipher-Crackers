@@ -47,6 +47,21 @@ namespace Cipher.WPF.Controls
                     (int)Math.Round(KV.Value, MidpointRounding.AwayFromZero))
                 ).OrderBy(KV => KV.Value).ToList();
             OnChanged("CipherResults");
+
+            AnalysisResults = new Dictionary<string,int>()
+            {
+                {"IC", (int)Math.Round(Analysis.TextData.IC, MidpointRounding.AwayFromZero)},
+                {"MIC", (int)Math.Round(Analysis.TextData.MIC, MidpointRounding.AwayFromZero)},
+                {"MKA", (int)Math.Round(Analysis.TextData.MKA, MidpointRounding.AwayFromZero)},
+                {"DIC", (int)Math.Round(Analysis.TextData.DIC, MidpointRounding.AwayFromZero)},
+                {"EDI", (int)Math.Round(Analysis.TextData.EDI, MidpointRounding.AwayFromZero)},
+                {"LR", (int)Math.Round(Analysis.TextData.LR, MidpointRounding.AwayFromZero)},
+                {"ROD", (int)Math.Round(Analysis.TextData.ROD, MidpointRounding.AwayFromZero)},
+                {"LDI", (int)Math.Round(Analysis.TextData.LDI, MidpointRounding.AwayFromZero)},
+                {"SDD", (int)Math.Round(Analysis.TextData.SDD, MidpointRounding.AwayFromZero)},
+            };
+
+            OnChanged("AnalysisResults");
         }
 
         #region INotifyPropertyChanged Members
