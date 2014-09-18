@@ -1,9 +1,8 @@
 ﻿using System.Windows.Controls;
-using Cipher.Text.WordParser;
+using Cipher.Analysis.AutoSpace;
 using System.Threading;
 using System.Collections.Generic;
 using System.IO;
-using Cipher.Text.WordParser.Storage;
 using System;
 using System.Windows;
 
@@ -34,19 +33,11 @@ namespace Cipher.WPF.Controls
             SuccessHandler = SetOutText;
 		}
 
-        public void Space(string Input, IEnumerable<string> ToLoad)
+        public void Space(string Input)
         {
             try
             {
-                GuessLoader Loader = new GuessLoader(ToLoad);
-                if (Loader.Count <= 0)
-                {
-                    throw new Exception("Must include samples");
-                }
-
-                Loader.Load();
-
-                WordGuesser Guesser = new WordGuesser(Input, Loader.Frequencies);
+                WordGuesser Guesser = new WordGuesser(Input);
                 string Result = String.Join(" ", Guesser.Result);
                 Dispatcher.BeginInvoke(SuccessHandler, Result);
             }
@@ -54,7 +45,7 @@ namespace Cipher.WPF.Controls
             {
                 // Pass
             }
-            catch (Exception e)
+            catch (ArgumentOutOfRangeException e)
             {
                 // Catch other exceptions
                 Dispatcher.BeginInvoke(ErrorHandler, e.Message);
@@ -73,24 +64,15 @@ namespace Cipher.WPF.Controls
             ToggleProcessing.Content = "Add spaces";
         }
 
-        private void ToggleProcessing_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void ToggleProcessing_Click(object sender, RoutedEventArgs e)
         {
             if (ProcessingThread == null || !ProcessingThread.IsAlive)
             {
                 string InputValue = Input;
-                List<string> SourceFiles = new List<string>();
-                foreach (object Item in Sources.Items)
-                {
-                    string Source = Item.ToString();
-                    if (!String.IsNullOrWhiteSpace(Source))
-                    {
-                        SourceFiles.Add(Source);
-                    }
-                }
 
                 Action Starter = delegate()
                 {
-                    Space(InputValue, SourceFiles);
+                    Space(InputValue);
                 };
 
                 ProcessingThread = new Thread(new ThreadStart(Starter));
@@ -105,16 +87,6 @@ namespace Cipher.WPF.Controls
                 ProcessingThread.Abort();
                 ToggleProcessing.Content = "Add spaces";
             }
-        }
-
-        private void AddSource_Click(object sender, RoutedEventArgs e)
-        {
-            Sources.Items.Add(new FileBrowserControl());
-        }
-
-        private void ClearSources_Click(object sender, RoutedEventArgs e)
-        {
-            Sources.Items.Clear();
         }
     }
 }

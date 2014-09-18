@@ -6,7 +6,7 @@
 	xmlns:Metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 	xmlns:WPF="clr-namespace:Cipher.WPF" x:Name="userControl" x:Class="Cipher.WPF.Controls.AutoSpaceControl"
 	mc:Ignorable="d"
-	d:DesignWidth="500" d:DesignHeight="190">
+	d:DesignWidth="500" d:DesignHeight="100">
 
     <UserControl.Resources>
         <WPF:StringLengthToBooleanConverter x:Key="StringLengthToBoolean"/>
@@ -15,32 +15,14 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" MinWidth="200"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
-            <ListBox x:Name="Sources" Margin="5,5,5,65" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel IsItemsHost="True"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-            </ListBox>
-            <Button x:Name="ToggleProcessing" Content="Add spaces" Margin="5,5,10,35" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="ToggleProcessing_Click" IsEnabled="{Binding Input, Converter={StaticResource StringLengthToBoolean}, ElementName=userControl}"/>
-            <TextBlock x:Name="ErrorMessages" Margin="5,0,10,5" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="Red" TextAlignment="Right" Height="25"/>
-            <Button x:Name="AddSource" Content="Add" Margin="5,5,5,35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="35" Click="AddSource_Click"/>
-            <Button x:Name="ClearSources" Content="Clear" Margin="45,5,5,35" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="45" Click="ClearSources_Click"/>
+            <Button x:Name="ToggleProcessing" Content="Add spaces" Margin="0,5" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="ToggleProcessing_Click" IsEnabled="{Binding Input, Converter={StaticResource StringLengthToBoolean}, ElementName=userControl}"/>
+            <TextBlock x:Name="ErrorMessages" Margin="0,35,0,5" TextWrapping="Wrap" Foreground="Red" TextAlignment="Right" Height="25"/>
         </Grid>
-
-        <GridSplitter Grid.Column="1"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Stretch" 
-              ShowsPreview="True"
-              Margin="0,2,0,2"
-              Width="5"
-              />
-
+        
         <TextBox
 			x:Name="ResultText" TextWrapping="Wrap" Grid.Column="2"
 			Margin="5" Metro:TextboxHelper.Watermark="Result"
