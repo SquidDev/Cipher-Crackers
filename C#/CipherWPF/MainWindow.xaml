@@ -23,7 +23,7 @@
                             <ColumnDefinition Width="100" />
                         </Grid.ColumnDefinitions>
 
-                        <TabControl ItemContainerStyle="{DynamicResource SmallTabs}" x:Name="CipherPanels">
+                        <TabControl ItemContainerStyle="{DynamicResource SmallTabs}" x:Name="CipherPanels" Margin="0" Padding="5">
                             <TabItem Header="CaeserShift">
                                 <local:CaeserShiftControl/>
                             </TabItem>
@@ -74,7 +74,7 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-					<TabControl ItemContainerStyle="{DynamicResource SmallTabs}">
+					<TabControl ItemContainerStyle="{DynamicResource SmallTabs}" Padding="5">
                         <TabItem Header="AutoSpace">
                             <local:AutoSpaceControl Input="{Binding Text, ElementName=AnalysisText}"/>
                         </TabItem>

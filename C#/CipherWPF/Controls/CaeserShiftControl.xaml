@@ -8,6 +8,6 @@
 	d:DesignWidth="300" d:DesignHeight="90">
 
 	<Grid>
-		<Metro:NumericUpDown x:Name="Key" VerticalAlignment="Top" Margin="5" Maximum="25" Minimum="0" Interval="1" Value="0"/>
+		<Metro:NumericUpDown x:Name="Key" VerticalAlignment="Top" Margin="0,5" Maximum="25" Minimum="0" Interval="1" Value="0"/>
 	</Grid>
 </UserControl>
