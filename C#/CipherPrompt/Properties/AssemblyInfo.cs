@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -11,6 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Cipher")]
 [assembly: AssemblyCopyright("Copyright © SquidDev 2014")]
 
+[assembly: ComVisible(false)]
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version

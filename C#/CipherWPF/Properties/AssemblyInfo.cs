@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -13,6 +11,7 @@ using System.Windows;
 [assembly: AssemblyProduct("Cipher")]
 [assembly: AssemblyCopyright("Copyright © SquidDev 2014")]
 
+[assembly: ComVisible(false)]
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version
