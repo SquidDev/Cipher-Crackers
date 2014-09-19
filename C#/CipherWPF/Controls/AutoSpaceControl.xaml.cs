@@ -35,11 +35,13 @@ namespace Cipher.WPF.Controls
 
         public void Space(string Input)
         {
+#if !DEBUG
             try
             {
+#endif
                 WordGuesser Guesser = new WordGuesser(Input);
-                string Result = String.Join(" ", Guesser.Result);
-                Dispatcher.BeginInvoke(SuccessHandler, Result);
+                Dispatcher.BeginInvoke(SuccessHandler, Guesser.Result);
+#if !DEBUG
             }
             catch (ThreadAbortException)
             {
@@ -50,6 +52,7 @@ namespace Cipher.WPF.Controls
                 // Catch other exceptions
                 Dispatcher.BeginInvoke(ErrorHandler, e.Message);
             }
+#endif
         }
 
         public void ErrorMessage(string Error)

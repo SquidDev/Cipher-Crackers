@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Cipher.Text
 {
@@ -54,6 +55,14 @@ namespace Cipher.Text
             }
 
             return byte.MaxValue;
+        }
+
+        /// <summary>
+        /// Removes whitespace and capitalises
+        /// </summary>
+        public static string UpperNoSpace(this string Text)
+        {
+            return new String(Text.Where(C => !Char.IsWhiteSpace(C)).Select(C => Char.ToUpper(C)).ToArray());
         }
     }
 }

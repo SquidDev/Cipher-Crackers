@@ -20,7 +20,7 @@
 
         <Grid Grid.Column="0">
             <Button x:Name="ToggleProcessing" Content="Add spaces" Margin="0,5" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="ToggleProcessing_Click" IsEnabled="{Binding Input, Converter={StaticResource StringLengthToBoolean}, ElementName=userControl}"/>
-            <TextBlock x:Name="ErrorMessages" Margin="0,35,0,5" TextWrapping="Wrap" Foreground="Red" TextAlignment="Right" Height="25"/>
+            <TextBlock x:Name="ErrorMessages" Margin="0,35,0,5" TextWrapping="Wrap" Foreground="Red" TextAlignment="Right"/>
         </Grid>
         
         <TextBox

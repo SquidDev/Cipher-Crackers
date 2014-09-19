@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Cipher.Text;
+using Cipher.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Cipher.Analysis.AutoSpace
 {
@@ -91,30 +92,19 @@ namespace Cipher.Analysis.AutoSpace
         {
             LoadFiles();
 
-            /*prob = [[-99e99]*maxwordlen for _ in range(len(text))]
-        strs = [['']*maxwordlen for _ in range(len(text))]
-        for j in range(maxwordlen):
-            prob[0][j] = self.cPw(text[:j+1])
-            strs[0][j] = [text[:j+1]]
-        for i in range(1,len(text)):
-            for j in range(maxwordlen):
-                if i+j+1 > len(text): break
-                candidates = [(prob[i-k-1][k] + self.cPw(text[i:i+j+1],strs[i-k-1][k][-1]),
-                               strs[i-k-1][k] + [text[i:i+j+1]] ) for k in range(min(i,maxwordlen))]
-                prob[i][j], strs[i][j] = max(candidates)
-        ends = [(prob[-i-1][i],strs[-i-1][i]) for i in range(min(len(text),maxwordlen))]
-        return max(ends)
-             */
+            // Trim whitespace and uppercase
+            Input = Input.UpperNoSpace();
             int TextLength = Input.Length;
+
             double[,] Probabilities = new double[TextLength, MAX_WORD_LENGTH];
-            List<string>[,] Strings = new List<string>[TextLength, MAX_WORD_LENGTH];
+            string[,][] Strings = new string[TextLength, MAX_WORD_LENGTH][];
 
             for(int X = 1; X < TextLength; X++)
             {
                 for(int Y = 0; Y < MAX_WORD_LENGTH; Y++)
                 {
-                    Probabilities[X, Y] = double.NegativeInfinity;
-                    Strings[X, Y] = new List<string>();
+                    Probabilities[X, Y] = Double.NegativeInfinity;
+                    Strings[X, Y] = new string[] { " " };
                 }
             }
 
@@ -122,8 +112,59 @@ namespace Cipher.Analysis.AutoSpace
             {
                 string Sub = Input.Substring(0, Y + 1);
                 Probabilities[0, Y] = ConditionalWordProbability(Sub);
-                Strings[0, Y] = new List<string> { Sub };
+                Strings[0, Y] = new string[]{ Sub };
             }
+
+            double BestProbability = Double.NegativeInfinity;
+            string[] BestStrings = null;
+           
+
+            for(int I = 1; I < TextLength; I++)
+            {
+                int Min = Math.Min(I, MAX_WORD_LENGTH);
+
+                for(int J = 0; J < MAX_WORD_LENGTH; J++)
+                {
+                    if (I + J + 1 > TextLength) break;
+
+                    BestProbability = Double.NegativeInfinity;
+
+                    for(int K = 0; K < Min; K++)
+                    {
+                        string[] OldStrings = Strings[I-K-1, K];
+                        string ThisString = Input.Substring(I, J + 1);
+                        double ThisProbability = Probabilities[I - K - 1, K] + ConditionalWordProbability(ThisString, OldStrings.LastValue());
+
+                        if(ThisProbability > BestProbability)
+                        {
+                            int OldLength = OldStrings.Length;
+                            BestProbability = ThisProbability;
+                            BestStrings = new string[OldLength + 1];
+                            OldStrings.CopyTo(BestStrings, 0);
+                            BestStrings[OldLength] = ThisString;
+                        }
+                    }
+
+                    Probabilities[I, J] = BestProbability;
+                    Strings[I, J] = BestStrings;
+                }
+            }
+
+            int Minimum = Math.Min(TextLength, MAX_WORD_LENGTH);
+
+            BestProbability = Double.NegativeInfinity;
+
+            for (int I = 0; I < Minimum; I++)
+            {
+                double ThisProbability = Probabilities[TextLength - I - 1, I];
+                if(ThisProbability > BestProbability)
+                {
+                    BestStrings = Strings[TextLength - I - 1, I];
+                }
+            }
+
+            Result = String.Join(" ", BestStrings);
+            Score = BestProbability;
         }
 
         protected double ConditionalWordProbability(string Word, string Previous = "<UNK>")

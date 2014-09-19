@@ -36,7 +36,7 @@
   </PostinstrumentEvent>
   <Binaries>
     <ProjBinary>
-      <Path>CipherPrompt\obj\Debug\CipherPrompt.exe</Path>
+      <Path>CipherPrompt\obj\Debug\Cipher.Prompt.exe</Path>
       <ArgumentTimestamp>01/01/0001 00:00:00</ArgumentTimestamp>
       <Instrument>true</Instrument>
       <Sample>true</Sample>
@@ -48,7 +48,7 @@
       <LaunchProject>true</LaunchProject>
       <OverrideProjectSettings>false</OverrideProjectSettings>
       <LaunchMethod>Executable</LaunchMethod>
-      <ExecutablePath>CipherPrompt\bin\Debug\CipherPrompt.exe</ExecutablePath>
+      <ExecutablePath>CipherPrompt\bin\Debug\Cipher.Prompt.exe</ExecutablePath>
       <StartupDirectory>CipherPrompt\bin\Debug\</StartupDirectory>
       <Arguments>
       </Arguments>
