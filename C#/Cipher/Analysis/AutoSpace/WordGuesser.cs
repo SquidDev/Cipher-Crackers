@@ -160,6 +160,7 @@ namespace Cipher.Analysis.AutoSpace
                 if(ThisProbability > BestProbability)
                 {
                     BestStrings = Strings[TextLength - I - 1, I];
+                    BestProbability = ThisProbability;
                 }
             }
 
