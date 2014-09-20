@@ -13,21 +13,22 @@
     </UserControl.Resources>
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" MinWidth="200"/>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
-        <Grid Grid.Column="0">
-            <Button x:Name="ToggleProcessing" Content="Add spaces" Margin="0,5" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75" Click="ToggleProcessing_Click" IsEnabled="{Binding Input, Converter={StaticResource StringLengthToBoolean}, ElementName=userControl}"/>
-            <TextBlock x:Name="ErrorMessages" Margin="0,35,0,5" TextWrapping="Wrap" Foreground="Red" TextAlignment="Right"/>
+        <Grid Grid.Row="0">
+            <TextBlock x:Name="ErrorMessages" Margin="0,5,0,125" TextWrapping="Wrap" Foreground="Red" TextAlignment="Right"/>
+            <Button x:Name="ToggleProcessing" Content="Add spaces" Margin="0,5" HorizontalAlignment="Right" Width="115" Click="ToggleProcessing_Click" IsEnabled="{Binding Input, Converter={StaticResource StringLengthToBoolean}, ElementName=userControl}" />
         </Grid>
-        
-        <TextBox
-			x:Name="ResultText" TextWrapping="Wrap" Grid.Column="2"
-			Margin="5" Metro:TextboxHelper.Watermark="Result"
+
+        <TextBox Grid.Row="1"
+			x:Name="ResultText" TextWrapping="Wrap" Grid.Column="1"
+			Margin="0,0,0,5" Metro:TextboxHelper.Watermark="Result"
 			VerticalScrollBarVisibility="Auto"
         />
+        
 
     </Grid>
 </UserControl>

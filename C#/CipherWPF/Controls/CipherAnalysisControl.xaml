@@ -4,10 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-             mc:Ignorable="d" 
+             xmlns:WPF="clr-namespace:Cipher.WPF"
+             mc:Ignorable="d" x:Name="userControl"
              d:DesignHeight="300" d:DesignWidth="500">
+
+    <UserControl.Resources>
+        <WPF:StringLengthToBooleanConverter x:Key="StringLengthToBoolean"/>
+    </UserControl.Resources>
+    
     <Grid>
-        <TabControl ItemContainerStyle="{DynamicResource SmallTabs}" Padding="0" Margin="0,5">
+        <TabControl ItemContainerStyle="{DynamicResource SmallTabs}" Padding="0,5" Margin="0,5">
             <TabItem Header="Ciphers">
                 <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding CipherResults}" AutoGenerateColumns="False">
                     <DataGrid.Columns>
@@ -26,7 +32,7 @@
             </TabItem>
         </TabControl>
 
-        <Button Content="Calculate Stats" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5" Click="Go_Click" Width="115"/>
+        <Button Content="Calculate Stats" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,0,0" Click="Go_Click" Width="115" IsEnabled="{Binding Input, Converter={StaticResource StringLengthToBoolean}, ElementName=userControl}" />
 
     </Grid>
 </UserControl>

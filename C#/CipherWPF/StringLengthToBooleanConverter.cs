@@ -13,7 +13,8 @@ namespace Cipher.WPF
         {
             if (Value is string)
             {
-                return ((string)Value).Length > 0;
+                string SValue = (string)Value;
+                return !String.IsNullOrWhiteSpace(SValue);
             }
 
             return false;
