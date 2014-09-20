@@ -56,6 +56,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Analysis\AutoSpaceTest.cs" />
     <Compile Include="Analysis\CipherAnalysisTest.cs" />
     <Compile Include="AssertUtils.cs" />
     <Compile Include="Ciphers\CipherTest.cs" />
@@ -72,6 +73,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestData\Analysis-AutoSpace.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\Analysis-CipherAnalysis.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
