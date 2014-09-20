@@ -1,4 +1,6 @@
-﻿using Cipher.Ciphers;
+﻿using Cipher.Analysis.AutoSpace;
+using Cipher.Analysis.CipherGuess;
+using Cipher.Ciphers;
 using Cipher.Prompt.Commands;
 using NDesk.Options;
 using System;
@@ -65,7 +67,50 @@ namespace Cipher.Prompt
             });
 
             AddCommand(new NGramCommand());
-            AddCommand(new AutoSpaceCommand());
+            AddCommand(new InlineCommand()
+            {
+                Name = "space",
+                Description = "Add spaces automagically",
+                Command = delegate(List<string> Extra, TextReader Input, TextWriter Output)
+                {
+                    WordGuesser Guesser = new WordGuesser(Input.ReadToEnd());
+                    Console.WriteLine("Score {0}", Guesser.Score);
+                    Output.WriteLine(String.Join(" ", Guesser.Result));
+                }
+            });
+
+            AddCommand(new InlineCommand()
+            {
+                Name = "guess",
+                Description = "Show the deviations from each type of cipher, and so deduce the most likely cipher",
+                Command = delegate(List<string> Extra, TextReader Input, TextWriter Output)
+                {
+                    CipherAnalysis Analysis = new CipherAnalysis(Input.ReadToEnd());
+                    foreach(KeyValuePair<CipherType, double> Cipher in Analysis.Deviations.OrderBy(KV => KV.Value))
+                    {
+                        Output.WriteLine("{0,-20} {1}", Cipher.Key.Name, Cipher.Value);
+                    }
+                }
+            });
+
+            AddCommand(new InlineCommand()
+            {
+                Name = "text-data",
+                Description = "Calculate some common properties about the text",
+                Command = delegate(List<string> Extra, TextReader Input, TextWriter Output)
+                {
+                    CipherAnalysis Analysis = new CipherAnalysis(Input.ReadToEnd());
+                    Output.WriteLine("{0,-4} {1}", "IC", Analysis.TextData.IC);
+                    Output.WriteLine("{0,-4} {1}", "MIC", Analysis.TextData.MIC);
+                    Output.WriteLine("{0,-4} {1}", "MKA", Analysis.TextData.MKA);
+                    Output.WriteLine("{0,-4} {1}", "DIC", Analysis.TextData.DIC);
+                    Output.WriteLine("{0,-4} {1}", "EDI", Analysis.TextData.EDI);
+                    Output.WriteLine("{0,-4} {1}", "LR", Analysis.TextData.LR);
+                    Output.WriteLine("{0,-4} {1}", "ROD", Analysis.TextData.ROD);
+                    Output.WriteLine("{0,-4} {1}", "LDI", Analysis.TextData.LDI);
+                    Output.WriteLine("{0,-4} {1}", "SDD", Analysis.TextData.SDD);
+                }
+            });
 
             AddCommand(new HelpCommand(this));
         }
