@@ -37,5 +37,41 @@ namespace Testing
         {
             Assert.AreEqual<double>(Math.Round(Expected, Mode), Math.Round(Actual, Mode), Message, Params);
         }
+
+        public static void AssertWithDiff(string Expected, string Actual)
+        {
+            Assert.AreEqual<string>(Expected, Actual, "Diff: {0}", new Differ(Expected, Actual));
+        }
+
+        /// <summary>
+        /// Lazy loader String differ
+        /// </summary>
+        public class Differ
+        {
+            string Original;
+            string New;
+
+            public Differ(string Original, string New)
+            {
+                this.Original = Original;
+                this.New = New;
+            }
+
+            public override string ToString()
+            {
+                IEnumerable<string> Set1 = Original.Split(' ').Distinct();
+                IEnumerable<string> Set2 = New.Split(' ').Distinct();
+
+                if (Set2.Count() > Set1.Count())
+                {
+                    return String.Join(", ", Set2.Except(Set1));
+                }
+                else
+                {
+                    return String.Join(", ", Set1.Except(Set2));
+                }
+            }
+        }
+        
     }
 }

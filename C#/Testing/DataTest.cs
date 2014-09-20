@@ -32,5 +32,10 @@ namespace Testing
         {
             return Byte.Parse(DataRead(Name));
         }
+
+        public double DataReadDouble(string Name)
+        {
+            return Double.Parse(DataRead(Name));
+        }
     }
 }
