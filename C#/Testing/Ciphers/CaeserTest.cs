@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Testing.Ciphers
 {
     [TestClass]
-    public class CaeserTest : DataTest
+    public class CaeserTest : CipherTest<byte>
     {
         /// <summary>
         /// Tests the crack method
@@ -53,7 +53,7 @@ namespace Testing.Ciphers
         }
 
         #region Internal functions
-        protected void InternalCrack(string Ciphertext, string Plaintext, byte Key)
+        protected override void InternalCrack(string Ciphertext, string Plaintext, byte Key)
         {
             CaeserShift<QuadgramScoredLetterArray> Shift = new CaeserShift<QuadgramScoredLetterArray>(Ciphertext);
             CaeserShift<QuadgramScoredLetterArray>.CipherResult Result = Shift.Crack();
@@ -72,7 +72,7 @@ namespace Testing.Ciphers
             Assert.AreEqual<byte>(Key, Result.Key);
         }
 
-        protected void InternalDecode(string Ciphertext, string Plaintext, byte Key)
+        protected override void InternalDecode(string Ciphertext, string Plaintext, byte Key)
         {
             CaeserShift<LetterArray> Shift = new CaeserShift<LetterArray>(Ciphertext);
             LetterArray Result = Shift.Decode(Key);

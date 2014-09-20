@@ -5,30 +5,22 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Testing.Ciphers
 {
     [TestClass]
-    public class SubstitutionTest
+    public class SubstitutionTest : CipherTest<string>
     {
-        // Taken from 2013 National Cipher Challenge
-        string Encoded = "SYIEZLKKZRIVPYIMPQVZFSLMLCKILVWMPFUBIVSZPYHLZEPMLEVULERLMOQPPYIHKFGIMMFKYICHIVDIITHCLZEPFVLEZICPYLPPYIGFKNIKZIMSFQCVOIJQZUBCWVIPIUPIVZGSIQMIVPYIDMYISLMHLZEPIVFELHFHCLKOFLKVKLPYIKPYLELMPKIPUYIVULERLMLEVPYIHZNDIEPMQMIVOWPYIDLMPIKSIKIRIKWVZGGIKIEPGKFDPYIFEIMSIQMIPFVLWEFSPYIWOKZENDIPYIHZNDIEPMZLMBGFKMFGPUYLCBWOCFFVKIVMLENQZEILEVDQMPLKVWICCFSFUYKIMGKFDPYIMFZCMFGZPLCWZDZTPYIDSZPYCZEMIIVFZCOFZCIVLEVLNIVZELBIPPCIHKFHIKCWHKIHLKIVPYIMIHLZEPMLKIZEVZMPZENQZMYLOCIGKFDPYIFEIMQMIVFEPYIFKZNZELCLEVPYIUFHWZMDFKICZBICWPFOIOIPKLWIVOWLULKICIMMOKQMYMPKFBIFKLDZMHCLUIVYZNYCZNYPPYIHKFGIMMFKMIIMJQZUBCWSYIEDWPZKIVIWIMYLRIDZMMIVLPFEILEVZYLRIDLVIIEFQNYVICZOIKLPIDZMPLBIMPFUFERZEUIPYIDPFDFRIDWMPQVZFPFPYILPPZUSYIKIPYICZNYPZMOIPPIKGKFDPYIKIZYLRILRZISFGPYIUZPWLEVLKIDZEVIKFGGKIIVFDPYIWMPZCCZEMZMPPYLPZMCIIHYIKIZEPYIUICCLKOQPPYLPNZRIMDILEFPYIKGKIIVFDPYIGCZUBIKZENULEVCIMULMPVIIHMYLVFSMSYZUYYZVIDWFPYIKSFKBZGZULEEFPOIGKIIHIKYLHMMYIULE";
-        string Plain = "WHENIARRIVEDTHESTUDIOWASALREADYSTOCKEDWITHPAINTSANDCANVASBUTTHEPROFESSORHELPEDMEEXPLAINTODANIELTHATTHEFORGERIESWOULDBEQUICKLYDETECTEDIFWEUSEDTHEMSHEWASPAINTEDONAPOPLARBOARDRATHERTHANASTRETCHEDCANVASANDTHEPIGMENTSUSEDBYTHEMASTERWEREVERYDIFFERENTFROMTHEONESWEUSETODAYNOWTHEYBRINGMETHEPIGMENTSIASKFORSOFTCHALKYBLOODREDSANGUINEANDMUSTARDYELLOWOCHRESFROMTHESOILSOFITALYIMIXTHEMWITHLINSEEDOILBOILEDANDAGEDINAKETTLEPROPERLYPREPAREDTHESEPAINTSAREINDISTINGUISHABLEFROMTHEONESUSEDONTHEORIGINALANDTHECOPYISMORELIKELYTOBEBETRAYEDBYACARELESSBRUSHSTROKEORAMISPLACEDHIGHLIGHTTHEPROFESSORSEESQUICKLYWHENMYTIREDEYESHAVEMISSEDATONEANDIHAVEMADEENOUGHDELIBERATEMISTAKESTOCONVINCETHEMTOMOVEMYSTUDIOTOTHEATTICWHERETHELIGHTISBETTERFROMTHEREIHAVEAVIEWOFTHECITYANDAREMINDEROFFREEDOMTHEYSTILLINSISTTHATISLEEPHEREINTHECELLARBUTTHATGIVESMEANOTHERFREEDOMTHEFLICKERINGCANDLESCASTDEEPSHADOWSWHICHHIDEMYOTHERWORKIFICANNOTBEFREEPERHAPSSHECAN";
-        string Key = "ZKLMNOFPEQRASGBTUVWXCDYJHI";
-        string OtherKey = "JKLMNOFPEQRASGBTUVWXCDYZHI";
 
         /// <summary>
         /// Tests the crack method
         /// </summary>
         [TestMethod]
+        [DeploymentItem(@"TestData\Cipher-Substitution.xml")]
+        [DataSource(
+            "Microsoft.VisualStudio.TestTools.DataSource.XML",
+            @"|DataDirectory|\TestData\Cipher-Substitution.xml", "Cipher",
+            DataAccessMethod.Sequential
+        )]
         public void SubstitutionCrack()
         {
-            Substitution<QuadgramScoredLetterArray> Shift = new Substitution<QuadgramScoredLetterArray>(Encoded);
-            Substitution<QuadgramScoredLetterArray>.CipherResult Result = Shift.Crack();
-
-            Assert.AreEqual<string>(Plain, Result.Text.ToString());
-
-            string ThisKey = Result.Key.ToString();
-            if(ThisKey != Key && ThisKey != OtherKey)
-            {
-                Assert.Fail("Key failed\nExpected: ({0} or {1})\nActual: {0}", Key, OtherKey, ThisKey);
-            }
+            InternalCrack(DataRead("Ciphertext"), DataRead("Plaintext"), DataRead("Key"));
             
         }
 
@@ -36,12 +28,34 @@ namespace Testing.Ciphers
         /// Tests the decode method
         /// </summary>
         [TestMethod]
+        [DeploymentItem(@"TestData\Cipher-Substitution.xml")]
+        [DataSource(
+            "Microsoft.VisualStudio.TestTools.DataSource.XML",
+            @"|DataDirectory|\TestData\Cipher-Substitution.xml", "Cipher",
+            DataAccessMethod.Sequential
+        )]
         public void SubstitutionDecode()
         {
-            Substitution<LetterArray> Shift = new Substitution<LetterArray>(Encoded);
+            InternalDecode(DataRead("Ciphertext"), DataRead("Plaintext"), DataRead("Key"));
+        }
+
+        #region 
+        protected override void InternalDecode(string Ciphertext, string Plaintext, string Key)
+        {
+            Substitution<LetterArray> Shift = new Substitution<LetterArray>(Ciphertext);
             LetterArray Result = Shift.Decode(new QuadgramScoredLetterArray(Key));
 
-            Assert.AreEqual(Plain, Result.ToString());
+            Assert.AreEqual(Plaintext, Result.ToString());
         }
+
+        protected override void InternalCrack(string Ciphertext, string Plaintext, string Key)
+        {
+            Substitution<QuadgramScoredLetterArray> Cipher = new Substitution<QuadgramScoredLetterArray>(Ciphertext);
+            Substitution<QuadgramScoredLetterArray>.CipherResult Result = Cipher.Crack();
+
+            Assert.AreEqual<string>(Plaintext, Result.Text.ToString());
+            Assert.AreEqual<string>(Key, Result.Key.ToString());
+        }
+        #endregion
     }
 }

@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Analysis\CipherAnalysisTest.cs" />
     <Compile Include="AssertUtils.cs" />
+    <Compile Include="Ciphers\CipherTest.cs" />
     <Compile Include="DataTest.cs" />
     <Compile Include="Ciphers\SubstitutionTest.cs" />
     <Compile Include="Ciphers\CaeserTest.cs" />
@@ -70,6 +71,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestData\Cipher-Substitution.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Cipher-Vigenere.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\Cipher-CaeserShift.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
