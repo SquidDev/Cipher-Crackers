@@ -1,8 +1,6 @@
-﻿using Cipher.Utils;
-using System;
+﻿using Cipher.Text;
+using Cipher.Utils;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Cipher.Analysis
 {
@@ -10,6 +8,7 @@ namespace Cipher.Analysis
     {
         public static Dictionary<string, int> GatherNGrams(string Value, int NGramLength = 2)
         {
+            Value = Value.UpperNoSpace();
             BasicDefaultDict<string, int> Positions = new BasicDefaultDict<string, int>();
             int End = Value.Length - NGramLength;
             for (int Position = 0; Position < End; Position++)
