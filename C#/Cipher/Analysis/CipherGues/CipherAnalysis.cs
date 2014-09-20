@@ -51,7 +51,7 @@ namespace Cipher.Analysis.CipherGuess
 
         protected double ScoreCipher(double Value, double Standard, double Average)
         {
-            if (Average == 0) return 0;
+            if (Average == 0) return Value;
             return Math.Abs((Value - Average) / Standard);
         }
 
