@@ -41,8 +41,8 @@ namespace Testing.Ciphers
         #region Internal functions
         protected override void InternalCrack(string Ciphertext, string Plaintext, int Key)
         {
-            RailFence<QuadgramScoredLetterArray> Shift = new RailFence<QuadgramScoredLetterArray>(Ciphertext);
-            RailFence<QuadgramScoredLetterArray>.CipherResult Result = Shift.Crack();
+            RailFence<QuadgramScoredLetterArray, byte> Shift = new RailFence<QuadgramScoredLetterArray, byte>(Ciphertext);
+            RailFence<QuadgramScoredLetterArray, byte>.CipherResult Result = Shift.Crack();
 
 
             Assert.AreEqual(Plaintext, Result.Text.ToString());
@@ -51,7 +51,7 @@ namespace Testing.Ciphers
 
         protected override void InternalDecode(string Ciphertext, string Plaintext, int Key)
         {
-            RailFence<LetterArray> Shift = new RailFence<LetterArray>(Ciphertext);
+            RailFence<LetterArray, byte> Shift = new RailFence<LetterArray, byte>(Ciphertext);
             LetterArray Result = Shift.Decode(Key);
 
             Assert.AreEqual(Plaintext, Result.ToString());

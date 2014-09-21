@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using LArray = Cipher.Text.LetterArray;
 using QSLArray = Cipher.Text.QuadgramScoredLetterArray;
+using QSCArray = Cipher.Text.QuadgramScoredCharacterArray;
 
 namespace Cipher.Prompt
 {
@@ -70,8 +71,8 @@ namespace Cipher.Prompt
             {
                 Name = "railfence",
                 Description = "Decode/crack the railfence cipher",
-                Decode = (Enc, Key) => new RailFence<QSLArray>(Enc).Decode(Convert.ToInt32(Key)).ToString(),
-                Crack = (Enc) => (GenericCipherResult)new RailFence<QSLArray>(Enc).Crack(),
+                Decode = (Enc, Key) => new RailFence<QSCArray, char>(Enc).Decode(Convert.ToInt32(Key)).ToString(),
+                Crack = (Enc) => (GenericCipherResult)new RailFence<QSCArray, char>(Enc).Crack(),
             });
 
             AddCommand(new NGramCommand());

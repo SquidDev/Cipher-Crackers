@@ -1,13 +1,10 @@
 ﻿using Cipher.Text;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Cipher.Ciphers
 {
-    public class RailFence<TArray> : BaseCipher<int, TArray, byte>
-        where TArray : TextArray<byte>, new()
+    public class RailFence<TArray, TArrayType> : BaseCipher<int, TArray, TArrayType>
+        where TArray : TextArray<TArrayType>, new()
     {
         public RailFence(string CipherText) : base(CipherText) { }
         public RailFence(TArray CipherText) : base(CipherText) { }

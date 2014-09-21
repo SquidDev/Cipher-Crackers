@@ -16,14 +16,14 @@ namespace Cipher.WPF.Controls
 
         public string Decode(string Input)
         {
-            RailFence<QuadgramScoredLetterArray> Cipher = new RailFence<QuadgramScoredLetterArray>(Input);
+            RailFence<QuadgramScoredCharacterArray, char> Cipher = new RailFence<QuadgramScoredCharacterArray, char>(Input);
             return Cipher.Decode((byte)Key.Value).ToString();
         }
 
         public string Crack(string Input)
         {
-            RailFence<QuadgramScoredLetterArray> Cipher = new RailFence<QuadgramScoredLetterArray>(Input);
-            RailFence<QuadgramScoredLetterArray>.CipherResult Result = Cipher.Crack();
+            RailFence<QuadgramScoredCharacterArray, char> Cipher = new RailFence<QuadgramScoredCharacterArray, char>(Input);
+            RailFence<QuadgramScoredCharacterArray, char>.CipherResult Result = Cipher.Crack();
 
             Key.Value = Result.Key;
             return Result.Text.ToString();
