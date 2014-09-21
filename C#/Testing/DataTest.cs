@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 
 namespace Testing
 {
@@ -36,6 +37,15 @@ namespace Testing
         public double DataReadDouble(string Name)
         {
             return Double.Parse(DataRead(Name));
+        }
+
+        public string[] DataReadArray(string Name)
+        {
+            return DataRead(Name).Split(';');
+        }
+        public T[] DataReadArray<T>(string Name, Func<string, T> Conversion)
+        {
+            return DataReadArray(Name).Select(Conversion).ToArray();
         }
     }
 }

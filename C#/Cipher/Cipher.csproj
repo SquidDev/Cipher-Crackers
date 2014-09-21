@@ -47,8 +47,10 @@
     <Compile Include="Ciphers\BaseCipher.cs" />
     <Compile Include="Ciphers\CaeserShift.cs" />
     <Compile Include="Ciphers\RailFence.cs" />
+    <Compile Include="Ciphers\ColumnarTransposition.cs" />
     <Compile Include="Ciphers\Substitution.cs" />
     <Compile Include="Frequency\MonogramStatistics.cs" />
+    <Compile Include="Text\CharacterArray.cs" />
     <Compile Include="Text\LetterNumberArray.cs" />
     <Compile Include="Text\LetterArray.cs" />
     <Compile Include="Ciphers\Vigenere.cs" />
@@ -56,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\DefaultDict.cs" />
     <Compile Include="Utils\IEnumerableUtilities.cs" />
+    <Compile Include="Utils\ListUtilities.cs" />
     <Compile Include="Utils\MathsUtilities.cs" />
     <Compile Include="Text\ScoredLetterArray.cs" />
     <Compile Include="Text\TextArray.cs" />

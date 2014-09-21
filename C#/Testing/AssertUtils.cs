@@ -72,6 +72,41 @@ namespace Testing
                 }
             }
         }
+
+        public static void AssertArray<T>(T[] Expected, T[] Actual)
+        {
+            int Length = Expected.Length;
+            
+
+            if(Length != Actual.Length)
+            {
+                throw new Exception(String.Format(
+                    "Expected:<{0}>, Actual:<{1}>", 
+                    ArrayToString(Expected), 
+                    ArrayToString(Actual)
+                ));
+            }
+            
+            for(int I = 0; I < Length; I++)
+            {
+                if(!Expected[I].Equals(Actual[I]))
+                {
+                    throw new Exception(String.Format(
+                        "Expected:<{0}>, Actual:<{1}> at index {2} with <{3}>, <{4}>",
+                        ArrayToString(Expected),
+                        ArrayToString(Actual),
+                        I,
+                        Expected[I],
+                        Actual[I]
+                    ));
+                }
+            }
+        }
+
+        static string ArrayToString<T>(T[] Array)
+        {
+            return "{" + String.Join(", ", Array) + "}";
+        }
         
     }
 }
