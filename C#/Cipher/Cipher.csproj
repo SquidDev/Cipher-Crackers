@@ -46,6 +46,7 @@
     <Compile Include="Analysis\NGrams.cs" />
     <Compile Include="Ciphers\BaseCipher.cs" />
     <Compile Include="Ciphers\CaeserShift.cs" />
+    <Compile Include="Ciphers\RailFence.cs" />
     <Compile Include="Ciphers\Substitution.cs" />
     <Compile Include="Frequency\MonogramStatistics.cs" />
     <Compile Include="Text\LetterNumberArray.cs" />
