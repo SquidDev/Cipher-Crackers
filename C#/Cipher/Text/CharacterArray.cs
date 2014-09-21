@@ -93,7 +93,7 @@ namespace Cipher.Text
                 if (ThisCharacter < 26)
                 {
                     Score += LetterStatistics.Quadgrams[
-                        Previous[0] + Previous[2] + Previous[2] + ThisCharacter
+                        Previous[0] + Previous[1] + Previous[2] + ThisCharacter
                     ];
 
                     Previous[0] = Previous[1] * 26;
