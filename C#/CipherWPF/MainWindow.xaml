@@ -33,6 +33,9 @@
                             <TabItem Header="Vigenere">
                                 <local:VigenereControl/>
                             </TabItem>
+                            <TabItem Header="Railfence">
+                                <local:RailFenceControl/>
+                            </TabItem>
                         </TabControl>
 
                         <Button Content="Decode" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,5,5,35" Click="Decode_Click" IsEnabled="{Binding Text, Converter={StaticResource StringLengthToBoolean}, ElementName=InputText}"/>

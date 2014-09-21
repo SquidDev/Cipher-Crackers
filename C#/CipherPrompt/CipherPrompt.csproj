@@ -54,7 +54,6 @@
     <Compile Include="Commands\NGramCommand.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="StdInWrapper.cs" />
-    <Compile Include="TestingProg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

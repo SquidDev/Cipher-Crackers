@@ -66,6 +66,14 @@ namespace Cipher.Prompt
                 Crack = (Enc) => (GenericCipherResult)new MonogramVigenere(Enc).Crack(),
             });
 
+            AddCommand(new CipherCommand()
+            {
+                Name = "railfence",
+                Description = "Decode/crack the railfence cipher",
+                Decode = (Enc, Key) => new RailFence<QSLArray>(Enc).Decode(Convert.ToInt32(Key)).ToString(),
+                Crack = (Enc) => (GenericCipherResult)new RailFence<QSLArray>(Enc).Crack(),
+            });
+
             AddCommand(new NGramCommand());
             AddCommand(new InlineCommand()
             {

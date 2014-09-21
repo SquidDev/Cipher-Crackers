@@ -66,6 +66,9 @@
     <Compile Include="Controls\AutoSpaceControl.xaml.cs">
       <DependentUpon>AutoSpaceControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RailFenceControl.xaml.cs">
+      <DependentUpon>RailFenceControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CipherAnalysisControl.xaml.cs">
       <DependentUpon>CipherAnalysisControl.xaml</DependentUpon>
     </Compile>
@@ -74,6 +77,10 @@
     </Compile>
     <Compile Include="StringLengthToBooleanConverter.cs" />
     <Page Include="Controls\AutoSpaceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\RailFenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
