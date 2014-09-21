@@ -25,19 +25,38 @@ namespace Cipher.Utils
             }
         }
 
+        #region Chai
+        /// <summary>
+        /// Calculate the Chai Squared statistic of one letter
+        /// </summary>
+        /// <param name="Frequency">The frequencies of each letters</param>
+        /// <param name="TotalCount">The total frequency count</param>
+        /// <param name="Letter">The letter index</param>
         public static double Chai(int[] Frequency, int TotalCount, int Letter)
         {
             return Chai(Frequency[Letter], TotalCount, LetterStatistics.Monograms[Letter]);
         }
 
+        /// <summary>
+        /// Calculate the chai squared statistic for one value
+        /// </summary>
+        /// <param name="Value">The count of that value</param>
+        /// <param name="TotalCount">The total count of all values</param>
+        /// <param name="Probability">The probability of that value occuring</param>
         public static double Chai(int Value, int TotalCount, double Probability)
         {
             return Chai(Value, TotalCount * Probability);
         }
 
+        /// <summary>
+        /// Calculate the chai squared statistic for one value
+        /// </summary>
+        /// <param name="Value">The value received</param>
+        /// <param name="Expected">The expected value</param>
         public static double Chai(int Value, double Expected)
         {
             return Math.Pow((Value - Expected), 2) / Expected;
         }
+        #endregion
     }
 }
