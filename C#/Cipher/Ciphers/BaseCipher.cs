@@ -1,4 +1,5 @@
 ﻿using Cipher.Text;
+using System;
 
 namespace Cipher.Ciphers
 {
@@ -12,6 +13,9 @@ namespace Cipher.Ciphers
         where TArray : TextArray<TArrayType>, new()
     {
         protected TArray Text;
+
+        // Conversion function for custom keys
+        protected Func<TKey, string> KeyStringify = K => K.ToString();
 
         public BaseCipher(TArray CipherText)
         {
@@ -55,12 +59,12 @@ namespace Cipher.Ciphers
 
         protected CipherResult GetResult(double Score, TKey Key, TArray Decoded)
         {
-            return new CipherResult(Decode(Key, Decoded), Score, Key);
+            return new CipherResult(Decode(Key, Decoded), Score, Key, KeyStringify);
         }
 
         protected CipherResult GetResult(double Score, TKey Key)
         {
-            return new CipherResult(Decode(Key), Score, Key);
+            return new CipherResult(Decode(Key), Score, Key, KeyStringify);
         }
 
         /// <summary>
@@ -72,11 +76,19 @@ namespace Cipher.Ciphers
             public readonly double Score;
             public readonly TKey Key;
 
+            protected Func<TKey, string> KeyStringify;
+
             public CipherResult(TArray Text, double Score, TKey Key)
+                : this(Text, Score, Key, K => K.ToString())
+            { }
+
+            public CipherResult(TArray Text, double Score, TKey Key, Func<TKey, string> KeyStringify)
             {
                 this.Text = Text;
                 this.Score = Score;
                 this.Key = Key;
+
+                this.KeyStringify = KeyStringify;
             }
 
             public override string ToString()
@@ -84,9 +96,14 @@ namespace Cipher.Ciphers
                 return Text.ToString();
             }
 
+            public string KeyString()
+            {
+                return KeyStringify(Key);
+            }
+
             public static explicit operator GenericCipherResult(CipherResult Result)
             {
-                return new GenericCipherResult(Result.Key.ToString(), Result.Text.ToString(), Result.Score);
+                return new GenericCipherResult(Result.KeyString(), Result.Text.ToString(), Result.Score);
             }
         }
     }
