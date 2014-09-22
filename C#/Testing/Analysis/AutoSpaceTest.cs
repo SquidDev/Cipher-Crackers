@@ -16,7 +16,7 @@ namespace Testing.Analysis
             @"|DataDirectory|\TestData\Analysis-AutoSpace.xml", "AnalysisItem",
             DataAccessMethod.Sequential
         )]
-        public void CipherData()
+        public void AutoSpace()
         {
             WordGuesser Spacer = new WordGuesser(DataRead("Text"));
             AssertUtils.AssertWithDiff(DataRead("Result"), Spacer.Result);
