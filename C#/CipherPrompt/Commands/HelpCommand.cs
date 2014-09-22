@@ -33,8 +33,6 @@ namespace Cipher.Prompt.Commands
                 return;
             }
 
-            Console.WriteLine(Args.Count());
-
             Console.WriteLine("Usage: CipherPrompt [MODE] [OPTIONS]");
             Console.WriteLine("Use `CipherPrompt help COMMAND` for help on a specific command");
             Console.WriteLine();
