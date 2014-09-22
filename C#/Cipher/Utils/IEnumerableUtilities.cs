@@ -49,5 +49,10 @@ namespace Cipher.Utils
         {
             return List[List.Count - 1];
         }
+
+        public static string PrettyString<T>(this IEnumerable<T> Items)
+        {
+            return "{" + String.Join(", ", Items) + "}";
+        }
     }
 }

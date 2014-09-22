@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using LArray = Cipher.Text.LetterArray;
 using QSLArray = Cipher.Text.QuadgramScoredLetterArray;
+using QSCArray = Cipher.Text.QuadgramScoredCharacterArray;
 
 namespace Cipher.Prompt
 {
@@ -64,6 +65,22 @@ namespace Cipher.Prompt
                 Description = "Crack the vigenere cipher",
                 Decode = (Enc, Key) => new MonogramVigenere(Enc).Decode(new LArray(Key)).ToString(),
                 Crack = (Enc) => (GenericCipherResult)new MonogramVigenere(Enc).Crack(),
+            });
+
+            AddCommand(new CipherCommand()
+            {
+                Name = "railfence",
+                Description = "Decode/crack the railfence cipher",
+                Decode = (Enc, Key) => new RailFence<QSCArray, char>(Enc).Decode(Convert.ToInt32(Key)).ToString(),
+                Crack = (Enc) => (GenericCipherResult)new RailFence<QSCArray, char>(Enc).Crack(),
+            });
+
+            AddCommand(new CipherCommand()
+            {
+                Name = "transposition",
+                Description = "Decode/crack the columnar transposition cipher (separate key with ';')",
+                Decode = (Enc, Key) => new ColumnarTransposition<QSCArray, char>(Enc).Decode(Key.Split(';').Select(C => Convert.ToByte(C)).ToArray()).ToString(),
+                Crack = (Enc) => (GenericCipherResult)new ColumnarTransposition<QSCArray, char>(Enc).Crack(),
             });
 
             AddCommand(new NGramCommand());

@@ -66,14 +66,24 @@
     <Compile Include="Controls\AutoSpaceControl.xaml.cs">
       <DependentUpon>AutoSpaceControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RailFenceControl.xaml.cs">
+      <DependentUpon>RailFenceControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CipherAnalysisControl.xaml.cs">
       <DependentUpon>CipherAnalysisControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\NGramControl.xaml.cs">
       <DependentUpon>NGramControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ColumnarTranspositionControl.xaml.cs">
+      <DependentUpon>ColumnarTranspositionControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StringLengthToBooleanConverter.cs" />
     <Page Include="Controls\AutoSpaceControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\RailFenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -92,6 +102,10 @@
     <Page Include="Controls\SubstitutionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ColumnarTranspositionControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\VigenereControl.xaml">
       <SubType>Designer</SubType>
