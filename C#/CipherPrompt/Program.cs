@@ -75,6 +75,14 @@ namespace Cipher.Prompt
                 Crack = (Enc) => (GenericCipherResult)new RailFence<QSCArray, char>(Enc).Crack(),
             });
 
+            AddCommand(new CipherCommand()
+            {
+                Name = "transposition",
+                Description = "Decode/crack the columnar transposition cipher (separate key with ';')",
+                Decode = (Enc, Key) => new ColumnarTransposition<QSCArray, char>(Enc).Decode(Key.Split(';').Select(C => Convert.ToByte(C)).ToArray()).ToString(),
+                Crack = (Enc) => (GenericCipherResult)new ColumnarTransposition<QSCArray, char>(Enc).Crack(),
+            });
+
             AddCommand(new NGramCommand());
             AddCommand(new InlineCommand()
             {
