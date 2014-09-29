@@ -33,7 +33,7 @@ namespace Cipher.WPF.Controls
                     .Select(S => Convert.ToByte(S.Trim()))
                     .ToArray();
             }
-            catch(Exception e)
+            catch
             {
                 return "";
             }
