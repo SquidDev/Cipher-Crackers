@@ -2,12 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        xmlns:local="clr-namespace:Cipher.WPF.Controls"
-		xmlns:local1="clr-namespace:Cipher.WPF"
+        xmlns:Controls="clr-namespace:Cipher.WPF.Controls"
+		xmlns:Cipher="clr-namespace:Cipher.WPF"
 		x:Class="Cipher.WPF.MainWindow"
         Title="Cipher-Crackers" Height="400" Width="600" MinHeight="300" MinWidth="400">
     <Metro:MetroWindow.Resources>
-        <local1:StringLengthToBooleanConverter x:Key="StringLengthToBoolean"/>
+        <Cipher:StringLengthToBooleanConverter x:Key="StringLengthToBoolean"/>
     </Metro:MetroWindow.Resources>
     <Grid>
         <TabControl Padding="0">
@@ -25,19 +25,19 @@
 
                         <TabControl ItemContainerStyle="{DynamicResource SmallTabs}" x:Name="CipherPanels" Margin="0" Padding="5">
                             <TabItem Header="CaeserShift">
-                                <local:CaeserShiftControl/>
+                                <Controls:CaeserShiftControl/>
                             </TabItem>
                             <TabItem Header="Substitution">
-                                <local:SubstitutionControl/>
+                                <Controls:SubstitutionControl/>
                             </TabItem>
                             <TabItem Header="Vigenere">
-                                <local:VigenereControl/>
+                                <Controls:VigenereControl/>
                             </TabItem>
                             <TabItem Header="Railfence">
-                                <local:RailFenceControl/>
+                                <Controls:RailFenceControl/>
                             </TabItem>
                             <TabItem Header="Transposition">
-                                <local:ColumnarTranspositionControl/>
+                                <Controls:ColumnarTranspositionControl/>
                             </TabItem>
                         </TabControl>
 
@@ -51,12 +51,11 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition MinWidth="100" />
                         </Grid.ColumnDefinitions>
-                        <TextBox
-							x:Name="InputText" TextWrapping="Wrap"
+                        <Controls:ExtendedTextBox
+							x:Name="InputText"
 							Margin="5" Metro:TextboxHelper.Watermark="Cipher text"
-							VerticalScrollBarVisibility="Auto"
                         />
-
+                        
                         <GridSplitter Grid.Column="1"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Stretch" 
@@ -64,12 +63,11 @@
                             Margin="0,2,0,2"
                             Width="5"
                         />
-                        <TextBox
-							x:Name="ResultText" TextWrapping="Wrap" Grid.Column="2"
+                        
+                        <Controls:ExtendedTextBox
+							x:Name="ResultText" Grid.Column="2"
 							Margin="5" Metro:TextboxHelper.Watermark="Plain text"
-							VerticalScrollBarVisibility="Auto"
                         />
-
                     </Grid>
                 </Grid>
             </TabItem>
@@ -82,24 +80,21 @@
 
 					<TabControl ItemContainerStyle="{DynamicResource SmallTabs}" Padding="5">
                         <TabItem Header="AutoSpace">
-                            <local:AutoSpaceControl Input="{Binding Text, ElementName=AnalysisText}"/>
+                            <Controls:AutoSpaceControl Input="{Binding Text, ElementName=AnalysisText}"/>
                         </TabItem>
 
                         <TabItem Header="NGrams">
-                            <local:NGramControl Input="{Binding Text, ElementName=AnalysisText}"/>
+                            <Controls:NGramControl Input="{Binding Text, ElementName=AnalysisText}"/>
                         </TabItem>
 
                         <TabItem Header="CipherAnalysis">
-                            <local:CipherAnalysisControl Input="{Binding Text, ElementName=AnalysisText}"/>
+                            <Controls:CipherAnalysisControl Input="{Binding Text, ElementName=AnalysisText}"/>
                         </TabItem>
                     </TabControl>
-                    
-                    
 
-                    <TextBox
-						x:Name="AnalysisText" TextWrapping="Wrap" Grid.Row="1"
+                    <Controls:ExtendedTextBox
+						x:Name="AnalysisText" Grid.Row="1"
 						Margin="5" Metro:TextboxHelper.Watermark="Input text"
-						VerticalScrollBarVisibility="Auto"
                     />
                 </Grid>
             </TabItem>

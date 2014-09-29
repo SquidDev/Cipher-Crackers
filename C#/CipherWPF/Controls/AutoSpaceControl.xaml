@@ -4,6 +4,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:Metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:Controls="clr-namespace:Cipher.WPF.Controls"
 	xmlns:WPF="clr-namespace:Cipher.WPF" x:Name="userControl" x:Class="Cipher.WPF.Controls.AutoSpaceControl"
 	mc:Ignorable="d"
 	d:DesignWidth="500" d:DesignHeight="100">
@@ -23,10 +24,9 @@
             <Button x:Name="ToggleProcessing" Content="Add spaces" Margin="0,5" HorizontalAlignment="Right" Width="115" Click="ToggleProcessing_Click" IsEnabled="{Binding Input, Converter={StaticResource StringLengthToBoolean}, ElementName=userControl}" />
         </Grid>
 
-        <TextBox Grid.Row="1"
-			x:Name="ResultText" TextWrapping="Wrap" Grid.Column="1"
+        <Controls:ExtendedTextBox Grid.Row="1"
+			x:Name="ResultText" Grid.Column="1"
 			Margin="0,0,0,5" Metro:TextboxHelper.Watermark="Result"
-			VerticalScrollBarVisibility="Auto"
         />
         
 

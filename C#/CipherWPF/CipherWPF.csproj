@@ -78,6 +78,7 @@
     <Compile Include="Controls\ColumnarTranspositionControl.xaml.cs">
       <DependentUpon>ColumnarTranspositionControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ExtendedTextBox.cs" />
     <Compile Include="StringLengthToBooleanConverter.cs" />
     <Page Include="Controls\AutoSpaceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
