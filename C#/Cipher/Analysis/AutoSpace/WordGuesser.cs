@@ -17,7 +17,7 @@ namespace Cipher.Analysis.AutoSpace
         protected static Dictionary<string, double> MonogramCounts;
         protected static Dictionary<string, double> BigramCounts;
         protected static double[] Unseen;
-        protected static void LoadFiles()
+        public static void LoadFiles()
         {
             if (MonogramCounts != null) return;
 
