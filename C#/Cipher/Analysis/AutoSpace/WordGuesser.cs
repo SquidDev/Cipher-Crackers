@@ -84,7 +84,7 @@ namespace Cipher.Analysis.AutoSpace
         }
         #endregion
 
-        public const byte MAX_WORD_LENGTH = 20;
+        public byte MaxWordLength = 20;
 
         public string Result { get; protected set; }
         public double Score { get; protected set; }
@@ -92,23 +92,30 @@ namespace Cipher.Analysis.AutoSpace
         {
             LoadFiles();
 
+            if (String.IsNullOrWhiteSpace(Input))
+            {
+                throw new ArgumentException("Input cannot be null or whitespace");
+            }
+
             // Trim whitespace and uppercase
             Input = Input.UpperNoSpace();
             int TextLength = Input.Length;
 
-            double[,] Probabilities = new double[TextLength, MAX_WORD_LENGTH];
-            string[,][] Strings = new string[TextLength, MAX_WORD_LENGTH][];
+            MaxWordLength = (byte)Math.Min(MaxWordLength, TextLength);
+
+            double[,] Probabilities = new double[TextLength, MaxWordLength];
+            string[,][] Strings = new string[TextLength, MaxWordLength][];
 
             for(int X = 1; X < TextLength; X++)
             {
-                for(int Y = 0; Y < MAX_WORD_LENGTH; Y++)
+                for(int Y = 0; Y < MaxWordLength; Y++)
                 {
                     Probabilities[X, Y] = Double.NegativeInfinity;
                     Strings[X, Y] = new string[] { " " };
                 }
             }
 
-            for(int Y = 0; Y < MAX_WORD_LENGTH; Y++)
+            for(int Y = 0; Y < MaxWordLength; Y++)
             {
                 string Sub = Input.Substring(0, Y + 1);
                 Probabilities[0, Y] = ConditionalWordProbability(Sub);
@@ -121,9 +128,9 @@ namespace Cipher.Analysis.AutoSpace
 
             for(int I = 1; I < TextLength; I++)
             {
-                int Min = Math.Min(I, MAX_WORD_LENGTH);
+                int Min = Math.Min(I, MaxWordLength);
 
-                for(int J = 0; J < MAX_WORD_LENGTH; J++)
+                for(int J = 0; J < MaxWordLength; J++)
                 {
                     if (I + J + 1 > TextLength) break;
 
@@ -150,7 +157,7 @@ namespace Cipher.Analysis.AutoSpace
                 }
             }
 
-            int Minimum = Math.Min(TextLength, MAX_WORD_LENGTH);
+            int Minimum = Math.Min(TextLength, MaxWordLength);
 
             BestProbability = Double.NegativeInfinity;
 
