@@ -15,7 +15,7 @@ namespace Cipher.WPF
             InitializeComponent();
         }
 
-        private async void Decode_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void Decode_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (String.IsNullOrWhiteSpace(InputText.Text)) return;
 
