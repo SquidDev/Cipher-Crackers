@@ -1,8 +1,8 @@
-﻿using Cipher.Ciphers;
-using System;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Controls;
-using QSCArray = Cipher.Text.QuadgramScoredCharacterArray;
+using Transposition = Cipher.Ciphers.ColumnarTransposition<Cipher.Text.QuadgramScoredCharacterArray, char>;
 
 namespace Cipher.WPF.Controls.Ciphers
 {
@@ -17,7 +17,7 @@ namespace Cipher.WPF.Controls.Ciphers
             InitializeComponent();
 
             // It is done on a per-instance basis.
-            ColumnarTransposition<QSCArray, char> Cipher = new ColumnarTransposition<QSCArray, char>("");
+            Transposition Cipher = new Transposition("");
             KeyLength.Minimum = Cipher.MinKeyLength;
             KeyLength.Maximum = Cipher.MaxKeyLength;
             KeyLength.Value = Math.Max(Cipher.MinKeyLength, (int)KeyLength.Value);
@@ -36,23 +36,24 @@ namespace Cipher.WPF.Controls.Ciphers
             {
                 return "";
             }
-          
-            ColumnarTransposition<QSCArray, char> Cipher = new ColumnarTransposition<QSCArray, char>(Input);
+
+            Transposition Cipher = new Transposition(Input);
             return Cipher.Decode(KeyArray).ToString();
 
         }
 
-        public string Crack(string Input)
+        public async Task<string> Crack(string Input)
         {
-            ColumnarTransposition<QSCArray, char> Cipher = new ColumnarTransposition<QSCArray, char>(Input);
-            ColumnarTransposition<QSCArray, char>.CipherResult Result;
+            Transposition Cipher = new Transposition(Input);
+            Transposition.CipherResult Result;
             if (UseKeyLength.IsChecked.HasValue && UseKeyLength.IsChecked.Value)
             {
-                Result = Cipher.Crack((byte)KeyLength.Value);
+                byte Length = (byte)KeyLength.Value;
+                Result = await Task<Transposition.CipherResult>.Run(() => Cipher.Crack(Length));
             }
             else
             {
-                Result = Cipher.Crack();
+                Result = await Task<Transposition.CipherResult>.Run(() => Cipher.Crack());
             }
 
             Key.Text = String.Join(";", Result.Key);

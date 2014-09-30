@@ -1,6 +1,7 @@
-﻿using Cipher.Ciphers;
-using Cipher.Text;
+﻿using Cipher.Text;
+using System.Threading.Tasks;
 using System.Windows.Controls;
+using Subs = Cipher.Ciphers.Substitution<Cipher.Text.QuadgramScoredLetterArray>;
 
 namespace Cipher.WPF.Controls.Ciphers
 {
@@ -16,14 +17,13 @@ namespace Cipher.WPF.Controls.Ciphers
 
         public string Decode(string Input)
         {
-            Substitution<QuadgramScoredLetterArray> Cipher = new Substitution<QuadgramScoredLetterArray>(Input);
+            Subs Cipher = new Subs(Input);
             return Cipher.Decode(new LetterArray(Key.Text)).ToString();
         }
 
-        public string Crack(string Input)
+        public async Task<string> Crack(string Input)
         {
-            Substitution<QuadgramScoredLetterArray> Cipher = new Substitution<QuadgramScoredLetterArray>(Input);
-            Substitution<QuadgramScoredLetterArray>.CipherResult Result = Cipher.Crack();
+            Subs.CipherResult Result = await Task<Subs.CipherResult>.Run(() => new Subs(Input).Crack());
 
             Key.Text = Result.Key.ToString();
             return Result.Text.ToString();

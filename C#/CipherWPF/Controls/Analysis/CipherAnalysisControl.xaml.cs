@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -30,14 +31,20 @@ namespace Cipher.WPF.Controls.Analysis
             DataContext = this;
         }
 
-        private void Go_Click(object sender, RoutedEventArgs e)
+        private async void Go_Click(object sender, RoutedEventArgs e)
         {
-            Analysis = new CipherAnalysis(Input);
+            Go.IsRunning = true;
+
+            string In = Input;
+            Analysis = await Task<CipherAnalysis>.Run(() => new CipherAnalysis(In));
+
+            // Sort the results and round
             CipherResults = Analysis.Deviations
                 .Select(KV => new KeyValuePair<string, int>(
                     KV.Key.Name, 
                     (int)Math.Round(KV.Value, MidpointRounding.AwayFromZero))
                 ).OrderBy(KV => KV.Value).ToList();
+
             OnChanged("CipherResults");
 
             AnalysisResults = new Dictionary<string,int>()
@@ -54,6 +61,8 @@ namespace Cipher.WPF.Controls.Analysis
             };
 
             OnChanged("AnalysisResults");
+
+            Go.IsRunning = false;
         }
 
         #region INotifyPropertyChanged Members

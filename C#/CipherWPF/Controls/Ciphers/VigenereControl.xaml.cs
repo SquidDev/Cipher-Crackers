@@ -1,6 +1,7 @@
 ﻿using Cipher.Ciphers;
 using Cipher.Text;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace Cipher.WPF.Controls.Ciphers
@@ -27,17 +28,18 @@ namespace Cipher.WPF.Controls.Ciphers
             return Cipher.Decode(new LetterArray(Key.Text)).ToString();
         }
 
-        public string Crack(string Input)
+        public async Task<string> Crack(string Input)
         {
             MonogramVigenere Cipher = new MonogramVigenere(Input);
             MonogramVigenere.CipherResult Result;
             if (UseKeyLength.IsChecked.HasValue && UseKeyLength.IsChecked.Value)
             {
-                Result = Cipher.Crack((int)KeyLength.Value);
+                int Length = (int)KeyLength.Value;
+                Result = await Task<MonogramVigenere.CipherResult>.Run(() => Cipher.Crack(Length));
             }
             else
             {
-                Result = Cipher.Crack();
+                Result = await Task<MonogramVigenere.CipherResult>.Run(() => Cipher.Crack());
             }
 
             Key.Text = Result.Key.ToString();

@@ -1,6 +1,8 @@
 ﻿using Cipher.Ciphers;
 using Cipher.Text;
+using System.Threading.Tasks;
 using System.Windows.Controls;
+using RFence = Cipher.Ciphers.RailFence<Cipher.Text.QuadgramScoredCharacterArray, char>;
 
 namespace Cipher.WPF.Controls.Ciphers
 {
@@ -16,14 +18,13 @@ namespace Cipher.WPF.Controls.Ciphers
 
         public string Decode(string Input)
         {
-            RailFence<QuadgramScoredCharacterArray, char> Cipher = new RailFence<QuadgramScoredCharacterArray, char>(Input);
+            RFence Cipher = new RFence(Input);
             return Cipher.Decode((byte)Key.Value).ToString();
         }
 
-        public string Crack(string Input)
+        public async Task<string> Crack(string Input)
         {
-            RailFence<QuadgramScoredCharacterArray, char> Cipher = new RailFence<QuadgramScoredCharacterArray, char>(Input);
-            RailFence<QuadgramScoredCharacterArray, char>.CipherResult Result = Cipher.Crack();
+            RFence.CipherResult Result = await Task<RFence.CipherResult>.Run(() => new RFence(Input).Crack());
 
             Key.Value = Result.Key;
             return Result.Text.ToString();

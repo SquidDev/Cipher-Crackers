@@ -20,8 +20,10 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <TextBlock x:Name="ErrorMessages" Margin="0,5,0,125" TextWrapping="Wrap" Foreground="Red" TextAlignment="Right"/>
-            <Button x:Name="ToggleProcessing" Content="Add spaces" Margin="0,5" HorizontalAlignment="Right" Width="115" Click="ToggleProcessing_Click" IsEnabled="{Binding Input, Converter={StaticResource StringLengthToBoolean}, ElementName=userControl}" />
+            <Controls:RunningButton 
+                x:Name="Start" Content="Add spaces" Margin="0,5"
+                HorizontalAlignment="Right" Width="115" Click="Start_Click" 
+                IsEnabled="{Binding Input, Converter={StaticResource StringLengthToBoolean}, ElementName=userControl}" />
         </Grid>
 
         <Controls:ExtendedTextBox Grid.Row="1"
