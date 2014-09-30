@@ -26,7 +26,7 @@ namespace Cipher.WPF
             }
         }
 
-        private void Crack_Click(object sender, System.Windows.RoutedEventArgs e)
+        private async void Crack_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (String.IsNullOrWhiteSpace(InputText.Text)) return;
 
@@ -34,7 +34,7 @@ namespace Cipher.WPF
             if (Selected is IDecode)
             {
                 IDecode Decoder = (IDecode)Selected;
-                ResultText.Text = Decoder.Crack(InputText.Text);
+                ResultText.Text = await Decoder.Crack(InputText.Text);
             }
         }
     }

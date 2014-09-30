@@ -1,6 +1,6 @@
-﻿using Cipher.Ciphers;
-using Cipher.Text;
+﻿using System.Threading.Tasks;
 using System.Windows.Controls;
+using Caeser = Cipher.Ciphers.CaeserShift<Cipher.Text.QuadgramScoredLetterArray>;
 
 namespace Cipher.WPF.Controls.Ciphers
 {
@@ -16,14 +16,15 @@ namespace Cipher.WPF.Controls.Ciphers
 
         public string Decode(string Input)
         {
-            CaeserShift<QuadgramScoredLetterArray> Cipher = new CaeserShift<QuadgramScoredLetterArray>(Input);
+            Caeser Cipher = new Caeser(Input);
             return Cipher.Decode((byte)Key.Value).ToString();
         }
 
-        public string Crack(string Input)
+        public async Task<string> Crack(string Input)
         {
-            CaeserShift<QuadgramScoredLetterArray> Cipher = new CaeserShift<QuadgramScoredLetterArray>(Input);
-            CaeserShift<QuadgramScoredLetterArray>.CipherResult Result = Cipher.Crack();
+            Caeser.CipherResult Result = await Task<Caeser.CipherResult>.Run(
+                () => new Caeser(Input).Crack()
+            );
 
             Key.Value = Result.Key;
             return Result.Text.ToString();

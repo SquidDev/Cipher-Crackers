@@ -1,4 +1,6 @@
-﻿namespace Cipher.WPF
+﻿using System.Threading.Tasks;
+
+namespace Cipher.WPF
 {
     /// <summary>
     /// Used for controls that decode text
@@ -7,6 +9,6 @@
 	public interface IDecode
 	{
         string Decode(string Input);
-        string Crack(string Input);
+        Task<string> Crack(string Input);
 	}
 }
