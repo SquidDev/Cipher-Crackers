@@ -33,7 +33,7 @@
                                           RecognizesAccessKey="True" 
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         <Metro:MetroProgressBar 
-                            IsIndeterminate="True" VerticalAlignment="Bottom" Margin="{TemplateBinding Padding}"
+                            IsIndeterminate="True" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"
                             Visibility="{TemplateBinding IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -50,6 +50,9 @@
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" TargetName="DisabledVisualElement" Value="0.7"/>
                             <Setter Property="Opacity" TargetName="contentPresenter" Value="0.3"/>
+                        </Trigger>
+                        <Trigger Property="IsRunning" Value="True">
+                            <Setter Property="Opacity" TargetName="contentPresenter" Value="0.1"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
