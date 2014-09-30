@@ -10,6 +10,7 @@ namespace Testing.Tools
     public class LetterArrayTest : DataTest
     {
         [TestMethod]
+        [TestCategory("Tools")]
         [DeploymentItem(@"TestData\Tools-LetterArrays.xml")]
         [DataSource(
             "Microsoft.VisualStudio.TestTools.DataSource.XML",

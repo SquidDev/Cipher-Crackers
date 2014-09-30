@@ -11,6 +11,7 @@ namespace Testing.Ciphers
         /// Tests the crack method
         /// </summary>
         [TestMethod]
+        [TestCategory("Cipher"), TestCategory("Crack")]
         [DeploymentItem(@"TestData\Cipher-RailFence.xml")]
         [DataSource(
             "Microsoft.VisualStudio.TestTools.DataSource.XML",
@@ -27,6 +28,7 @@ namespace Testing.Ciphers
         /// Tests the decode method
         /// </summary>
         [TestMethod]
+        [TestCategory("Cipher"), TestCategory("Decode")]
         [DeploymentItem(@"TestData\Cipher-RailFence.xml")]
         [DataSource(
             "Microsoft.VisualStudio.TestTools.DataSource.XML",

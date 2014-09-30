@@ -11,6 +11,7 @@ namespace Testing.Ciphers
     public class VigenereTest : CipherTest<string>
     {
         [TestMethod]
+        [TestCategory("Cipher"), TestCategory("Crack")]
         [DeploymentItem(@"TestData\Cipher-Vigenere.xml")]
         [DataSource(
             "Microsoft.VisualStudio.TestTools.DataSource.XML",
@@ -23,6 +24,7 @@ namespace Testing.Ciphers
         }
 
         [TestMethod]
+        [TestCategory("Cipher"), TestCategory("Decode")]
         [DeploymentItem(@"TestData\Cipher-Vigenere.xml")]
         [DataSource(
             "Microsoft.VisualStudio.TestTools.DataSource.XML",

@@ -12,6 +12,7 @@ namespace Testing.Analysis
         const string XML_CIPHER_PREFIX = "Cipher_";
 
         [TestMethod]
+        [TestCategory("Analysis")]
         [DeploymentItem(@"TestData\Analysis-CipherAnalysis.xml")]
         [DataSource(
             "Microsoft.VisualStudio.TestTools.DataSource.XML",

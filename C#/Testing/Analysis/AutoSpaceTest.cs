@@ -10,6 +10,7 @@ namespace Testing.Analysis
     public class AutoSpaceTest : DataTest
     {
         [TestMethod]
+        [TestCategory("Analysis")]
         [DeploymentItem(@"TestData\Analysis-AutoSpace.xml")]
         [DataSource(
             "Microsoft.VisualStudio.TestTools.DataSource.XML",
