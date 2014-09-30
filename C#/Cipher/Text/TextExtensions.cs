@@ -43,7 +43,7 @@ namespace Cipher.Text
             }
             else if (Character >= 'a' && Character <= 'z')
             {
-                return (byte)(Character - 'z');
+                return (byte)(Character - 'a');
             }
             else if (Character == '#')
             {
