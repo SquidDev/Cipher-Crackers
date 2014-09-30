@@ -44,7 +44,7 @@
                         </TabControl>
 
                         <Button Content="Decode" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,5,5,35" Click="Decode_Click" IsEnabled="{Binding Text, Converter={StaticResource StringLengthToBoolean}, ElementName=InputText}"/>
-                        <Button Content="Crack" Grid.Column="1" VerticalAlignment="Bottom" Margin="5" Click="Crack_Click" IsEnabled="{Binding Text, Converter={StaticResource StringLengthToBoolean}, ElementName=InputText}"/>
+                        <Controls:RunningButton x:Name="Crack" Content="Crack" Grid.Column="1" VerticalAlignment="Bottom" Margin="5" Click="Crack_Click" IsEnabled="{Binding Text, Converter={StaticResource StringLengthToBoolean}, ElementName=InputText}" HorizontalContentAlignment="Center"/>
                     </Grid>
 
                     <Grid Grid.Row="2">
