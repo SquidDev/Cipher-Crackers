@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:WPF="clr-namespace:Cipher.WPF"
+             xmlns:Controls="clr-namespace:Cipher.WPF.Controls"
              mc:Ignorable="d" x:Name="userControl"
              d:DesignHeight="300" d:DesignWidth="500">
 
@@ -32,7 +33,10 @@
             </TabItem>
         </TabControl>
 
-        <Button Content="Calculate Stats" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,0,0" Click="Go_Click" Width="115" IsEnabled="{Binding Input, Converter={StaticResource StringLengthToBoolean}, ElementName=userControl}" />
+        <Controls:RunningButton
+            x:Name="Go" Content="Calculate Stats" HorizontalAlignment="Right" 
+            VerticalAlignment="Top" Margin="0,5,0,0" Click="Go_Click" Width="115"
+            IsEnabled="{Binding Input, Converter={StaticResource StringLengthToBoolean}, ElementName=userControl}" />
 
     </Grid>
 </UserControl>

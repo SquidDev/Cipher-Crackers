@@ -1,10 +1,8 @@
-﻿using System.Windows.Controls;
-using Cipher.Analysis.AutoSpace;
-using System.Threading;
-using System.Collections.Generic;
-using System.IO;
+﻿using Cipher.Analysis.AutoSpace;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Cipher.WPF.Controls.Analysis
 {
@@ -13,11 +11,6 @@ namespace Cipher.WPF.Controls.Analysis
 	/// </summary>
 	public partial class AutoSpaceControl : UserControl
 	{
-        Thread ProcessingThread;
-        Action<string> ErrorHandler;
-        Action<string> SuccessHandler;
-
-
         public static readonly DependencyProperty InputProperty = DependencyProperty.Register("Input", typeof(String), typeof(AutoSpaceControl), new FrameworkPropertyMetadata(String.Empty));
         public String Input
         {
@@ -28,67 +21,35 @@ namespace Cipher.WPF.Controls.Analysis
         public AutoSpaceControl()
 		{
 			this.InitializeComponent();
-
-            ErrorHandler = ErrorMessage;
-            SuccessHandler = SetOutText;
 		}
 
-        public void Space(string Input)
+        private async void Start_Click(object sender, RoutedEventArgs e)
         {
-#if !DEBUG
+            Start.IsRunning = true;
+            Exception Error = null;
             try
             {
-#endif
-                WordGuesser Guesser = new WordGuesser(Input);
-                Dispatcher.BeginInvoke(SuccessHandler, Guesser.Result);
-#if !DEBUG
+                string In = Input;
+                ResultText.Text = await Task<string>.Run(() => new WordGuesser(In).Result);
             }
-            catch (ThreadAbortException)
+            catch(Exception Er)
             {
-                // Pass
+                Error = Er;
             }
-            catch (ArgumentOutOfRangeException e)
+            
+            Start.IsRunning = false;
+
+            if(Error != null)
             {
-                // Catch other exceptions
-                Dispatcher.BeginInvoke(ErrorHandler, e.Message);
-            }
-#endif
-        }
-
-        public void ErrorMessage(string Error)
-        {
-            ErrorMessages.Text = Error;
-            ToggleProcessing.Content = "Add spaces";
-        }
-
-        public void SetOutText(string Result)
-        {
-            ResultText.Text = Result;
-            ToggleProcessing.Content = "Add spaces";
-        }
-
-        private void ToggleProcessing_Click(object sender, RoutedEventArgs e)
-        {
-            if (ProcessingThread == null || !ProcessingThread.IsAlive)
-            {
-                string InputValue = Input;
-
-                Action Starter = delegate()
+                // We have to use this override to get the parent element.
+                if(Window.GetWindow(this) is MainWindow)
                 {
-                    Space(InputValue);
-                };
-
-                ProcessingThread = new Thread(new ThreadStart(Starter));
-                ProcessingThread.SetApartmentState(ApartmentState.STA);
-                ProcessingThread.IsBackground = true;
-
-                ProcessingThread.Start();
-                ToggleProcessing.Content = "Abort";
-            }
-            else
-            {
-                ProcessingThread.Abort();
-                ToggleProcessing.Content = "Add spaces";
+                    ((MainWindow)Window.GetWindow(this)).ShowErrorMessage(Error);
+                }
+                else
+                {
+                    throw Error;
+                }
             }
         }
     }

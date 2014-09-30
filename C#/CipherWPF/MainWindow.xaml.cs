@@ -33,11 +33,10 @@ namespace Cipher.WPF
                     Error = Er;
                 }
 
-                if(Error != null)
+                if (Error != null)
                 {
-                    await this.ShowMessageAsync("SSomething went wrong, sorry", Error.Message);
+                    ShowErrorMessage(Error);
                 }
-                
             }
         }
 
@@ -65,9 +64,14 @@ namespace Cipher.WPF
 
                 if (Error != null)
                 {
-                    await this.ShowMessageAsync("Something went wrong, sorry", Error.Message);
+                    ShowErrorMessage(Error);
                 }
             }
+        }
+
+        public async void ShowErrorMessage(Exception Error)
+        {
+            await this.ShowMessageAsync("Whoah!", Error.Message);
         }
     }
 }
