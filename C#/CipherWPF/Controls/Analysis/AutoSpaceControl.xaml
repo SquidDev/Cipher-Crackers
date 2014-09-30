@@ -1,12 +1,12 @@
-﻿<UserControl
+﻿<UserControl x:Class="Cipher.WPF.Controls.Analysis.AutoSpaceControl"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:Metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:Controls="clr-namespace:Cipher.WPF.Controls"
-	xmlns:WPF="clr-namespace:Cipher.WPF" x:Name="userControl" x:Class="Cipher.WPF.Controls.AutoSpaceControl"
-	mc:Ignorable="d"
+	xmlns:WPF="clr-namespace:Cipher.WPF" x:Name="userControl"
+    mc:Ignorable="d"
 	d:DesignWidth="500" d:DesignHeight="100">
 
     <UserControl.Resources>

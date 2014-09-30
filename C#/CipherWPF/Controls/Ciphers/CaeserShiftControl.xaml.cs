@@ -1,8 +1,8 @@
-﻿using System.Windows.Controls;
-using Cipher.Ciphers;
+﻿using Cipher.Ciphers;
 using Cipher.Text;
+using System.Windows.Controls;
 
-namespace Cipher.WPF.Controls
+namespace Cipher.WPF.Controls.Ciphers
 {
 	/// <summary>
 	/// Interaction logic for CaeserShift.xaml

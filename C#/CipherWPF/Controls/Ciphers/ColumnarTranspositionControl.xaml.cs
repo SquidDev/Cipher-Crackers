@@ -1,11 +1,10 @@
 ﻿using Cipher.Ciphers;
-using Cipher.Text;
 using System;
 using System.Linq;
 using System.Windows.Controls;
 using QSCArray = Cipher.Text.QuadgramScoredCharacterArray;
 
-namespace Cipher.WPF.Controls
+namespace Cipher.WPF.Controls.Ciphers
 {
     /// <summary>
     /// Interaction logic for VigenereControl.xaml

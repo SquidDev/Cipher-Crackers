@@ -63,52 +63,52 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\AutoSpaceControl.xaml.cs">
+    <Compile Include="Controls\Analysis\AutoSpaceControl.xaml.cs">
       <DependentUpon>AutoSpaceControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\RailFenceControl.xaml.cs">
+    <Compile Include="Controls\Ciphers\RailFenceControl.xaml.cs">
       <DependentUpon>RailFenceControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CipherAnalysisControl.xaml.cs">
+    <Compile Include="Controls\Analysis\CipherAnalysisControl.xaml.cs">
       <DependentUpon>CipherAnalysisControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NGramControl.xaml.cs">
+    <Compile Include="Controls\Analysis\NGramControl.xaml.cs">
       <DependentUpon>NGramControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ColumnarTranspositionControl.xaml.cs">
+    <Compile Include="Controls\Ciphers\ColumnarTranspositionControl.xaml.cs">
       <DependentUpon>ColumnarTranspositionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ExtendedTextBox.cs" />
     <Compile Include="StringLengthToBooleanConverter.cs" />
-    <Page Include="Controls\AutoSpaceControl.xaml">
+    <Page Include="Controls\Analysis\AutoSpaceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\RailFenceControl.xaml">
+    <Page Include="Controls\Ciphers\RailFenceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\CaeserShiftControl.xaml">
+    <Page Include="Controls\Ciphers\CaeserShiftControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\CipherAnalysisControl.xaml">
+    <Page Include="Controls\Analysis\CipherAnalysisControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\NGramControl.xaml">
+    <Page Include="Controls\Analysis\NGramControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\SubstitutionControl.xaml">
+    <Page Include="Controls\Ciphers\SubstitutionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ColumnarTranspositionControl.xaml">
+    <Page Include="Controls\Ciphers\ColumnarTranspositionControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\VigenereControl.xaml">
+    <Page Include="Controls\Ciphers\VigenereControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -124,13 +124,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\CaeserShiftControl.xaml.cs">
+    <Compile Include="Controls\Ciphers\CaeserShiftControl.xaml.cs">
       <DependentUpon>CaeserShiftControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SubstitutionControl.xaml.cs">
+    <Compile Include="Controls\Ciphers\SubstitutionControl.xaml.cs">
       <DependentUpon>SubstitutionControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\VigenereControl.xaml.cs">
+    <Compile Include="Controls\Ciphers\VigenereControl.xaml.cs">
       <DependentUpon>VigenereControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="IDecode.cs" />

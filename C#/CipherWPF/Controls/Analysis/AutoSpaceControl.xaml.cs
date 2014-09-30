@@ -6,7 +6,7 @@ using System.IO;
 using System;
 using System.Windows;
 
-namespace Cipher.WPF.Controls
+namespace Cipher.WPF.Controls.Analysis
 {
 	/// <summary>
 	/// Interaction logic for AutoSpaceControl.xaml

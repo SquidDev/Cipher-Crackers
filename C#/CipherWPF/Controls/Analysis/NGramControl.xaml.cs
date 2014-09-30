@@ -1,6 +1,4 @@
 ﻿using Cipher.Analysis;
-using Cipher.Ciphers;
-using Cipher.Text;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Cipher.WPF.Controls
+namespace Cipher.WPF.Controls.Analysis
 {
     /// <summary>
     /// Interaction logic for Substitution.xaml

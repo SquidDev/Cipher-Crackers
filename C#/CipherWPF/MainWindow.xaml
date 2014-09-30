@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:Controls="clr-namespace:Cipher.WPF.Controls"
+        xmlns:Ciphers="clr-namespace:Cipher.WPF.Controls.Ciphers"
+        xmlns:Analysis="clr-namespace:Cipher.WPF.Controls.Analysis"
 		xmlns:Cipher="clr-namespace:Cipher.WPF"
 		x:Class="Cipher.WPF.MainWindow"
         Title="Cipher-Crackers" Height="400" Width="600" MinHeight="300" MinWidth="400">
@@ -25,19 +27,19 @@
 
                         <TabControl ItemContainerStyle="{DynamicResource SmallTabs}" x:Name="CipherPanels" Margin="0" Padding="5">
                             <TabItem Header="CaeserShift">
-                                <Controls:CaeserShiftControl/>
+                                <Ciphers:CaeserShiftControl/>
                             </TabItem>
                             <TabItem Header="Substitution">
-                                <Controls:SubstitutionControl/>
+                                <Ciphers:SubstitutionControl/>
                             </TabItem>
                             <TabItem Header="Vigenere">
-                                <Controls:VigenereControl/>
+                                <Ciphers:VigenereControl/>
                             </TabItem>
                             <TabItem Header="Railfence">
-                                <Controls:RailFenceControl/>
+                                <Ciphers:RailFenceControl/>
                             </TabItem>
                             <TabItem Header="Transposition">
-                                <Controls:ColumnarTranspositionControl/>
+                                <Ciphers:ColumnarTranspositionControl/>
                             </TabItem>
                         </TabControl>
 
@@ -80,15 +82,15 @@
 
 					<TabControl ItemContainerStyle="{DynamicResource SmallTabs}" Padding="5">
                         <TabItem Header="AutoSpace">
-                            <Controls:AutoSpaceControl Input="{Binding Text, ElementName=AnalysisText}"/>
+                            <Analysis:AutoSpaceControl Input="{Binding Text, ElementName=AnalysisText}"/>
                         </TabItem>
 
                         <TabItem Header="NGrams">
-                            <Controls:NGramControl Input="{Binding Text, ElementName=AnalysisText}"/>
+                            <Analysis:NGramControl Input="{Binding Text, ElementName=AnalysisText}"/>
                         </TabItem>
 
                         <TabItem Header="CipherAnalysis">
-                            <Controls:CipherAnalysisControl Input="{Binding Text, ElementName=AnalysisText}"/>
+                            <Analysis:CipherAnalysisControl Input="{Binding Text, ElementName=AnalysisText}"/>
                         </TabItem>
                     </TabControl>
 
