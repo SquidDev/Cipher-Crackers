@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis\AutoSpace\Count1Word.cs" />
+    <Compile Include="Analysis\AutoSpace\Count2Word.cs" />
+    <Compile Include="Analysis\AutoSpace\CountCalculator.cs" />
     <Compile Include="Analysis\AutoSpace\WordGuesser.cs" />
     <Compile Include="Analysis\CipherGues\CipherData.cs" />
     <Compile Include="Analysis\CipherGues\CipherType.cs" />
@@ -63,10 +66,6 @@
     <Compile Include="Text\ScoredLetterArray.cs" />
     <Compile Include="Text\TextArray.cs" />
     <Compile Include="Text\TextExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Analysis\AutoSpace\1WordScores.txt" />
-    <EmbeddedResource Include="Analysis\AutoSpace\2WordScores.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

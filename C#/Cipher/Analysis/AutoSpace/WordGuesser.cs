@@ -10,88 +10,12 @@ namespace Cipher.Analysis.AutoSpace
 {
     public class WordGuesser
     {
-        #region Loading
-        protected const double TOKEN_COUNT = 1024908267229;
-        protected const byte UNSEEN_COUNT = 50;
-
-        protected static Dictionary<string, double> MonogramCounts;
-        protected static Dictionary<string, double> BigramCounts;
-        protected static double[] Unseen;
-        public static void LoadFiles()
-        {
-            if (MonogramCounts != null) return;
-
-            MonogramCounts = LoadFile("1WordScores");
-            // Calculate first order log probabilities
-            foreach (string Key in MonogramCounts.Keys.ToArray())
-            {
-                MonogramCounts[Key] = Math.Log10(MonogramCounts[Key] / TOKEN_COUNT);
-            }
-
-            BigramCounts = LoadFile("2WordScores");
-            // Calculate second order log probabilities
-            foreach (string Key in BigramCounts.Keys.ToArray())
-            {
-                string[] Words = Key.Split(' ');
-                if (Words.Length < 2) continue;
-
-                double Word1Result;
-                if (MonogramCounts.TryGetValue(Words[0], out Word1Result))
-                {
-                    BigramCounts[Key] = Math.Log10(BigramCounts[Key] / TOKEN_COUNT) - Word1Result;
-                }
-                else
-                {
-                    BigramCounts[Key] = Math.Log10(BigramCounts[Key] / TOKEN_COUNT);
-                }
-            }
-
-            Unseen = new double[UNSEEN_COUNT];
-            for(int L = 0; L < UNSEEN_COUNT; L++)
-            {
-                Unseen[L] = Math.Log10(10 / (TOKEN_COUNT * Math.Pow(10, L)));
-            }
-        }
-
-        protected static Dictionary<string, double> LoadFile(string FileName)
-        {
-            Assembly ThisAssembly = Assembly.GetExecutingAssembly();
-
-            Dictionary<string, double> ToLoad = new Dictionary<string, double>();
-            using(Stream ResourceStream = ThisAssembly.GetManifestResourceStream("Cipher.Analysis.AutoSpace." + FileName + ".txt"))
-            {
-                using(StreamReader Reader = new StreamReader(ResourceStream))
-                {
-                    while(Reader.Peek() >= 0)
-                    {
-                        string[] Line = Reader.ReadLine().Split('\t');
-                        if (Line.Length < 2) continue;
-
-                        string Name = Line[0].ToUpper();
-                        double Score = 0;
-                        try
-                        {
-                            Score = Convert.ToDouble(Line[1]);
-                            double OldScore = 0;
-                            ToLoad.TryGetValue(Name, out OldScore);
-                            ToLoad[Name] = Score + OldScore;
-                        }
-                        catch { }
-                    }
-                }
-            }
-            return ToLoad;
-        }
-        #endregion
-
         public byte MaxWordLength = 20;
 
         public string Result { get; protected set; }
         public double Score { get; protected set; }
         public WordGuesser(string Input)
         {
-            LoadFiles();
-
             if (String.IsNullOrWhiteSpace(Input))
             {
                 throw new ArgumentException("Input cannot be null or whitespace");
@@ -178,10 +102,10 @@ namespace Cipher.Analysis.AutoSpace
         protected double ConditionalWordProbability(string Word, string Previous = "<UNK>")
         {
             double SingleScore, DoubleScore;
-            if (MonogramCounts.TryGetValue(Word, out SingleScore))
+            if (AutoSpaceData.WordOne.TryGetValue(Word, out SingleScore))
             {
 
-                if (BigramCounts.TryGetValue(Previous + " " + Word, out DoubleScore))
+                if (AutoSpaceData.WordTwo.TryGetValue(Previous + " " + Word, out DoubleScore))
                 {
                     return DoubleScore;
                 }
