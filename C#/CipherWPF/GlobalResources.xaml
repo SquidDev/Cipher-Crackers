@@ -13,6 +13,8 @@
 	<Style TargetType="{x:Type Controls:ExtendedTextBox}" BasedOn="{StaticResource {x:Type TextBox}}" />
 
     <Style TargetType="{x:Type Controls:RunningButton}" BasedOn="{StaticResource {x:Type Button}}">
+        <!-- Needed for strange reason -->
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Controls:RunningButton}">
