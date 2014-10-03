@@ -61,7 +61,7 @@ namespace Cipher.Ciphers
             int Length = Text.Length;
             for (int WordLength = MinWordLength; WordLength <= MaxWordLength; WordLength++)
             {
-                int End = Length - WordLength;
+                int End = Length - WordLength + 1;
                 for (int Position = 0; Position < End; Position++)
                 {
                     Positions.GetOrDefault(Text.Substring(Position, WordLength)).Add(Position);

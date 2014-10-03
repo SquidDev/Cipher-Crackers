@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Analysis>
+  <AnalysisItem>
+    <Text>LETSGETSOMESTUFF</Text>
+    <Length>2</Length>
+    
+    <N_ET>2</N_ET>
+    <N_TS>2</N_TS>
+    <N_LE>1</N_LE>
+    <N_SG>1</N_SG>
+    <N_GE>1</N_GE>
+    <N_SO>1</N_SO>
+    <N_OM>1</N_OM>
+    <N_ME>1</N_ME>
+    <N_ES>1</N_ES>
+    <N_ST>1</N_ST>
+    <N_TU>1</N_TU>
+    <N_UF>1</N_UF>
+    <N_FF>1</N_FF>
+  </AnalysisItem>
+</Analysis>
