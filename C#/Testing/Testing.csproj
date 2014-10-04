@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Analysis\AutoSpaceTest.cs" />
     <Compile Include="Analysis\CipherAnalysisTest.cs" />
+    <Compile Include="Analysis\NGramTest.cs" />
     <Compile Include="AssertUtils.cs" />
     <Compile Include="Ciphers\RailFenceTest.cs" />
     <Compile Include="Ciphers\CipherTest.cs" />
@@ -76,6 +77,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestData\Analysis-NGram.xml" />
     <Content Include="TestData\Tools-LetterArrays.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
