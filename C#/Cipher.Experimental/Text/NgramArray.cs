@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using MathNet.Numerics.LinearAlgebra;
@@ -8,27 +9,27 @@ namespace Cipher.Text
     /// <summary>
     /// Holds characters in an array of Matrices
     /// </summary>
-    public class NgramArray : TextArray<Matrix<float>>
+    public class NGramArray : TextArray<Matrix<float>>, IEnumerable<float>
     {
         /// <summary>
         /// The length of each NGram
         /// </summary>
-        public readonly int NgramLength = 2;
+        public int NGramLength = 2;
 
-        public NgramArray() : this(2) { }
+        public NGramArray() : this(2) { }
 
-        public NgramArray(int ngramLength = 2) : base()
+        public NGramArray(int ngramLength = 2) : base()
         {
-            NgramLength = ngramLength;
+            NGramLength = ngramLength;
         }
-        public NgramArray(string Text, int ngramLength = 2)
+        public NGramArray(string Text, int ngramLength = 2)
         {
-            NgramLength = ngramLength;
+            NGramLength = ngramLength;
             Initalise(Text);
         }
-        public NgramArray(int length, int ngramLength = 2)
+        public NGramArray(int length, int ngramLength = 2)
         {
-            NgramLength = ngramLength;
+            NGramLength = ngramLength;
             Initalise(length);
         }
 
@@ -38,7 +39,7 @@ namespace Cipher.Text
             MatrixBuilder<float> builder = Matrix<float>.Build;
             List<Matrix<float>> characters = new List<Matrix<float>>();
 
-            int ngramLength = NgramLength;
+            int ngramLength = NGramLength;
             float[] values = new float[ngramLength];
             int offset = 0;
             foreach (char character in Text)
@@ -63,16 +64,16 @@ namespace Cipher.Text
             Characters = characters.ToArray();
         }
 
-        public override void Initalise(int Length)
+        public override void Initalise(int length)
         {
-            if (Length % NgramLength != 0) throw new ArgumentException("Text length must be a multiple of NgramLength");
-            int length = Length / NgramLength;
+            if (length % NGramLength != 0) throw new ArgumentException("Text length must be a multiple of NgramLength");
+            length /= NGramLength;
             Characters = new Matrix<float>[length];
 
             MatrixBuilder<float> builder = Matrix<float>.Build;
             for (int i = 0; i < length; i++)
             {
-                Characters[i] = builder.Dense(1, NgramLength);
+                Characters[i] = builder.Dense(1, NGramLength);
             }
         }
         #endregion
@@ -87,7 +88,7 @@ namespace Cipher.Text
         /// </summary>
         public new int Length
         {
-            get { return Characters.Length * NgramLength; }
+            get { return Characters.Length * NGramLength; }
         }
 
         /// <summary>
@@ -96,7 +97,7 @@ namespace Cipher.Text
         /// <returns></returns>
         public override string ToString()
         {
-            StringBuilder result = new StringBuilder(Characters.Length * NgramLength);
+            StringBuilder result = new StringBuilder(Characters.Length * NGramLength);
             foreach (Matrix<float> ngram in Characters)
             {
                 foreach(float character in ngram.Enumerate())
@@ -115,6 +116,25 @@ namespace Cipher.Text
         public override string Substring(int start, int length)
         {
             return ToString().Substring(start, length);
+        }
+
+        public IEnumerator<float> GetEnumerator()
+        {
+            int nGramLength = NGramLength;
+            Matrix<float>[] characters = Characters;
+            for(int offset = 0; offset < characters.Length; offset++)
+            {
+                Matrix<float> current = characters[offset];
+                for(int column = 0; column < nGramLength; column++)
+                {
+                    yield return current[0, column];
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

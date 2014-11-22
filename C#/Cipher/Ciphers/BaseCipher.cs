@@ -17,6 +17,7 @@ namespace Cipher.Ciphers
         // Conversion function for custom keys
         protected Func<TKey, string> KeyStringify = K => K.ToString();
 
+        public BaseCipher() { }
         public BaseCipher(TArray CipherText)
         {
             Text = CipherText;

@@ -7,12 +7,16 @@ namespace Cipher.Ciphers
     /// <summary>
     /// Implements the Hill Cipher
     /// </summary>
-    public class Hill : BaseCipher<Matrix<float>, NgramArray, Matrix<float>>
+    public class Hill<TArray> : BaseCipher<Matrix<float>, TArray, Matrix<float>>
+        where TArray : NGramArray, new()
     {
         public Hill(string cipherText, int ngramLength = 2)
-            : this(new NgramArray(cipherText, ngramLength))
-        { }
-        public Hill(NgramArray cipherText) : base(cipherText) { }
+        {
+            Text = new TArray();
+            Text.NGramLength = ngramLength;
+            Text.Initalise(cipherText);
+        }
+        public Hill(TArray cipherText) : base(cipherText) { }
 
         public override CipherResult Crack()
         {
@@ -24,9 +28,12 @@ namespace Cipher.Ciphers
         /// </summary>
         /// <param name="key">The Key to use</param>
         /// <returns>The decoded text</returns>
-        public override NgramArray Decode(Matrix<float> key)
+        public override TArray Decode(Matrix<float> key)
         {
-            return Decode(key, new NgramArray(Text.Length, Text.NgramLength));
+            TArray decoded = new TArray();
+            decoded.NGramLength = Text.NGramLength;
+            decoded.Initalise(Text.Length);
+            return Decode(key, decoded);
         }
 
         /// <summary>
@@ -35,7 +42,7 @@ namespace Cipher.Ciphers
         /// <param name="key">The key to use</param>
         /// <param name="decoded">The variable to </param>
         /// <returns></returns>
-        public override NgramArray Decode(Matrix<float> key, NgramArray decoded)
+        public override TArray Decode(Matrix<float> key, TArray decoded)
         {
             // Calculate the inverse of the matrix, 
             Matrix<float> inverse = key.Inverse();

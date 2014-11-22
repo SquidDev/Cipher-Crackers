@@ -44,9 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Text\NgramArray.cs" />
+    <Compile Include="Text\NGramArray.cs" />
     <Compile Include="Ciphers\Hill.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Text\QuadgramScoredNGramArray.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

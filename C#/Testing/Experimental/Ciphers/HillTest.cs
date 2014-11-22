@@ -30,8 +30,8 @@ namespace Testing.Experimental.Ciphers
         #region Internal functions
         protected override void InternalDecode(string Ciphertext, string Plaintext, Matrix<float> Key)
         {
-            Hill Shift = new Hill(Ciphertext);
-            NgramArray Result = Shift.Decode(Key);
+            Hill<NGramArray> Shift = new Hill<NGramArray>(Ciphertext);
+            NGramArray Result = Shift.Decode(Key);
 
             Assert.AreEqual(Plaintext, Result.ToString());
         }
