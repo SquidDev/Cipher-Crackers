@@ -5,11 +5,18 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace Cipher.Text
 {
+    /// <summary>
+    /// Holds characters in an array of Matrices
+    /// </summary>
     public class NgramArray : TextArray<Matrix<float>>
     {
+        /// <summary>
+        /// The length of each NGram
+        /// </summary>
         public readonly int NgramLength = 2;
 
         public NgramArray() : this(2) { }
+
         public NgramArray(int ngramLength = 2) : base()
         {
             NgramLength = ngramLength;
@@ -25,6 +32,7 @@ namespace Cipher.Text
             Initalise(length);
         }
 
+        #region Creators
         public override void Initalise(string Text)
         {
             MatrixBuilder<float> builder = Matrix<float>.Build;
@@ -67,13 +75,9 @@ namespace Cipher.Text
                 Characters[i] = builder.Dense(1, NgramLength);
             }
         }
+        #endregion
 
         public override double ScoreText()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string Substring(int Start, int Length)
         {
             throw new NotImplementedException();
         }
@@ -81,7 +85,7 @@ namespace Cipher.Text
         /// <summary>
         /// Length of the ciphertext
         /// </summary>
-        public int Length
+        public new int Length
         {
             get { return Characters.Length * NgramLength; }
         }
@@ -92,16 +96,25 @@ namespace Cipher.Text
         /// <returns></returns>
         public override string ToString()
         {
-            StringBuilder Result = new StringBuilder(Characters.Length * NgramLength);
-            foreach (Matrix<float> NGram in Characters)
+            StringBuilder result = new StringBuilder(Characters.Length * NgramLength);
+            foreach (Matrix<float> ngram in Characters)
             {
-                foreach(float Character in NGram.Enumerate())
+                foreach(float character in ngram.Enumerate())
                 {
-                    Result.Append((char)(Character + 'A'));
+                    result.Append((char)(character + 'A'));
                 }
             }
 
-            return Result.ToString();
+            return result.ToString();
+        }
+
+        /// <summary>
+        /// Gets a portion of the string.
+        /// </summary>
+        /// <remarks>This is not an efficient implementation, it simply exists for completion</remarks>
+        public override string Substring(int start, int length)
+        {
+            return ToString().Substring(start, length);
         }
     }
 }
