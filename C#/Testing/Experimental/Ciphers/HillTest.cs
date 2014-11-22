@@ -27,6 +27,23 @@ namespace Testing.Experimental.Ciphers
             InternalDecode(DataRead("Ciphertext"), DataRead("Plaintext"), this.DataReadMatrix("Key"));
         }
 
+        /// <summary>
+        /// Tests the crack method
+        /// </summary>
+        [TestMethod]
+        [TestCategory("Cipher"), TestCategory("Decode"), TestCategory("Experimental")]
+        [DeploymentItem(@"TestData\Experimental-Cipher-Hill.xml")]
+        [DataSource(
+            "Microsoft.VisualStudio.TestTools.DataSource.XML",
+            @"|DataDirectory|\TestData\Experimental-Cipher-Hill.xml", "Cipher",
+            DataAccessMethod.Sequential
+        )]
+        [Ignore]
+        public void HillBruteCrack()
+        {
+            InternalCrack(DataRead("Ciphertext"), DataRead("Plaintext"), this.DataReadMatrix("Key"));
+        }
+
         #region Internal functions
         protected override void InternalDecode(string Ciphertext, string Plaintext, Matrix<float> Key)
         {
@@ -38,7 +55,11 @@ namespace Testing.Experimental.Ciphers
 
         protected override void InternalCrack(string Ciphertext, string Plaintext, Matrix<float> Key)
         {
+            HillBrute<QuadgramScoredNGramArray> Shift = new HillBrute<QuadgramScoredNGramArray>(Ciphertext);
+            HillBrute<QuadgramScoredNGramArray>.CipherResult Result = Shift.Crack();
 
+            Assert.AreEqual(Plaintext, Result.Text.ToString());
+            Assert.AreEqual(Key, Result.Key);
         }
         #endregion
     }

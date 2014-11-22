@@ -47,7 +47,14 @@ namespace Cipher.Ciphers
             // Calculate the inverse of the matrix, 
             Matrix<float> inverse = key.Inverse();
             inverse.Modulus(26, inverse);
-            inverse.Map(f => (float)Math.Floor(f), inverse);
+            inverse.Map(f =>
+            {
+                if (Single.IsInfinity(f) || Single.IsNaN(f))
+                {
+                    throw new ArgumentException("Non invertable matrix");
+                }
+                return (float)Math.Floor(f);
+            }, inverse);
 
             Matrix<float>[] text = Text.Characters;
             Matrix<float>[] decodedText = decoded.Characters;
