@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Cipher.Text
+﻿namespace Cipher.Text
 {
     public abstract class TextArray<T>
     {
@@ -17,11 +12,11 @@ namespace Cipher.Text
 
         // Hacky functions required for creating generics
         public abstract void Initalise(string Text);
-        public void Initalise(int Length)
+        public virtual void Initalise(int Length)
         {
             Characters = new T[Length];
         }
-        public void Initalise(T[] Characters)
+        public virtual void Initalise(T[] Characters)
         {
             this.Characters = Characters;
         }
@@ -46,19 +41,19 @@ namespace Cipher.Text
             set { Characters[Index] = value; }
         }
 
-        public void CopyTo(TextArray<T> Destination)
+        public virtual void CopyTo(TextArray<T> Destination)
         {
             Characters.CopyTo(Destination.Characters, 0);
         }
 
-        public void Swap(int A, int B)
+        public virtual void Swap(int A, int B)
         {
             T Temp = Characters[A];
             Characters[A] = Characters[B];
             Characters[B] = Temp;
         }
 
-        public string Substring(int Start)
+        public virtual string Substring(int Start)
         {
             return Substring(Start, Length - Start);
         }
