@@ -22,7 +22,7 @@ namespace Cipher.Text
         public NgramArray(int length, int ngramLength = 2)
         {
             NgramLength = ngramLength;
-            Initalise(length / ngramLength);
+            Initalise(length);
         }
 
         public override void Initalise(string Text)
@@ -58,7 +58,14 @@ namespace Cipher.Text
         public override void Initalise(int Length)
         {
             if (Length % NgramLength != 0) throw new ArgumentException("Text length must be a multiple of NgramLength");
-            Characters = new Matrix<float>[Length / NgramLength];
+            int length = Length / NgramLength;
+            Characters = new Matrix<float>[length];
+
+            MatrixBuilder<float> builder = Matrix<float>.Build;
+            for (int i = 0; i < length; i++)
+            {
+                Characters[i] = builder.Dense(1, NgramLength);
+            }
         }
 
         public override double ScoreText()
@@ -69,6 +76,14 @@ namespace Cipher.Text
         public override string Substring(int Start, int Length)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Length of the ciphertext
+        /// </summary>
+        public int Length
+        {
+            get { return Characters.Length * NgramLength; }
         }
 
         /// <summary>

@@ -29,7 +29,7 @@ namespace Cipher.Ciphers
         }
 
         public abstract TArray Decode(TKey Key, TArray Decoded);
-        public TArray Decode(TKey Key)
+        public virtual TArray Decode(TKey Key)
         {
             TArray Decoded = new TArray();
             Decoded.Initalise(Text.Length);
@@ -37,9 +37,6 @@ namespace Cipher.Ciphers
             return Decode(Key, Decoded);
         }
         public abstract CipherResult Crack();
-
-
-
 
         #region TArray shortcuts
         protected TArray Create(string Text)
