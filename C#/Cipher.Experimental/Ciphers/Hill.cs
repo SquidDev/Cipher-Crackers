@@ -1,5 +1,6 @@
 ﻿using System;
 using Cipher.Text;
+using Cipher.Utils;
 using MathNet.Numerics.LinearAlgebra;
 
 namespace Cipher.Ciphers
@@ -18,6 +19,11 @@ namespace Cipher.Ciphers
         }
         public Hill(TArray cipherText) : base(cipherText) { }
 
+        public int NGramLength
+        {
+            get { return Text.NGramLength; }
+        }
+
         public override CipherResult Crack()
         {
             throw new NotImplementedException();
@@ -31,7 +37,7 @@ namespace Cipher.Ciphers
         public override TArray Decode(Matrix<float> key)
         {
             TArray decoded = new TArray();
-            decoded.NGramLength = Text.NGramLength;
+            decoded.NGramLength = NGramLength;
             decoded.Initalise(Text.Length);
             return Decode(key, decoded);
         }
@@ -44,9 +50,8 @@ namespace Cipher.Ciphers
         /// <returns></returns>
         public override TArray Decode(Matrix<float> key, TArray decoded)
         {
-            // Calculate the inverse of the matrix, 
-            Matrix<float> inverse = key.Inverse();
-            inverse.Modulus(26, inverse);
+
+            /*
             inverse.Map(f =>
             {
                 if (Single.IsInfinity(f) || Single.IsNaN(f))
@@ -54,7 +59,12 @@ namespace Cipher.Ciphers
                     throw new ArgumentException("Non invertable matrix");
                 }
                 return (float)Math.Floor(f);
-            }, inverse);
+            }, inverse);*/
+
+            //Console.WriteLine(key.ToMatrixString());
+            //Console.WriteLine(inverse.ToMatrixString());
+
+            //Console.WriteLine("Key: {0}", inverse);
 
             Matrix<float>[] text = Text.Characters;
             Matrix<float>[] decodedText = decoded.Characters;
@@ -63,7 +73,7 @@ namespace Cipher.Ciphers
             for (int pos = 0; pos < length; pos++)
             {
                 Matrix<float> thisDecoded = decodedText[pos];
-                text[pos].Multiply(inverse, thisDecoded);
+                key.Multiply(text[pos], thisDecoded);
                 thisDecoded.Modulus(26, thisDecoded);
             }
 

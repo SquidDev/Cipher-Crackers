@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ciphers\HillBrute.cs" />
+    <Compile Include="Ciphers\HillCribbed.cs" />
+    <Compile Include="Utils\MatrixExtensions.cs" />
     <Compile Include="Text\NGramArray.cs" />
     <Compile Include="Ciphers\Hill.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -13,7 +13,7 @@ namespace Testing.Experimental.Tools
         [DeploymentItem(@"TestData\Experimental-Tools-NgramArray.xml")]
         [DataSource(
             "Microsoft.VisualStudio.TestTools.DataSource.XML",
-            @"|DataDirectory|\TestData\Experimental-Tools-NgramArray.xml", "AnalysisItem",
+            @"|DataDirectory|\TestData\Experimental-Tools-NGramArray.xml", "AnalysisItem",
             DataAccessMethod.Sequential
         )]
         public void NGramArray()
@@ -26,7 +26,7 @@ namespace Testing.Experimental.Tools
         [DeploymentItem(@"TestData\Experimental-Tools-NgramArray.xml")]
         [DataSource(
             "Microsoft.VisualStudio.TestTools.DataSource.XML",
-            @"|DataDirectory|\TestData\Experimental-Tools-NgramArray.xml", "AnalysisItem",
+            @"|DataDirectory|\TestData\Experimental-Tools-NGramArray.xml", "AnalysisItem",
             DataAccessMethod.Sequential
         )]
         public void NGramArrayScoring()

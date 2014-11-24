@@ -73,6 +73,7 @@
     <Compile Include="Ciphers\CaeserTest.cs" />
     <Compile Include="Ciphers\VigenereTest.cs" />
     <Compile Include="Experimental\DataTestExtensions.cs" />
+    <Compile Include="Experimental\Tools\MatrixUtils.cs" />
     <Compile Include="Experimental\Tools\NGramArrayTest.cs" />
     <Compile Include="Tools\LetterArrayTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,6 +91,9 @@
   <ItemGroup>
     <Content Include="TestData\Analysis-NGram.xml" />
     <Content Include="TestData\Experimental-Cipher-Hill.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Experimental-Tools-MatrixUtils.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\Experimental-Tools-NGramArray.xml">

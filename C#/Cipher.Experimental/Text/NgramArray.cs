@@ -52,7 +52,7 @@ namespace Cipher.Text
                     offset++;
                     if(offset == ngramLength)
                     {
-                        characters.Add(builder.Dense(1, ngramLength, values));
+                        characters.Add(builder.Dense(ngramLength, 1, values));
                         values = new float[ngramLength];
                         offset = 0;
                     }
@@ -73,7 +73,7 @@ namespace Cipher.Text
             MatrixBuilder<float> builder = Matrix<float>.Build;
             for (int i = 0; i < length; i++)
             {
-                Characters[i] = builder.Dense(1, NGramLength);
+                Characters[i] = builder.Dense(NGramLength, 1);
             }
         }
         #endregion
@@ -125,9 +125,9 @@ namespace Cipher.Text
             for(int offset = 0; offset < characters.Length; offset++)
             {
                 Matrix<float> current = characters[offset];
-                for(int column = 0; column < nGramLength; column++)
+                for(int row = 0; row < nGramLength; row++)
                 {
-                    yield return current[0, column];
+                    yield return current[row, 0];
                 }
             }
         }

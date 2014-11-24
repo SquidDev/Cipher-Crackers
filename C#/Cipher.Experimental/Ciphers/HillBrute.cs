@@ -18,7 +18,7 @@ namespace Cipher.Ciphers
 
         public override CipherResult Crack()
         {
-            if (Text.NGramLength != 2) throw new NotImplementedException();
+            if (NGramLength != 2) throw new NotImplementedException();
 
             TArray decoded = new TArray();
             decoded.NGramLength = 2;
@@ -42,18 +42,14 @@ namespace Cipher.Ciphers
                         for (int d = 0; d < 26; d++)
                         {
                             key[1, 1] = d;
-                            try
+
+                            decoded = Decode(key, decoded);
+                            double score = decoded.ScoreText();
+                            if (score > bestScore)
                             {
-                                decoded = Decode(key, decoded);
-                                double score = decoded.ScoreText();
-                                if (score > bestScore)
-                                {
-                                    bestScore = score;
-                                    key.CopyTo(bestKey);
-                                }
+                                bestScore = score;
+                                key.CopyTo(bestKey);
                             }
-                            catch (ArgumentException)
-                            { }
 
                         }
                     }

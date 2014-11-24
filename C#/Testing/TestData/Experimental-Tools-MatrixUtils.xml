@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Items>
+  <Item>
+    <Matrix>19,7;7,4</Matrix>
+    <Adjugate>4,19;19,19</Adjugate>
+  </Item>
+
+  <Item>
+    <Matrix>15,2;12,19</Matrix>
+    <Adjugate>19,24;14,15</Adjugate>
+  </Item>
+</Items>
