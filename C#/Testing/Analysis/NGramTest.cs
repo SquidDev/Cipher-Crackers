@@ -1,16 +1,19 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Cipher.Analysis;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Xml.Linq;
+
+using Cipher.Analysis;
+using NUnit.Framework;
 
 namespace Testing.Analysis
 {
     /// <summary>
     /// Test class for NGrams
     /// </summary>
-    [TestClass]
-    public class NGramTest : DataTest
+    [TestFixture]
+    public class NGramTest
     {
         /// <summary>
         /// Prefix of NGram results in the XML file
@@ -20,32 +23,35 @@ namespace Testing.Analysis
         /// <summary>
         /// Test method for ngrams
         /// </summary>
-        [TestMethod]
-        [TestCategory("Analysis")]
-        [DeploymentItem(@"TestData\Analysis-NGram.xml")]
-        [DataSource(
-            "Microsoft.VisualStudio.TestTools.DataSource.XML",
-            @"|DataDirectory|\TestData\Analysis-NGram.xml", "AnalysisItem",
-            DataAccessMethod.Sequential
-        )]
-        public void NGram()
+        [Test]
+        [TestCaseSource("Items")]
+        [Ignore("Dictionary parsing doesn't exist yet")]
+        public void NGram(String text, int length, Dictionary<String, int> counts)
         {
-            Dictionary<string, int> NGs = NGrams.GatherNGrams(DataRead("Text"), DataReadByte("Length"));
+            Dictionary<string, int> NGs = NGrams.GatherNGrams(text, length);
             foreach(KeyValuePair<string, int> NGram in NGs)
             {
-                Assert.AreEqual<int>(DataReadInt(RESULT_PREFIX + NGram.Key), NGram.Value);
+            	Assert.AreEqual(counts[NGram.Key], NGram.Value);
             }
 
             // Check for items not in the NGram results
             // (Issue #15 where some letters are ignored)
-            foreach(DataColumn DColumn in TestContext.DataRow.Table.Columns)
-            {
-                string Column = DColumn.ColumnName;
-                if(Column.StartsWith(RESULT_PREFIX))
-                {
-                    Assert.AreEqual<int>(DataReadInt(Column), NGs[Column.Substring(RESULT_PREFIX.Length)]);
-                }
+            foreach(KeyValuePair<String, int> count in counts) {
+            	Assert.AreEqual(count.Value, NGs[count.Key]);
             }
+        }
+        
+        public IEnumerable<Object[]> Items
+        {
+        	get 
+        	{
+        		XDocument document = XDocument.Load(@"TestData\Analysis-NGram.xml");
+        		return document.Descendants("AnalysisItem").Select(item => new Object[] {
+			        	item.Element("Text").Value,
+			        	(int)item.Element("Length"),
+			        	null
+        			});
+        	}
         }
     }
 }
