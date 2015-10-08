@@ -28,7 +28,7 @@
 
         <Controls:ExtendedTextBox Grid.Row="1"
 			x:Name="ResultText" Grid.Column="1"
-			Margin="0,0,0,5" Metro:TextboxHelper.Watermark="Result"
+			Margin="0,0,0,5" Metro:TextBoxHelper.Watermark="Result"
         />
         
 

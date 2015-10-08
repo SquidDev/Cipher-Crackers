@@ -1,64 +1,55 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
+
 using Cipher.Text;
+using NUnit.Framework;
 
 namespace Testing.Experimental.Tools
 {
-    [TestClass]
-    public class NGramArrayTest : DataTest
+    [TestFixture]
+    public class NGramArrayTest
     {
-        [TestMethod]
-        [TestCategory("Tools"), TestCategory("Experimental")]
-        [DeploymentItem(@"TestData\Experimental-Tools-NgramArray.xml")]
-        [DataSource(
-            "Microsoft.VisualStudio.TestTools.DataSource.XML",
-            @"|DataDirectory|\TestData\Experimental-Tools-NGramArray.xml", "AnalysisItem",
-            DataAccessMethod.Sequential
-        )]
-        public void NGramArray()
-        {
-            InternalNGramArray(DataRead("Text"));
-        }
-
-        [TestMethod]
-        [TestCategory("Tools"), TestCategory("Experimental")]
-        [DeploymentItem(@"TestData\Experimental-Tools-NgramArray.xml")]
-        [DataSource(
-            "Microsoft.VisualStudio.TestTools.DataSource.XML",
-            @"|DataDirectory|\TestData\Experimental-Tools-NGramArray.xml", "AnalysisItem",
-            DataAccessMethod.Sequential
-        )]
-        public void NGramArrayScoring()
-        {
-            InternalNGramArrayScoring("HELLOWORLD"); // DataRead("Text"));
-        }
-
-        #region Internal
-        protected void InternalNGramArray(string A)
+        [Test]
+        [Category("Tools"), Category("Experimental")]
+        [TestCaseSource("Items")]
+        public void NGramArray(string A)
         {
             LetterArray letters = new LetterArray(A);
             NGramArray nGrams = new NGramArray(A, 2);
 
             if (A.Count<char>(C => !Char.IsLetter(C)) == 0)
             {
-                Assert.AreEqual<string>(nGrams.ToString(), letters.ToString());
+                Assert.AreEqual(nGrams.ToString(), letters.ToString());
             }
         }
 
-        protected void InternalNGramArrayScoring(string A)
+        [Test]
+        [Category("Tools"), Category("Experimental")]
+        [TestCaseSource("Items")]
+        public void NGramArrayScoring(string A)
         {
             QuadgramScoredLetterArray letters = new QuadgramScoredLetterArray(A);
             QuadgramScoredNGramArray nGrams = new QuadgramScoredNGramArray(A, 2);
 
             if (A.Count<char>(C => !Char.IsLetter(C)) == 0)
             {
-                Assert.AreEqual<string>(nGrams.ToString(), letters.ToString());
+                Assert.AreEqual(nGrams.ToString(), letters.ToString());
             }
 
-            Assert.AreEqual<double>(letters.ScoreText(), nGrams.ScoreText());
+            Assert.AreEqual(letters.ScoreText(), nGrams.ScoreText());
         }
-        #endregion
 
+        public IEnumerable<Object[]> Items
+        {
+        	get 
+        	{
+        		XDocument document = XDocument.Load(@"TestData\Experimental-Tools-NgramArray.xml");
+        		return document.Descendants("AnalysisItem").Select(item => new Object[] {
+						item.Element("Text").Value,
+        			});
+        	}
+        }
     }
 }

@@ -1,87 +1,67 @@
-﻿using Cipher.Ciphers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+
+using Cipher.Ciphers;
 using Cipher.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Testing.Ciphers
 {
-    [TestClass]
-    public class CaeserTest : CipherTest<byte>
+    [TestFixture]
+    public class CaeserTest
     {
-        /// <summary>
-        /// Tests the crack method
-        /// </summary>
-        [TestMethod]
-        [TestCategory("Cipher"), TestCategory("Crack")]
-        [DeploymentItem(@"TestData\Cipher-CaeserShift.xml")]
-        [DataSource(
-            "Microsoft.VisualStudio.TestTools.DataSource.XML",
-            @"|DataDirectory|\TestData\Cipher-CaeserShift.xml", "Cipher",
-            DataAccessMethod.Sequential
-        )]
-        public void CaeserCrack()
-        {
-            InternalCrack(DataRead("Ciphertext"), DataRead("Plaintext"), DataReadByte("Key"));
-        }
-
-        /// <summary>
-        /// Tests the crack method for monograms
-        /// </summary>
-        [TestMethod]
-        [TestCategory("Cipher"), TestCategory("Crack")]
-        [DeploymentItem(@"TestData\Cipher-CaeserShift.xml")]
-        [DataSource(
-            "Microsoft.VisualStudio.TestTools.DataSource.XML",
-            @"|DataDirectory|\TestData\Cipher-CaeserShift.xml", "Cipher",
-            DataAccessMethod.Sequential
-        )]
-        public void CaeserMonogramCrack()
-        {
-            InternalMonogramCrack(DataRead("Ciphertext"), DataRead("Plaintext"), DataReadByte("Key"));
-        }
-
-        /// <summary>
-        /// Tests the decode method
-        /// </summary>
-        [TestMethod]
-        [TestCategory("Cipher"), TestCategory("Decode")]
-        [DeploymentItem(@"TestData\Cipher-CaeserShift.xml")]
-        [DataSource(
-            "Microsoft.VisualStudio.TestTools.DataSource.XML",
-            @"|DataDirectory|\TestData\Cipher-CaeserShift.xml", "Cipher",
-            DataAccessMethod.Sequential
-        )]
-        public void CaeserDecode()
-        {
-            InternalDecode(DataRead("Ciphertext"), DataRead("Plaintext"), DataReadByte("Key"));
-        }
-
-        #region Internal functions
-        protected override void InternalCrack(string Ciphertext, string Plaintext, byte Key)
+        [Test]
+        [Category("Cipher"), Category("Crack")]
+        [TestCaseSource("Items")]
+        public void Crack(string Ciphertext, string Plaintext, byte Key)
         {
             CaeserShift<QuadgramScoredLetterArray> Shift = new CaeserShift<QuadgramScoredLetterArray>(Ciphertext);
             CaeserShift<QuadgramScoredLetterArray>.CipherResult Result = Shift.Crack();
 
 
             Assert.AreEqual(Plaintext, Result.Text.ToString());
-            Assert.AreEqual<byte>(Key, Result.Key);
+            Assert.AreEqual(Key, Result.Key);
         }
 
-        protected void InternalMonogramCrack(string Ciphertext, string Plaintext, byte Key)
+        /// <summary>
+        /// Tests using monograms instead
+        /// </summary>
+        [Test]
+        [Category("Cipher"), Category("Crack")]
+        [TestCaseSource("Items")]
+        public void MonogramCrack(string Ciphertext, string Plaintext, byte Key)
         {
             MonogramCaeserShift Shift = new MonogramCaeserShift(Ciphertext);
             MonogramCaeserShift.CipherResult Result = Shift.Crack();
 
             Assert.AreEqual(Plaintext, Result.Text.ToString());
-            Assert.AreEqual<byte>(Key, Result.Key);
+            Assert.AreEqual(Key, Result.Key);
         }
 
-        protected override void InternalDecode(string Ciphertext, string Plaintext, byte Key)
+        [Test]
+        [Category("Cipher"), Category("Decode")]
+        [TestCaseSource("Items")]
+        public void Decode(string Ciphertext, string Plaintext, byte Key)
         {
             CaeserShift<LetterArray> Shift = new CaeserShift<LetterArray>(Ciphertext);
             LetterArray Result = Shift.Decode(Key);
 
             Assert.AreEqual(Plaintext, Result.ToString());
         }
-        #endregion
+        
+        public IEnumerable<Object[]> Items
+        {
+        	get 
+        	{
+        		XDocument document = XDocument.Load(@"TestData\Cipher-CaeserShift.xml");
+        		return document.Descendants("Cipher").Select(item => new Object[] {
+			        	item.Element("Ciphertext").Value,
+			        	item.Element("Plaintext").Value,
+			        	(byte)(int)item.Element("Key"),
+        			});
+        	}
+        }
     }
 }

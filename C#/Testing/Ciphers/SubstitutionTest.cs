@@ -1,63 +1,58 @@
-﻿using Cipher.Ciphers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+
+using Cipher.Ciphers;
 using Cipher.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Testing.Ciphers
 {
-    [TestClass]
-    public class SubstitutionTest : CipherTest<string>
+    [TestFixture]
+    public class SubstitutionTest
     {
 
         /// <summary>
         /// Tests the crack method
         /// </summary>
-        [TestMethod]
-        [TestCategory("Cipher"), TestCategory("Crack")]
-        [DeploymentItem(@"TestData\Cipher-Substitution.xml")]
-        [DataSource(
-            "Microsoft.VisualStudio.TestTools.DataSource.XML",
-            @"|DataDirectory|\TestData\Cipher-Substitution.xml", "Cipher",
-            DataAccessMethod.Sequential
-        )]
-        public void SubstitutionCrack()
+        [Test]
+        [Category("Cipher"), Category("Crack")]
+        [TestCaseSource("Items")]
+        public void SubstitutionCrack(string Ciphertext, string Plaintext, string Key)
         {
-            InternalCrack(DataRead("Ciphertext"), DataRead("Plaintext"), DataRead("Key"));
-            
+            Substitution<QuadgramScoredLetterArray> Cipher = new Substitution<QuadgramScoredLetterArray>(Ciphertext);
+            Substitution<QuadgramScoredLetterArray>.CipherResult Result = Cipher.Crack();
+
+            Assert.AreEqual(Plaintext, Result.Text.ToString());
+            Assert.AreEqual(Key, Result.Key.ToString());
         }
 
         /// <summary>
         /// Tests the decode method
         /// </summary>
-        [TestMethod]
-        [TestCategory("Cipher"), TestCategory("Decode")]
-        [DeploymentItem(@"TestData\Cipher-Substitution.xml")]
-        [DataSource(
-            "Microsoft.VisualStudio.TestTools.DataSource.XML",
-            @"|DataDirectory|\TestData\Cipher-Substitution.xml", "Cipher",
-            DataAccessMethod.Sequential
-        )]
-        public void SubstitutionDecode()
-        {
-            InternalDecode(DataRead("Ciphertext"), DataRead("Plaintext"), DataRead("Key"));
-        }
-
-        #region 
-        protected override void InternalDecode(string Ciphertext, string Plaintext, string Key)
+        [Test]
+        [Category("Cipher"), Category("Decode")]
+        [TestCaseSource("Items")]
+        public void SubstitutionDecode(string Ciphertext, string Plaintext, string Key)
         {
             Substitution<LetterArray> Shift = new Substitution<LetterArray>(Ciphertext);
             LetterArray Result = Shift.Decode(new QuadgramScoredLetterArray(Key));
 
             Assert.AreEqual(Plaintext, Result.ToString());
         }
-
-        protected override void InternalCrack(string Ciphertext, string Plaintext, string Key)
+        
+        public IEnumerable<Object[]> Items
         {
-            Substitution<QuadgramScoredLetterArray> Cipher = new Substitution<QuadgramScoredLetterArray>(Ciphertext);
-            Substitution<QuadgramScoredLetterArray>.CipherResult Result = Cipher.Crack();
-
-            Assert.AreEqual<string>(Plaintext, Result.Text.ToString());
-            Assert.AreEqual<string>(Key, Result.Key.ToString());
+        	get 
+        	{
+        		XDocument document = XDocument.Load(@"TestData\Cipher-Substitution.xml");
+        		return document.Descendants("Cipher").Select(item => new Object[] {
+			        	item.Element("Ciphertext").Value,
+			        	item.Element("Plaintext").Value,
+			        	item.Element("Key").Value,
+        			});
+        	}
         }
-        #endregion
     }
 }

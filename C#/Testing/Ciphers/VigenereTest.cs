@@ -1,43 +1,24 @@
-﻿using Cipher.Ciphers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+
+using Cipher.Ciphers;
 using Cipher.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Testing.Ciphers
 {
     /// <summary>
     /// Summary description for VigenereTest
     /// </summary>
-    [TestClass]
-    public class VigenereTest : CipherTest<string>
+    [TestFixture]
+    public class VigenereTest
     {
-        [TestMethod]
-        [TestCategory("Cipher"), TestCategory("Crack")]
-        [DeploymentItem(@"TestData\Cipher-Vigenere.xml")]
-        [DataSource(
-            "Microsoft.VisualStudio.TestTools.DataSource.XML",
-            @"|DataDirectory|\TestData\Cipher-Vigenere.xml", "Cipher",
-            DataAccessMethod.Sequential
-        )]
-        public void VigenereDecode()
-        {
-            InternalDecode(DataRead("Ciphertext"), DataRead("Plaintext"), DataRead("Key"));
-        }
-
-        [TestMethod]
-        [TestCategory("Cipher"), TestCategory("Decode")]
-        [DeploymentItem(@"TestData\Cipher-Vigenere.xml")]
-        [DataSource(
-            "Microsoft.VisualStudio.TestTools.DataSource.XML",
-            @"|DataDirectory|\TestData\Cipher-Vigenere.xml", "Cipher",
-            DataAccessMethod.Sequential
-        )]
-        public void VigenereMonogramCrack()
-        {
-            InternalCrack(DataRead("Ciphertext"), DataRead("Plaintext"), DataRead("Key"));
-        }
-
-        #region Internal Methods
-        protected override void InternalDecode(string Ciphertext, string Plaintext, string Key)
+        [Test]
+        [Category("Cipher"), Category("Crack")]
+        [TestCaseSource("Items")]
+        public void VigenereDecode(string Ciphertext, string Plaintext, string Key)
         {
             Vigenere<QuadgramScoredLetterArray> Cipher = new Vigenere<QuadgramScoredLetterArray>(Ciphertext);
             QuadgramScoredLetterArray Result = Cipher.Decode(new QuadgramScoredLetterArray(Key));
@@ -45,16 +26,29 @@ namespace Testing.Ciphers
             Assert.AreEqual(Plaintext, Result.ToString());
         }
 
-        protected override void InternalCrack(string Ciphertext, string Plaintext, string Key)
+        [Test]
+        [Category("Cipher"), Category("Decode")]
+        [TestCaseSource("Items")]
+        public void VigenereMonogramCrack(string Ciphertext, string Plaintext, string Key)
         {
             MonogramVigenere Cipher = new MonogramVigenere(Ciphertext);
             MonogramVigenere.CipherResult Result = Cipher.Crack();
 
             Assert.AreEqual(Plaintext, Result.Text.ToString());
-            Assert.AreEqual<string>(Key, Result.Key.ToString());
+            Assert.AreEqual(Key, Result.Key.ToString());
         }
-        #endregion
 
-        
+        public IEnumerable<Object[]> Items
+        {
+        	get 
+        	{
+        		XDocument document = XDocument.Load(@"TestData\Cipher-Vigenere.xml");
+        		return document.Descendants("Cipher").Select(item => new Object[] {
+			        	item.Element("Ciphertext").Value,
+			        	item.Element("Plaintext").Value,
+			        	item.Element("Key").Value,
+        			});
+        	}
+        }
     }
 }

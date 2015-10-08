@@ -1,26 +1,35 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using Cipher.Analysis.CipherGuess;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+
 using Cipher.Analysis.AutoSpace;
+using Cipher.Analysis.CipherGuess;
+using NUnit.Framework;
 
 namespace Testing.Analysis
 {
-    [TestClass]
-    public class AutoSpaceTest : DataTest
+    [TestFixture]
+    public class AutoSpaceTest
     {
-        [TestMethod]
-        [TestCategory("Analysis")]
-        [DeploymentItem(@"TestData\Analysis-AutoSpace.xml")]
-        [DataSource(
-            "Microsoft.VisualStudio.TestTools.DataSource.XML",
-            @"|DataDirectory|\TestData\Analysis-AutoSpace.xml", "AnalysisItem",
-            DataAccessMethod.Sequential
-        )]
-        public void AutoSpace()
+    	[Test]
+        [TestCaseSource("Items")]
+        public void AutoSpace(string text, string result)
         {
-            WordGuesser Spacer = new WordGuesser(DataRead("Text"));
-            AssertUtils.AssertWithDiff(DataRead("Result"), Spacer.Result);
+            WordGuesser Spacer = new WordGuesser(text);
+            AssertUtils.AssertWithDiff(result, Spacer.Result);
+        }
+        
+        public IEnumerable<Object[]> Items
+        {
+        	get 
+        	{
+        		XDocument document = XDocument.Load(@"TestData\Analysis-AutoSpace.xml");
+        		return document.Descendants("AnalysisItem").Select(item => new Object[] {
+			        	item.Element("Text").Value,
+			        	item.Element("Result").Value,
+        			});
+        	}
         }
     }
 }
