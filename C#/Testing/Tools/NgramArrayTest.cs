@@ -12,7 +12,7 @@ namespace Testing.Experimental.Tools
     public class NGramArrayTest
     {
         [Test]
-        [Category("Tools"), Category("Experimental")]
+        [Category("Tools")]
         [TestCaseSource("Items")]
         public void NGramArray(string A)
         {
@@ -26,7 +26,7 @@ namespace Testing.Experimental.Tools
         }
 
         [Test]
-        [Category("Tools"), Category("Experimental")]
+        [Category("Tools")]
         [TestCaseSource("Items")]
         public void NGramArrayScoring(string A)
         {
@@ -45,7 +45,7 @@ namespace Testing.Experimental.Tools
         {
         	get 
         	{
-        		XDocument document = XDocument.Load(@"TestData\Experimental-Tools-NgramArray.xml");
+        		XDocument document = XDocument.Load(@"TestData\Tools-NgramArray.xml");
         		return document.Descendants("AnalysisItem").Select(item => new Object[] {
 						item.Element("Text").Value,
         			});

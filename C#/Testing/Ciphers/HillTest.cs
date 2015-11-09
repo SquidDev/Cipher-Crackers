@@ -9,8 +9,9 @@ using MathNet.Numerics.LinearAlgebra;
 using NUnit.Framework;
 using Testing.Ciphers;
 using Testing.Experimental;
+using Testing.Tools;
 
-namespace Testing.Experimental.Ciphers
+namespace Testing.Ciphers
 {
     [TestFixture]
     public class HillTest
@@ -19,7 +20,7 @@ namespace Testing.Experimental.Ciphers
         /// Tests the decode method
         /// </summary>
         [Test]
-        [Category("Cipher"), Category("Decode"), Category("Experimental")]
+        [Category("Cipher"), Category("Decode")]
         [TestCaseSource("Items")]
         public void HillDecode(string Ciphertext, string Plaintext, Matrix<float> Key)
         {
@@ -47,7 +48,7 @@ namespace Testing.Experimental.Ciphers
         }
 
         [Test]
-        [Category("Cipher"), Category("Decode"), Category("Experimental")]
+        [Category("Cipher"), Category("Decode")]
       	[TestCaseSource("CribItems")]
         public void HillCribCrack(string Ciphertext, string Plaintext, Matrix<float> Key, string plainCrib, string cipherCrib)
         {
@@ -63,11 +64,11 @@ namespace Testing.Experimental.Ciphers
         {
         	get 
         	{
-        		XDocument document = XDocument.Load(@"TestData\Experimental-Cipher-Hill.xml");
+        		XDocument document = XDocument.Load(@"TestData\Cipher-Hill.xml");
         		return document.Descendants("Cipher").Select(item => new Object[] {
 						item.Element("Ciphertext").Value,
 						item.Element("Plaintext").Value,
-						DataTestExtensions.DataReadMatrix(item.Element("Key").Value),
+						MatrixUtils.ReadMatrix(item.Element("Key").Value),
         			});
         	}
         }
@@ -76,11 +77,11 @@ namespace Testing.Experimental.Ciphers
         {
         	get 
         	{
-        		XDocument document = XDocument.Load(@"TestData\Experimental-Cipher-Hill.xml");
+        		XDocument document = XDocument.Load(@"TestData\Cipher-Hill.xml");
         		return document.Descendants("Cipher").Select(item => new Object[] {
 						item.Element("Ciphertext").Value,
 						item.Element("Plaintext").Value,
-						DataTestExtensions.DataReadMatrix(item.Element("Key").Value),
+						MatrixUtils.ReadMatrix(item.Element("Key").Value),
 						item.Element("PlainCrib").Value,
 						item.Element("CipherCrib").Value,
         			});

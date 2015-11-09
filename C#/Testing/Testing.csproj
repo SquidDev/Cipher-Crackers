@@ -86,23 +86,18 @@
     <Compile Include="Analysis\CipherAnalysisTest.cs" />
     <Compile Include="Analysis\NGramTest.cs" />
     <Compile Include="AssertUtils.cs" />
-    <Compile Include="Experimental\Ciphers\HillTest.cs" />
+    <Compile Include="Ciphers\HillTest.cs" />
     <Compile Include="Ciphers\RailFenceTest.cs" />
     <Compile Include="Ciphers\TranspositionTest.cs" />
     <Compile Include="Ciphers\SubstitutionTest.cs" />
     <Compile Include="Ciphers\CaeserTest.cs" />
     <Compile Include="Ciphers\VigenereTest.cs" />
-    <Compile Include="Experimental\DataTestExtensions.cs" />
-    <Compile Include="Experimental\Tools\MatrixUtils.cs" />
-    <Compile Include="Experimental\Tools\NGramArrayTest.cs" />
     <Compile Include="Tools\LetterArrayTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\MatrixUtils.cs" />
+    <Compile Include="Tools\NgramArrayTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cipher.Experimental\Cipher.Experimental.csproj">
-      <Project>{3b9d6335-786a-4cff-87b0-24aa14be0a5b}</Project>
-      <Name>Cipher.Experimental</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Cipher\Cipher.csproj">
       <Project>{366d90a5-44ef-41f8-8bb1-8961cf16d815}</Project>
       <Name>Cipher</Name>
@@ -110,13 +105,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestData\Analysis-NGram.xml" />
-    <Content Include="TestData\Experimental-Cipher-Hill.xml">
+    <Content Include="TestData\Cipher-Hill.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestData\Experimental-Tools-MatrixUtils.xml">
+    <Content Include="TestData\Tools-MatrixUtils.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestData\Experimental-Tools-NGramArray.xml">
+    <Content Include="TestData\Tools-NgramArray.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\Analysis-NGram.xml">
