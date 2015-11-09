@@ -26,7 +26,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TabControl ItemContainerStyle="{DynamicResource SmallTabs}" x:Name="CipherPanels" Margin="0" Padding="5">
-                            <TabItem Header="CaeserShift">
+                            <TabItem Header="Caeser">
                                 <Ciphers:CaeserShiftControl/>
                             </TabItem>
                             <TabItem Header="Substitution">
@@ -40,6 +40,9 @@
                             </TabItem>
                             <TabItem Header="Transposition">
                                 <Ciphers:ColumnarTranspositionControl/>
+                            </TabItem>
+                    		<TabItem Header="Hill">
+                                <Ciphers:HillControl/>
                             </TabItem>
                         </TabControl>
 

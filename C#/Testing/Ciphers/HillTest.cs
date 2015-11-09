@@ -5,6 +5,7 @@ using System.Xml.Linq;
 
 using Cipher.Ciphers;
 using Cipher.Text;
+using Cipher.Utils;
 using MathNet.Numerics.LinearAlgebra;
 using NUnit.Framework;
 using Testing.Ciphers;
@@ -68,7 +69,7 @@ namespace Testing.Ciphers
         		return document.Descendants("Cipher").Select(item => new Object[] {
 						item.Element("Ciphertext").Value,
 						item.Element("Plaintext").Value,
-						MatrixUtils.ReadMatrix(item.Element("Key").Value),
+						MatrixExtensions.ReadMatrix(item.Element("Key").Value),
         			});
         	}
         }
@@ -81,7 +82,7 @@ namespace Testing.Ciphers
         		return document.Descendants("Cipher").Select(item => new Object[] {
 						item.Element("Ciphertext").Value,
 						item.Element("Plaintext").Value,
-						MatrixUtils.ReadMatrix(item.Element("Key").Value),
+						MatrixExtensions.ReadMatrix(item.Element("Key").Value),
 						item.Element("PlainCrib").Value,
 						item.Element("CipherCrib").Value,
         			});
