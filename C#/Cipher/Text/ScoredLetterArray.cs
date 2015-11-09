@@ -51,7 +51,7 @@ namespace Cipher.Text
 
             for (byte Letter = 0; Letter < 26; Letter++)
             {
-                Score += MathsUtilities.Chai(Frequency, Length, Letter);
+                Score += MathsUtilities.Chi(Frequency, Length, Letter);
             }
 
             // 'Invert' score so largest is better

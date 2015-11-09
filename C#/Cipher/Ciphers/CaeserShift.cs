@@ -79,7 +79,7 @@ namespace Cipher.Ciphers
                 double Score = 0;
                 for (byte Letter = 0; Letter < 26; Letter++)
                 {
-                    Score += MathsUtilities.Chai(Frequencies[Letter], Length, LetterStatistics.Monograms[(Letter + Shift) % 26]);
+                    Score += MathsUtilities.Chi(Frequencies[Letter], Length, LetterStatistics.Monograms[(Letter + Shift) % 26]);
                 }
                 
                 if (Score < BestScore)

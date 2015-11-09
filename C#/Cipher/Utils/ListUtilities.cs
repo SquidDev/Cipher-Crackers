@@ -22,7 +22,6 @@ namespace Cipher.Utils
         /// <param name="Items">List to use</param>
         /// <returns>Enumerable of all permutations</returns>
         public static IEnumerable<T[]> Permutations<T>(this IList<T> Items)
-            where T : IComparable<T>
         {
             return Items.Permutations(Items.Count);
         }
@@ -34,7 +33,6 @@ namespace Cipher.Utils
         /// <param name="R">Number to choose from</param>
         /// <returns>Enumerable of all permutations</returns>
         public static IEnumerable<T[]> Permutations<T>(this IList<T> Items, int R)
-            where T : IComparable<T>
         {
             int N = Items.Count;
             T[] Result = new T[N];

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cipher.Utils;
+using System.Numerics;
+using System.Text;
+
 using Cipher.Text;
+using Cipher.Utils;
+using MathNet.Numerics;
 using MathNet.Numerics.LinearAlgebra;
 
 namespace Cipher.Ciphers
@@ -13,7 +17,7 @@ namespace Cipher.Ciphers
     public class HillCribbed<TArray> : Hill<TArray>
         where TArray : NGramArray, new()
     {
-        protected Dictionary<string, string> Cribs = new Dictionary<string, string>();
+        protected List<KeyValuePair<string, string>> Cribs = new List<KeyValuePair<string, string>>();
 
         public HillCribbed(string text, int nGramLength = 2)
             : base(text, nGramLength)
@@ -42,64 +46,58 @@ namespace Cipher.Ciphers
             int nGramLength = NGramLength;
             for(int index = 0; index < length; index += nGramLength)
             {
-                Cribs[ciphertext.Substring(index, nGramLength)] = plaintext.Substring(index, nGramLength);
+            	Cribs.Add(new KeyValuePair<string, string>(ciphertext.Substring(index, nGramLength), plaintext.Substring(index, nGramLength)));
             }
+        }
+        
+        public CipherResult CrackSingle(string cribStr, string plainStr)
+        {
+        	int nGramLength = NGramLength;
+        	
+        	MatrixBuilder<float> builder = Matrix<float>.Build;
+        	Matrix<float> plain = builder.Dense(nGramLength, nGramLength, plainStr.Select(x => (float)x.ToLetterByte()).ToArray());
+            Matrix<float> cipher = builder.Dense(nGramLength, nGramLength, cribStr.Select(x => (float)x.ToLetterByte()).ToArray());
+            
+            BigInteger det = (BigInteger)cipher.Determinant();
+            det = Euclid.Modulus(det, 26);
+            
+            // http://planetcalc.com/3311/
+            BigInteger inverseDet, inverseMod;
+            if(Euclid.ExtendedGreatestCommonDivisor(det, 26, out inverseDet, out inverseMod) != 1)
+            {
+            	throw new ArgumentException(det + " is not coprime with 26");
+            }
+            
+            Console.WriteLine("Inverses:");
+            Console.WriteLine(det);
+            Console.WriteLine(inverseDet);
+            
+            Matrix<float> adjugate = cipher.Adjugate();
+            Matrix<float> inverse = (adjugate * (float)inverseDet);
+            inverse = inverse.Modulus(26);
+
+            Matrix<float> key = (plain * inverse).Modulus(26);
+            return GetResult(0, key);
         }
 
         public override CipherResult Crack()
         {
-            if (Cribs.Count < 2) throw new Exception("HillCribbed required at least two cribs");
+            if (Cribs.Count < NGramLength) throw new Exception("HillCribbed required at least two cribs");
 
-            int nGramLength = NGramLength;
-
-            List<float> plainList = new List<float>();
-            List<float> cipherList = new List<float>();
-            foreach(KeyValuePair<string, string> characters in Cribs.Take(2))
+            StringBuilder builder = new StringBuilder();
+            foreach(IReadOnlyList<KeyValuePair<string, string>> pair in Cribs.Permutations(2))
             {
-                foreach(char character in characters.Key)
-                {
-                    cipherList.Add(character.ToLetterByte());
-                }
-
-                foreach (char character in characters.Value)
-                {
-                    plainList.Add(character.ToLetterByte());
-                }
+            	try
+            	{
+            		return CrackSingle(pair[0].Key + pair[1].Key, pair[0].Value + pair[1].Value);
+            	}
+            	catch (Exception e)
+            	{
+            		builder.AppendLine(e.Message);
+            	}
             }
-
-            MatrixBuilder<float> builder = Matrix<float>.Build;
-            Matrix<float> plain = builder.Dense(nGramLength, nGramLength, plainList.ToArray());
-            Matrix<float> cipher = builder.Dense(nGramLength, nGramLength, cipherList.ToArray());
-
-            Console.WriteLine("Plain");
-            Console.WriteLine(plain.ToMatrixString());
-            Console.WriteLine("Cipher");
-            Console.WriteLine(cipher.ToMatrixString());
-
-            float determinate = ((cipher.Determinant() % 26) + 26) % 26;
-            float determinateInverse = 0;
-            for (; determinateInverse < 26; determinateInverse++)
-            {
-                if ((determinate * determinateInverse) % 26 == 1) break;
-            }
-
-            Matrix<float> key = cipher.Adjugate();
-            Console.WriteLine("Key {0} ", key);
             
-            key.Multiply(determinateInverse);
-            Console.WriteLine("Key * det({1}) {0} ", key, determinateInverse);
-            
-            key = key.Modulus(26);
-            Console.WriteLine("Key % 26 {0} ", key);
-            
-            key = plain * key;
-            Console.WriteLine("Plain * Key {0} ", key);
-            
-            key = key.Modulus(26);
-            Console.WriteLine("Key % 26 {0} ", key);
-
-
-            return GetResult(0, key);
+            throw new ArgumentException("Cannot find permutation\n" + builder.ToString());
         }
     }
 }

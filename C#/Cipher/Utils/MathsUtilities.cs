@@ -25,16 +25,16 @@ namespace Cipher.Utils
             }
         }
 
-        #region Chai
+        #region Chi
         /// <summary>
-        /// Calculate the Chai Squared statistic of one letter
+        /// Calculate the Chi Squared statistic of one letter
         /// </summary>
         /// <param name="Frequency">The frequencies of each letters</param>
         /// <param name="TotalCount">The total frequency count</param>
         /// <param name="Letter">The letter index</param>
-        public static double Chai(int[] Frequency, int TotalCount, int Letter)
+        public static double Chi(int[] Frequency, int TotalCount, int Letter)
         {
-            return Chai(Frequency[Letter], TotalCount, LetterStatistics.Monograms[Letter]);
+            return Chi(Frequency[Letter], TotalCount, LetterStatistics.Monograms[Letter]);
         }
 
         /// <summary>
@@ -43,17 +43,17 @@ namespace Cipher.Utils
         /// <param name="Value">The count of that value</param>
         /// <param name="TotalCount">The total count of all values</param>
         /// <param name="Probability">The probability of that value occuring</param>
-        public static double Chai(int Value, int TotalCount, double Probability)
+        public static double Chi(int Value, int TotalCount, double Probability)
         {
-            return Chai(Value, TotalCount * Probability);
+            return Chi(Value, TotalCount * Probability);
         }
 
         /// <summary>
-        /// Calculate the chai squared statistic for one value
+        /// Calculate the chi squared statistic for one value
         /// </summary>
         /// <param name="Value">The value received</param>
         /// <param name="Expected">The expected value</param>
-        public static double Chai(int Value, double Expected)
+        public static double Chi(int Value, double Expected)
         {
             return Math.Pow((Value - Expected), 2) / Expected;
         }

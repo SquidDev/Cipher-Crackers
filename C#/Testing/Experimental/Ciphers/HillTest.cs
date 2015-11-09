@@ -36,6 +36,7 @@ namespace Testing.Experimental.Ciphers
         [Test]
         [Category("Cipher"), Category("Decode"), Category("Experimental")]
         [TestCaseSource("Items")]
+        [Ignore]
         public void HillBruteCrack(string Ciphertext, string Plaintext, Matrix<float> Key)
         {
             HillBrute<QuadgramScoredNGramArray> hill = new HillBrute<QuadgramScoredNGramArray>(Ciphertext);
@@ -47,22 +48,22 @@ namespace Testing.Experimental.Ciphers
 
         [Test]
         [Category("Cipher"), Category("Decode"), Category("Experimental")]
-      	[TestCaseSource("Items")]
+      	[TestCaseSource("CribItems")]
         public void HillCribCrack(string Ciphertext, string Plaintext, Matrix<float> Key, string plainCrib, string cipherCrib)
         {
             HillCribbed<NGramArray> hill = new HillCribbed<NGramArray>(Ciphertext);
             hill.Add(cipherCrib, plainCrib);
             HillCribbed<NGramArray>.CipherResult result = hill.Crack();
 
-            Assert.AreEqual(Plaintext, result.Text.ToString());
             Assert.AreEqual(Key, result.Key);
+            Assert.AreEqual(Plaintext, result.Text.ToString());
         }
         
         public IEnumerable<Object[]> Items
         {
         	get 
         	{
-        		XDocument document = XDocument.Load(@"TestData\Experimental-Tools-NgramArray.xml");
+        		XDocument document = XDocument.Load(@"TestData\Experimental-Cipher-Hill.xml");
         		return document.Descendants("Cipher").Select(item => new Object[] {
 						item.Element("Ciphertext").Value,
 						item.Element("Plaintext").Value,
@@ -71,11 +72,11 @@ namespace Testing.Experimental.Ciphers
         	}
         }
         
-        public IEnumerable<Object[]> CribKey
+        public IEnumerable<Object[]> CribItems
         {
         	get 
         	{
-        		XDocument document = XDocument.Load(@"TestData\Experimental-Tools-NgramArray.xml");
+        		XDocument document = XDocument.Load(@"TestData\Experimental-Cipher-Hill.xml");
         		return document.Descendants("Cipher").Select(item => new Object[] {
 						item.Element("Ciphertext").Value,
 						item.Element("Plaintext").Value,
