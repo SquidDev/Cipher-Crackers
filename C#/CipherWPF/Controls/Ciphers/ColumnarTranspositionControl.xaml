@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="90" d:DesignWidth="300">
     <Grid>
-        <TextBox x:Name="Key" VerticalAlignment="Top" Margin="0,5" Metro:TextboxHelper.Watermark="Key (separate with ';')"/>
+        <TextBox x:Name="Key" VerticalAlignment="Top" Margin="0,5" Metro:TextBoxHelper.Watermark="Key (separate with ';')"/>
         <Metro:NumericUpDown x:Name="KeyLength" VerticalAlignment="Top" Margin="115,35,0,0" Maximum="25" Minimum="0" Interval="1" Value="2" IsEnabled="{Binding IsChecked, ElementName=UseKeyLength}" />
         <CheckBox x:Name="UseKeyLength" Content="Use Key length" HorizontalAlignment="Left" Margin="0,39,0,0" VerticalAlignment="Top" Width="110" IsChecked="False"/>
     </Grid>

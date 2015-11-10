@@ -26,7 +26,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TabControl ItemContainerStyle="{DynamicResource SmallTabs}" x:Name="CipherPanels" Margin="0" Padding="5">
-                            <TabItem Header="CaeserShift">
+                            <TabItem Header="Caeser">
                                 <Ciphers:CaeserShiftControl/>
                             </TabItem>
                             <TabItem Header="Substitution">
@@ -40,6 +40,9 @@
                             </TabItem>
                             <TabItem Header="Transposition">
                                 <Ciphers:ColumnarTranspositionControl/>
+                            </TabItem>
+                    		<TabItem Header="Hill">
+                                <Ciphers:HillControl/>
                             </TabItem>
                         </TabControl>
 
@@ -55,7 +58,7 @@
                         </Grid.ColumnDefinitions>
                         <Controls:ExtendedTextBox
 							x:Name="InputText"
-							Margin="5" Metro:TextboxHelper.Watermark="Cipher text"
+							Margin="5" Metro:TextBoxHelper.Watermark="Cipher text"
                         />
                         
                         <GridSplitter Grid.Column="1"
@@ -68,7 +71,7 @@
                         
                         <Controls:ExtendedTextBox
 							x:Name="ResultText" Grid.Column="2"
-							Margin="5" Metro:TextboxHelper.Watermark="Plain text"
+							Margin="5" Metro:TextBoxHelper.Watermark="Plain text"
                         />
                     </Grid>
                 </Grid>
@@ -96,7 +99,7 @@
 
                     <Controls:ExtendedTextBox
 						x:Name="AnalysisText" Grid.Row="1"
-						Margin="5" Metro:TextboxHelper.Watermark="Input text"
+						Margin="5" Metro:TextBoxHelper.Watermark="Input text"
                     />
                 </Grid>
             </TabItem>

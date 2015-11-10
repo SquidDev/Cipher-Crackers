@@ -7,6 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="90" d:DesignWidth="300">
     <Grid>
-        <TextBox x:Name="Key" VerticalAlignment="Top" Margin="0,5" Metro:TextboxHelper.Watermark="Key"/>
+        <TextBox x:Name="Key" VerticalAlignment="Top" Margin="0,5" Metro:TextBoxHelper.Watermark="Key"/>
     </Grid>
 </UserControl>

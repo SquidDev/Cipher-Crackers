@@ -25,7 +25,6 @@ namespace Testing.Analysis
         /// </summary>
         [Test]
         [TestCaseSource("Items")]
-        [Ignore("Dictionary parsing doesn't exist yet")]
         public void NGram(String text, int length, Dictionary<String, int> counts)
         {
             Dictionary<string, int> NGs = NGrams.GatherNGrams(text, length);
@@ -49,7 +48,10 @@ namespace Testing.Analysis
         		return document.Descendants("AnalysisItem").Select(item => new Object[] {
 			        	item.Element("Text").Value,
 			        	(int)item.Element("Length"),
-			        	null
+			        	item.Elements("Cipher").ToDictionary(
+			        		x => x.Attribute("Type").Value, 
+			        		x => Int32.Parse(x.Value)
+			        	),
         			});
         	}
         }
