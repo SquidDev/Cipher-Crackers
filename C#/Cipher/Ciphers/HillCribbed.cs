@@ -85,7 +85,7 @@ namespace Cipher.Ciphers
             if (Cribs.Count < NGramLength) throw new Exception("HillCribbed required at least two cribs");
 
             StringBuilder builder = new StringBuilder();
-            foreach(IReadOnlyList<KeyValuePair<string, string>> pair in Cribs.Permutations(2))
+            foreach(KeyValuePair<string, string>[] pair in Cribs.Permutations(2))
             {
             	try
             	{
