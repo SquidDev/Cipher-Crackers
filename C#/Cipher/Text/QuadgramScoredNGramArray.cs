@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Cipher.Frequency;
 
@@ -9,14 +9,22 @@ namespace Cipher.Text
     /// </summary>
     public class QuadgramScoredNGramArray : NGramArray
     {
-        public QuadgramScoredNGramArray() : base(2) { }
-        public QuadgramScoredNGramArray(int ngramLength = 2) : base(ngramLength) { }
+        public QuadgramScoredNGramArray()
+            : base(2)
+        {
+        }
+        public QuadgramScoredNGramArray(int ngramLength = 2)
+            : base(ngramLength)
+        {
+        }
         public QuadgramScoredNGramArray(string Text, int ngramLength = 2)
-            : base(Text,ngramLength)
-        { }
+            : base(Text, ngramLength)
+        {
+        }
         public QuadgramScoredNGramArray(int length, int ngramLength = 2)
-            :base(length, ngramLength)
-        { }
+            : base(length, ngramLength)
+        {
+        }
 
         public override double ScoreText()
         {
@@ -36,7 +44,7 @@ namespace Cipher.Text
             }
 
             
-            while(enumerator.MoveNext())
+            while (enumerator.MoveNext())
             {
                 int thisCharacter = (int)enumerator.Current;
                 score += quadgrams[

@@ -1,4 +1,4 @@
-﻿using Cipher.Frequency;
+using Cipher.Frequency;
 using Cipher.Text;
 using Cipher.Utils;
 using System;
@@ -15,8 +15,14 @@ namespace Cipher.Ciphers
     public class CaeserShift<TArray> : BaseCipher<byte, TArray, byte>
         where TArray : TextArray<byte>, new()
     {
-    	public CaeserShift(string CipherText) : base(CipherText) { }
-    	public CaeserShift(TArray CipherText) : base(CipherText) { }
+        public CaeserShift(string CipherText)
+            : base(CipherText)
+        {
+        }
+        public CaeserShift(TArray CipherText)
+            : base(CipherText)
+        {
+        }
     	
         /// <summary>
         /// Decode the CipherText
@@ -48,7 +54,8 @@ namespace Cipher.Ciphers
                 Decoded = Decode(Key, Decoded);
                 double Score = Decoded.ScoreText();
                 
-                if(Score > BestScore){
+                if (Score > BestScore)
+                {
                     BestScore = Score;
                     BestKey = Key;
                 }
@@ -63,8 +70,14 @@ namespace Cipher.Ciphers
     /// </summary>
     public class MonogramCaeserShift : CaeserShift<MonogramScoredLetterArray>
     {
-        public MonogramCaeserShift(string CipherText) : base(CipherText) { }
-        public MonogramCaeserShift(MonogramScoredLetterArray CipherText) : base(CipherText) { }
+        public MonogramCaeserShift(string CipherText)
+            : base(CipherText)
+        {
+        }
+        public MonogramCaeserShift(MonogramScoredLetterArray CipherText)
+            : base(CipherText)
+        {
+        }
 
         public override CipherResult Crack()
         {

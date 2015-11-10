@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cipher.Text;
 using Cipher.Utils;
 using MathNet.Numerics.LinearAlgebra;
@@ -17,7 +17,10 @@ namespace Cipher.Ciphers
             Text.NGramLength = ngramLength;
             Text.Initalise(cipherText);
         }
-        public Hill(TArray cipherText) : base(cipherText) { }
+        public Hill(TArray cipherText)
+            : base(cipherText)
+        {
+        }
 
         public int NGramLength
         {

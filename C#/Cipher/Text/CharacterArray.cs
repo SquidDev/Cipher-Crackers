@@ -1,4 +1,4 @@
-﻿using Cipher.Frequency;
+using Cipher.Frequency;
 using System;
 using System.Text;
 
@@ -9,10 +9,22 @@ namespace Cipher.Text
     /// </summary>
     public class CharacterArray : TextArray<char>
     {
-        public CharacterArray() : base() { }
-        public CharacterArray(string Text) : base(Text) { }
-        public CharacterArray(int Length) : base(Length) { }
-        public CharacterArray(char[] Characters) : base(Characters) { }
+        public CharacterArray()
+            : base()
+        {
+        }
+        public CharacterArray(string Text)
+            : base(Text)
+        {
+        }
+        public CharacterArray(int Length)
+            : base(Length)
+        {
+        }
+        public CharacterArray(char[] Characters)
+            : base(Characters)
+        {
+        }
 
         public override void Initalise(string Text)
         {
@@ -54,10 +66,22 @@ namespace Cipher.Text
 
     public class QuadgramScoredCharacterArray : CharacterArray
     {
-        public QuadgramScoredCharacterArray() : base() { }
-        public QuadgramScoredCharacterArray(string Text) : base(Text) { }
-        public QuadgramScoredCharacterArray(int Length) : base(Length) { }
-        public QuadgramScoredCharacterArray(char[] Characters) : base(Characters) { }
+        public QuadgramScoredCharacterArray()
+            : base()
+        {
+        }
+        public QuadgramScoredCharacterArray(string Text)
+            : base(Text)
+        {
+        }
+        public QuadgramScoredCharacterArray(int Length)
+            : base(Length)
+        {
+        }
+        public QuadgramScoredCharacterArray(char[] Characters)
+            : base(Characters)
+        {
+        }
 
         /// <summary>
         /// Scores this ciphertext using quadgrams

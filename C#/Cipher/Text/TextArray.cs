@@ -1,14 +1,25 @@
-﻿namespace Cipher.Text
+namespace Cipher.Text
 {
     public abstract class TextArray<T>
     {
         public T[] Characters;
 
         // Basic constructors
-        public TextArray() { }
-        public TextArray(string Text) { Initalise(Text); }
-        public TextArray(int Length) { Initalise(Length); }
-        public TextArray(T[] Characters) { Initalise(Characters); }
+        public TextArray()
+        {
+        }
+        public TextArray(string Text)
+        {
+            Initalise(Text);
+        }
+        public TextArray(int Length)
+        {
+            Initalise(Length);
+        }
+        public TextArray(T[] Characters)
+        {
+            Initalise(Characters);
+        }
 
         // Hacky functions required for creating generics
         public abstract void Initalise(string Text);

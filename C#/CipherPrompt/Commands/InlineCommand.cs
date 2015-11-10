@@ -1,4 +1,4 @@
-﻿using NDesk.Options;
+using NDesk.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +17,7 @@ namespace Cipher.Prompt.Commands
 
             OptionSet Options = new OptionSet()
             {
-                {"h|?|help", "Show this message and exit", V => ShowHelp = (V != null)},
+                { "h|?|help", "Show this message and exit", V => ShowHelp = (V != null) },
             };
 
             List<string> Extra = Options.Parse(Args);

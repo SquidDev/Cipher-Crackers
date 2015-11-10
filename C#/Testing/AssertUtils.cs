@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -79,27 +79,27 @@ namespace Testing
             int Length = Expected.Length;
             
 
-            if(Length != Actual.Length)
+            if (Length != Actual.Length)
             {
                 throw new Exception(String.Format(
-                    "Expected:<{0}>, Actual:<{1}>", 
-                    ArrayToString(Expected), 
-                    ArrayToString(Actual)
-                ));
+                        "Expected:<{0}>, Actual:<{1}>", 
+                        ArrayToString(Expected), 
+                        ArrayToString(Actual)
+                    ));
             }
             
-            for(int I = 0; I < Length; I++)
+            for (int I = 0; I < Length; I++)
             {
-                if(!Expected[I].Equals(Actual[I]))
+                if (!Expected[I].Equals(Actual[I]))
                 {
                     throw new Exception(String.Format(
-                        "Expected:<{0}>, Actual:<{1}> at index {2} with <{3}>, <{4}>",
-                        ArrayToString(Expected),
-                        ArrayToString(Actual),
-                        I,
-                        Expected[I],
-                        Actual[I]
-                    ));
+                            "Expected:<{0}>, Actual:<{1}> at index {2} with <{3}>, <{4}>",
+                            ArrayToString(Expected),
+                            ArrayToString(Actual),
+                            I,
+                            Expected[I],
+                            Actual[I]
+                        ));
                 }
             }
         }

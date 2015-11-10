@@ -1,4 +1,4 @@
-﻿using Cipher.Text;
+using Cipher.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +32,7 @@ namespace Cipher.Analysis.CipherGuess
                 SDD = GetSDD(),
             };
 
-            foreach(CipherType Cipher in CipherData.Ciphers)
+            foreach (CipherType Cipher in CipherData.Ciphers)
             {
                 double Score = 
                     ScoreCipher(TextData.IC, Cipher.Standard.IC + 0.001, Cipher.Average.IC) +
@@ -42,7 +42,7 @@ namespace Cipher.Analysis.CipherGuess
                     ScoreCipher(TextData.EDI, Cipher.Standard.EDI, Cipher.Average.EDI) +
                     ScoreCipher(TextData.LR, Cipher.Standard.LR, Cipher.Average.LR) +
                     ScoreCipher(TextData.ROD, Cipher.Standard.ROD, Cipher.Average.ROD) +
-                    ScoreCipher(TextData.LDI, Cipher.Standard.LDI, Cipher.Average.LDI) + 
+                    ScoreCipher(TextData.LDI, Cipher.Standard.LDI, Cipher.Average.LDI) +
                     ScoreCipher(TextData.SDD, Cipher.Standard.SDD, Cipher.Average.SDD);
 
                 Deviations.Add(Cipher, Score);
@@ -226,7 +226,7 @@ namespace Cipher.Analysis.CipherGuess
                 for (int J = I + 1; J < Length; J++)
                 {
                     int N = 0;
-                    while(J+N < Length && Text[I+N] == Text[J+N])
+                    while (J + N < Length && Text[I + N] == Text[J + N])
                     {
                         N++;
                     }
@@ -234,7 +234,7 @@ namespace Cipher.Analysis.CipherGuess
                     if (N > 1)
                     {
                         SumAll++;
-                        if(((J-I) & 1) > 0)
+                        if (((J - I) & 1) > 0)
                         {
                             SumOdd++;
                         }
@@ -251,10 +251,10 @@ namespace Cipher.Analysis.CipherGuess
         /// </summary>
         protected double GetLogDI()
         {
-            int Length = Text.Length -1;
+            int Length = Text.Length - 1;
             int Score = 0;
 
-            for(int I =0 ;I < Length; I++)
+            for (int I = 0; I < Length; I++)
             {
                 byte A = Text[I];
                 byte B = Text[I + 1];

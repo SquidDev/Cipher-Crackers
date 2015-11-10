@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cipher.Text;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -13,8 +13,12 @@ namespace Cipher.Ciphers
     {
         public HillBrute(string text, int nGramLength = 2)
             : base(text, nGramLength)
-        { }
-        public HillBrute(TArray text) : base(text) { }
+        {
+        }
+        public HillBrute(TArray text)
+            : base(text)
+        {
+        }
 
         public override CipherResult Crack()
         {

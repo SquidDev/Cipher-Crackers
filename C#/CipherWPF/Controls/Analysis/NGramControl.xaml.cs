@@ -1,4 +1,4 @@
-﻿using Cipher.Analysis;
+using Cipher.Analysis;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,7 +38,7 @@ namespace Cipher.WPF.Controls.Analysis
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnChanged(string Property)
         {
-            if(!String.IsNullOrEmpty(Property) && PropertyChanged != null)
+            if (!String.IsNullOrEmpty(Property) && PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(Property));
             }

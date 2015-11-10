@@ -1,4 +1,4 @@
-﻿using Cipher.Text;
+using Cipher.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using Subs = Cipher.Ciphers.Substitution<Cipher.Text.QuadgramScoredLetterArray>;

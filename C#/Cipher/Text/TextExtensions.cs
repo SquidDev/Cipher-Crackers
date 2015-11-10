@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,7 +17,7 @@ namespace Cipher.Text
             foreach (char Character in Text)
             {
                 byte BChar = Character.ToLetterByte();
-                if(BChar != byte.MaxValue && BChar < 26) Chars.Add(BChar);
+                if (BChar != byte.MaxValue && BChar < 26) Chars.Add(BChar);
             }
 
             return Chars.ToArray();

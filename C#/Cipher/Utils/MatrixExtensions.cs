@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -48,7 +48,7 @@ namespace Cipher.Utils
             return value.RemoveRow(row).RemoveColumn(column);
         }
         
-                /// <summary>
+        /// <summary>
         /// Reads a matrix in the form 1,3;2,4 which produces the matrix:
         /// / 1 2 \
         /// \ 3 4 /

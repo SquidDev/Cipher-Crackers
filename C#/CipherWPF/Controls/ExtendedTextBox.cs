@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,7 +22,8 @@ namespace Cipher.WPF.Controls
 
         protected OpenFileDialog Open;
         protected SaveFileDialog Save;
-        public ExtendedTextBox() : base()
+        public ExtendedTextBox()
+            : base()
         {
             // Set default properties
             TextWrapping = System.Windows.TextWrapping.Wrap;
@@ -51,75 +52,75 @@ namespace Cipher.WPF.Controls
 
             // Add pre-existing items
             ContextMenu.Items.Add(new MenuItem()
-            {
-                Header = "Cut",
-                Command = ApplicationCommands.Cut,
-                InputGestureText = "Ctrl + X",
-            });
+                {
+                    Header = "Cut",
+                    Command = ApplicationCommands.Cut,
+                    InputGestureText = "Ctrl + X",
+                });
 
             ContextMenu.Items.Add(new MenuItem()
-            {
-                Header = "Copy",
-                Command = ApplicationCommands.Copy,
-                InputGestureText = "Ctrl + C",
-            });
+                {
+                    Header = "Copy",
+                    Command = ApplicationCommands.Copy,
+                    InputGestureText = "Ctrl + C",
+                });
 
             ContextMenu.Items.Add(new MenuItem()
-            {
-                Header = "Paste",
-                Command = ApplicationCommands.Paste,
-                InputGestureText = "Ctrl + V",
-            });
+                {
+                    Header = "Paste",
+                    Command = ApplicationCommands.Paste,
+                    InputGestureText = "Ctrl + V",
+                });
 
             ContextMenu.Items.Add(new Separator());
 
             ContextMenu.Items.Add(new MenuItem()
-            {
-                Header = "Remove",
-                Items =
                 {
-                    ItemFactory("Spaces", () => Text.Where(C => !Char.IsWhiteSpace(C))),
-                    ItemFactory("Non-letters", () => Text.Where(C => Char.IsLetter(C))),
-                    ItemFactory("Non-letters/numbers", () => Text.Where(C => Char.IsLetterOrDigit(C))),
-                },
-            });
+                    Header = "Remove",
+                    Items =
+                    {
+                        ItemFactory("Spaces", () => Text.Where(C => !Char.IsWhiteSpace(C))),
+                        ItemFactory("Non-letters", () => Text.Where(C => Char.IsLetter(C))),
+                        ItemFactory("Non-letters/numbers", () => Text.Where(C => Char.IsLetterOrDigit(C))),
+                    },
+                });
 
             ContextMenu.Items.Add(new MenuItem()
-            {
-                Header = "Format",
-                Items =
                 {
-                    ItemFactory("Upper", () => Text.ToUpper()),
-                    ItemFactory("Lower", () => Text.ToLower()),
-                },
-            });
+                    Header = "Format",
+                    Items =
+                    {
+                        ItemFactory("Upper", () => Text.ToUpper()),
+                        ItemFactory("Lower", () => Text.ToLower()),
+                    },
+                });
 
             ContextMenu.Items.Add(new Separator());
 
             // Add file system items
             ContextMenu.Items.Add(ItemFactory("Save", delegate()
-            {
-                bool? Result = Save.ShowDialog();
-                if (Result.HasValue && Result.Value && !String.IsNullOrWhiteSpace(Save.FileName))
-                {
-                    using(StreamWriter Writer = new StreamWriter(Save.FileName))
                     {
-                        Writer.Write(Text);
-                    }
-                }
-            }));
+                        bool? Result = Save.ShowDialog();
+                        if (Result.HasValue && Result.Value && !String.IsNullOrWhiteSpace(Save.FileName))
+                        {
+                            using (StreamWriter Writer = new StreamWriter(Save.FileName))
+                            {
+                                Writer.Write(Text);
+                            }
+                        }
+                    }));
 
             ContextMenu.Items.Add(ItemFactory("Open", delegate()
-            {
-                bool? Result = Open.ShowDialog();
-                if (Result.HasValue && Result.Value && !String.IsNullOrWhiteSpace(Open.FileName))
-                {
-                    using (StreamReader Reader = new StreamReader(Open.FileName))
                     {
-                        Text = Reader.ReadToEnd();
-                    }
-                }
-            }));
+                        bool? Result = Open.ShowDialog();
+                        if (Result.HasValue && Result.Value && !String.IsNullOrWhiteSpace(Open.FileName))
+                        {
+                            using (StreamReader Reader = new StreamReader(Open.FileName))
+                            {
+                                Text = Reader.ReadToEnd();
+                            }
+                        }
+                    }));
         }
 
         #region Factories

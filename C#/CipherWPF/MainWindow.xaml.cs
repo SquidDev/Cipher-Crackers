@@ -1,4 +1,4 @@
-﻿using MahApps.Metro.Controls;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace Cipher.WPF
                 {
                     ResultText.Text = Decoder.Decode(InputText.Text);
                 }
-                catch(Exception Er)
+                catch (Exception Er)
                 {
                     Error = Er;
                 }
@@ -55,7 +55,7 @@ namespace Cipher.WPF
                 {
                     ResultText.Text = await Decoder.Crack(InputText.Text);
                 }
-                catch(Exception Er)
+                catch (Exception Er)
                 {
                     Error = Er;
                 }

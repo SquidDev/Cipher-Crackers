@@ -1,4 +1,4 @@
-﻿using Cipher.Text;
+using Cipher.Text;
 using Cipher.Utils;
 using System;
 using System.Collections.Generic;
@@ -34,8 +34,14 @@ namespace Cipher.Ciphers
         public int MaxKeyLength = 20;
         #endregion
 
-        public Vigenere(string Text) : base(Text) { }
-        public Vigenere(TArray Text) : base(Text) { }
+        public Vigenere(string Text)
+            : base(Text)
+        {
+        }
+        public Vigenere(TArray Text)
+            : base(Text)
+        {
+        }
 
         public override TArray Decode(LetterArray Key, TArray Decoded)
         {
@@ -52,7 +58,7 @@ namespace Cipher.Ciphers
     
         public override BaseCipher<LetterArray,TArray,byte>.CipherResult Crack()
         {
- 	        throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public int GuessKeyLength()
@@ -70,7 +76,7 @@ namespace Cipher.Ciphers
 
             // Calculate position differences
             int[] Factors = new int[MaxKeyLength - MinKeyLength];
-            foreach(KeyValuePair<string, List<int>> Word in Positions)
+            foreach (KeyValuePair<string, List<int>> Word in Positions)
             {
                 int PositionLength = Word.Value.Count;
                 // Cull non-repeating sequences
@@ -99,12 +105,18 @@ namespace Cipher.Ciphers
 
     public class MonogramVigenere : Vigenere<LetterArray>
     {
-        public MonogramVigenere(string CipherText) : base(CipherText) { }
-        public MonogramVigenere(LetterArray CipherText) : base(CipherText) { }
+        public MonogramVigenere(string CipherText)
+            : base(CipherText)
+        {
+        }
+        public MonogramVigenere(LetterArray CipherText)
+            : base(CipherText)
+        {
+        }
 
         public CipherResult Crack(int KeyLength = -1)
         {
-            if(KeyLength <= 0) KeyLength = GuessKeyLength();
+            if (KeyLength <= 0) KeyLength = GuessKeyLength();
             
             LetterArray Key = new LetterArray(KeyLength);
             int Length = Text.Length;

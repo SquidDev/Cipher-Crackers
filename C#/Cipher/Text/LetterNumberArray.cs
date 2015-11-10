@@ -1,16 +1,29 @@
-﻿using System;
+using System;
 using System.Text;
 
 namespace Cipher.Text
 {
     public class LetterNumberArray : LetterArray
     {
-        public const byte NUM_SYMBOLS = 26 + 1 + 10; // Letters, #, numbers
+        public const byte NUM_SYMBOLS = 26 + 1 + 10;
+        // Letters, #, numbers
 
-        public LetterNumberArray() : base() { }
-        public LetterNumberArray(string Text) : this(Text.ToLetterArray()) { }
-        public LetterNumberArray(int Length) : base(Length) { }
-        public LetterNumberArray(byte[] Characters) : base(Characters) { }
+        public LetterNumberArray()
+            : base()
+        {
+        }
+        public LetterNumberArray(string Text)
+            : this(Text.ToLetterArray())
+        {
+        }
+        public LetterNumberArray(int Length)
+            : base(Length)
+        {
+        }
+        public LetterNumberArray(byte[] Characters)
+            : base(Characters)
+        {
+        }
 
         public override void Initalise(string Text)
         {
@@ -36,7 +49,7 @@ namespace Cipher.Text
                 }
                 else
                 {
-                    Result.Append((char)(Character + '0'- 27));
+                    Result.Append((char)(Character + '0' - 27));
                 }
                 
             }

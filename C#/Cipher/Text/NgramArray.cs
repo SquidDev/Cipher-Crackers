@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -16,9 +16,13 @@ namespace Cipher.Text
         /// </summary>
         public int NGramLength = 2;
 
-        public NGramArray() : this(2) { }
+        public NGramArray()
+            : this(2)
+        {
+        }
 
-        public NGramArray(int ngramLength = 2) : base()
+        public NGramArray(int ngramLength = 2)
+            : base()
         {
             NGramLength = ngramLength;
         }
@@ -50,7 +54,7 @@ namespace Cipher.Text
                     values[offset] = bChar;
 
                     offset++;
-                    if(offset == ngramLength)
+                    if (offset == ngramLength)
                     {
                         characters.Add(builder.Dense(ngramLength, 1, values));
                         values = new float[ngramLength];
@@ -100,7 +104,7 @@ namespace Cipher.Text
             StringBuilder result = new StringBuilder(Characters.Length * NGramLength);
             foreach (Matrix<float> ngram in Characters)
             {
-                foreach(float character in ngram.Enumerate())
+                foreach (float character in ngram.Enumerate())
                 {
                     result.Append((char)(character + 'A'));
                 }
@@ -122,10 +126,10 @@ namespace Cipher.Text
         {
             int nGramLength = NGramLength;
             Matrix<float>[] characters = Characters;
-            for(int offset = 0; offset < characters.Length; offset++)
+            for (int offset = 0; offset < characters.Length; offset++)
             {
                 Matrix<float> current = characters[offset];
-                for(int row = 0; row < nGramLength; row++)
+                for (int row = 0; row < nGramLength; row++)
                 {
                     yield return current[row, 0];
                 }

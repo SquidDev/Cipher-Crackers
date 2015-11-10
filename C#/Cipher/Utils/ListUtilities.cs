@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,7 +36,7 @@ namespace Cipher.Utils
         {
             int N = Items.Count;
             T[] Result = new T[N];
-            for(int I =0; I<N; I++)
+            for (int I = 0; I < N; I++)
             {
                 Result[I] = Items[I];
             }
@@ -52,10 +52,10 @@ namespace Cipher.Utils
             }
             else
             {
-                for(int I = K; I <= M; I++)
+                for (int I = K; I <= M; I++)
                 {
                     Results.Swap(K, I);
-                    foreach(T[] Item in Permutations(Results, K + 1, M))
+                    foreach (T[] Item in Permutations(Results, K + 1, M))
                     {
                         yield return Item;
                     }
@@ -68,7 +68,7 @@ namespace Cipher.Utils
         public static byte[] Range(byte Count = 0)
         {
             byte[] Result = new byte[Count];
-            for(byte I = 0; I < Count; I++)
+            for (byte I = 0; I < Count; I++)
             {
                 Result[I] = I;
             }

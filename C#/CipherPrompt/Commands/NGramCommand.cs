@@ -1,4 +1,4 @@
-﻿using Cipher.Analysis;
+using Cipher.Analysis;
 using NDesk.Options;
 using System;
 using System.Collections.Generic;
@@ -24,9 +24,9 @@ namespace Cipher.Prompt.Commands
 
             OptionSet Options = new OptionSet()
             {
-                {"h|?|help", "Show this message and exit", V => ShowHelp = (V != null)},
-                {"l|length=", "{LENGTH} of the bigrams", V => Length = Convert.ToInt32(V)},
-                {"m|limit=", "{MAXIMUM} numer to show (use -1 for no limit)", V => Limit = Convert.ToInt32(V)},
+                { "h|?|help", "Show this message and exit", V => ShowHelp = (V != null) },
+                { "l|length=", "{LENGTH} of the bigrams", V => Length = Convert.ToInt32(V) },
+                { "m|limit=", "{MAXIMUM} numer to show (use -1 for no limit)", V => Limit = Convert.ToInt32(V) },
             };
 
             Options.Parse(Args);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -28,7 +28,7 @@ namespace Cipher.WPF.Controls.Ciphers
             byte[] KeyArray;
             try
             {
-                 KeyArray = Key.Text.Split(Separators)
+                KeyArray = Key.Text.Split(Separators)
                     .Select(S => Convert.ToByte(S.Trim()))
                     .ToArray();
             }

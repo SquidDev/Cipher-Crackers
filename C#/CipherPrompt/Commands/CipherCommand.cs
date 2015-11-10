@@ -1,4 +1,4 @@
-﻿using Cipher.Ciphers;
+using Cipher.Ciphers;
 using NDesk.Options;
 using System;
 using System.Collections.Generic;
@@ -19,13 +19,13 @@ namespace Cipher.Prompt.Commands
 
             OptionSet Options = new OptionSet()
             {
-                {"h|?|help", "Show this message and exit", V => ShowHelp = (V != null)},
-                {"k|key=", "{KEY} of the cipher", V => Key = V},
+                { "h|?|help", "Show this message and exit", V => ShowHelp = (V != null) },
+                { "k|key=", "{KEY} of the cipher", V => Key = V },
             };
 
             IList<string> Extra = Options.Parse(Args);
 
-            if(ShowHelp)
+            if (ShowHelp)
             {
                 Console.WriteLine("Usage: CipherPrompt {0} [OPTIONS]", Name);
                 Console.WriteLine();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -12,7 +12,7 @@ namespace Testing.Analysis
     [TestFixture]
     public class AutoSpaceTest
     {
-    	[Test]
+        [Test]
         [TestCaseSource("Items")]
         public void AutoSpace(string text, string result)
         {
@@ -22,14 +22,15 @@ namespace Testing.Analysis
         
         public IEnumerable<Object[]> Items
         {
-        	get 
-        	{
-        		XDocument document = XDocument.Load(@"TestData\Analysis-AutoSpace.xml");
-        		return document.Descendants("AnalysisItem").Select(item => new Object[] {
-			        	item.Element("Text").Value,
-			        	item.Element("Result").Value,
-        			});
-        	}
+            get
+            {
+                XDocument document = XDocument.Load(@"TestData\Analysis-AutoSpace.xml");
+                return document.Descendants("AnalysisItem").Select(item => new Object[]
+                    {
+                        item.Element("Text").Value,
+                        item.Element("Result").Value,
+                    });
+            }
         }
     }
 }

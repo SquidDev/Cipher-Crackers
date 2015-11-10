@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,7 +33,7 @@ namespace Cipher.WPF.Controls
                 SetValue(IsRunningProperty, value);
 
                 // We want to disable the button when processing
-                if(value)
+                if (value)
                 {
                     Enabled_BindingExpression = GetBindingExpression(IsEnabledProperty);
                     IsEnabled = false;

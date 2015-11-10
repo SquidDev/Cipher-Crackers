@@ -1,4 +1,4 @@
-﻿using Cipher.Frequency;
+using Cipher.Frequency;
 using System;
 using System.Collections.Generic;
 

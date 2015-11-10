@@ -1,4 +1,4 @@
-﻿using Cipher.Text;
+using Cipher.Text;
 using System;
 
 namespace Cipher.Ciphers
@@ -17,7 +17,9 @@ namespace Cipher.Ciphers
         // Conversion function for custom keys
         protected Func<TKey, string> KeyStringify = K => K.ToString();
 
-        public BaseCipher() { }
+        public BaseCipher()
+        {
+        }
         public BaseCipher(TArray CipherText)
         {
             Text = CipherText;
@@ -78,7 +80,8 @@ namespace Cipher.Ciphers
 
             public CipherResult(TArray Text, double Score, TKey Key)
                 : this(Text, Score, Key, K => K.ToString())
-            { }
+            {
+            }
 
             public CipherResult(TArray Text, double Score, TKey Key, Func<TKey, string> KeyStringify)
             {

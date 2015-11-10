@@ -1,14 +1,26 @@
-﻿using Cipher.Frequency;
+using Cipher.Frequency;
 using Cipher.Utils;
 
 namespace Cipher.Text
 {
     public class QuadgramScoredLetterArray : LetterArray
     {
-        public QuadgramScoredLetterArray() : base() { }
-        public QuadgramScoredLetterArray(string Text) : base(Text) { }
-        public QuadgramScoredLetterArray(int Length) : base(Length) { }
-        public QuadgramScoredLetterArray(byte[] Characters) : base(Characters) { }
+        public QuadgramScoredLetterArray()
+            : base()
+        {
+        }
+        public QuadgramScoredLetterArray(string Text)
+            : base(Text)
+        {
+        }
+        public QuadgramScoredLetterArray(int Length)
+            : base(Length)
+        {
+        }
+        public QuadgramScoredLetterArray(byte[] Characters)
+            : base(Characters)
+        {
+        }
 
         /// <summary>
         /// Scores this ciphertext using quadgrams
@@ -33,10 +45,22 @@ namespace Cipher.Text
 
     public class MonogramScoredLetterArray : LetterArray
     {
-        public MonogramScoredLetterArray() : base() { }
-        public MonogramScoredLetterArray(string Text) : base(Text) { }
-        public MonogramScoredLetterArray(int Length) : base(Length) { }
-        public MonogramScoredLetterArray(byte[] Characters) : base(Characters) { }
+        public MonogramScoredLetterArray()
+            : base()
+        {
+        }
+        public MonogramScoredLetterArray(string Text)
+            : base(Text)
+        {
+        }
+        public MonogramScoredLetterArray(int Length)
+            : base(Length)
+        {
+        }
+        public MonogramScoredLetterArray(byte[] Characters)
+            : base(Characters)
+        {
+        }
 
         /// <summary>
         /// Calculate the Chi-Squared statistic (single letter)

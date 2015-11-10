@@ -1,14 +1,26 @@
-﻿using System;
+using System;
 using System.Text;
 
 namespace Cipher.Text
 {
     public class LetterArray : TextArray<byte>
     {
-        public LetterArray() : base() { }
-        public LetterArray(string Text) : this(Text.ToLetterArray()) { }
-        public LetterArray(int Length) : base(Length) { }
-        public LetterArray(byte[] Characters) : base(Characters) { }
+        public LetterArray()
+            : base()
+        {
+        }
+        public LetterArray(string Text)
+            : this(Text.ToLetterArray())
+        {
+        }
+        public LetterArray(int Length)
+            : base(Length)
+        {
+        }
+        public LetterArray(byte[] Characters)
+            : base(Characters)
+        {
+        }
 
         public override void Initalise(string Text)
         {

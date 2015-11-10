@@ -1,4 +1,4 @@
-﻿using Cipher.Ciphers;
+using Cipher.Ciphers;
 using Cipher.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -6,15 +6,15 @@ using RFence = Cipher.Ciphers.RailFence<Cipher.Text.QuadgramScoredCharacterArray
 
 namespace Cipher.WPF.Controls.Ciphers
 {
-	/// <summary>
-	/// Interaction logic for CaeserShift.xaml
-	/// </summary>
-	public partial class RailFenceControl : UserControl, IDecode
-	{
+    /// <summary>
+    /// Interaction logic for CaeserShift.xaml
+    /// </summary>
+    public partial class RailFenceControl : UserControl, IDecode
+    {
         public RailFenceControl()
-		{
-			this.InitializeComponent();
-		}
+        {
+            this.InitializeComponent();
+        }
 
         public string Decode(string Input)
         {

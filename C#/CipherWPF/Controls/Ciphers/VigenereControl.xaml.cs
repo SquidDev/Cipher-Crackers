@@ -1,4 +1,4 @@
-﻿using Cipher.Ciphers;
+using Cipher.Ciphers;
 using Cipher.Text;
 using System;
 using System.Threading.Tasks;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -53,15 +53,16 @@ namespace Testing.Ciphers
         
         public IEnumerable<Object[]> Items
         {
-        	get 
-        	{
-        		XDocument document = XDocument.Load(@"TestData\Cipher-CaeserShift.xml");
-        		return document.Descendants("Cipher").Select(item => new Object[] {
-			        	item.Element("Ciphertext").Value,
-			        	item.Element("Plaintext").Value,
-			        	(byte)(int)item.Element("Key"),
-        			});
-        	}
+            get
+            {
+                XDocument document = XDocument.Load(@"TestData\Cipher-CaeserShift.xml");
+                return document.Descendants("Cipher").Select(item => new Object[]
+                    {
+                        item.Element("Ciphertext").Value,
+                        item.Element("Plaintext").Value,
+                        (byte)(int)item.Element("Key"),
+                    });
+            }
         }
     }
 }

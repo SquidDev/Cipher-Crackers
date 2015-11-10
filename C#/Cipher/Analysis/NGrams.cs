@@ -1,4 +1,4 @@
-﻿using Cipher.Text;
+using Cipher.Text;
 using Cipher.Utils;
 using System.Collections.Generic;
 

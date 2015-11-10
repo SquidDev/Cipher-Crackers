@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -29,13 +29,14 @@ namespace Testing.Tools
         
         public IEnumerable<Object[]> Items
         {
-        	get 
-        	{
-        		XDocument document = XDocument.Load(@"TestData\Tools-LetterArrays.xml");
-        		return document.Descendants("AnalysisItem").Select(item => new Object[] {
-			        	item.Element("Text").Value,
-        			});
-        	}
+            get
+            {
+                XDocument document = XDocument.Load(@"TestData\Tools-LetterArrays.xml");
+                return document.Descendants("AnalysisItem").Select(item => new Object[]
+                    {
+                        item.Element("Text").Value,
+                    });
+            }
         }
 
     }

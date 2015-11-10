@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +7,14 @@ namespace Cipher.Utils
 {
     public abstract class DefaultDict<TKey, TValue> : Dictionary<TKey, TValue>
     {
-        public DefaultDict() : base() { }
-        public DefaultDict(IDictionary<TKey, TValue> Dict) : base(Dict) { }
+        public DefaultDict()
+            : base()
+        {
+        }
+        public DefaultDict(IDictionary<TKey, TValue> Dict)
+            : base(Dict)
+        {
+        }
 
         public TValue GetOrDefault(TKey Key)
         {
@@ -30,12 +36,18 @@ namespace Cipher.Utils
     public class BasicDefaultDict<TKey, TValue> : DefaultDict<TKey, TValue>
         where TValue : new()
     {
-         public BasicDefaultDict() : base() { }
-         public BasicDefaultDict(IDictionary<TKey, TValue> Dict) : base(Dict) { }
+        public BasicDefaultDict()
+            : base()
+        {
+        }
+        public BasicDefaultDict(IDictionary<TKey, TValue> Dict)
+            : base(Dict)
+        {
+        }
 
-         public override TValue GetDefault(TKey Key)
-         {
-             return new TValue();
-         }
+        public override TValue GetDefault(TKey Key)
+        {
+            return new TValue();
+        }
     }
 }

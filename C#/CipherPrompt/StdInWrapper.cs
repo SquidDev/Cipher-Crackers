@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace Cipher.Prompt
@@ -11,7 +11,10 @@ namespace Cipher.Prompt
     public class StdInWrapper : TextReader
     {
         public TextReader Reader;
-        public StdInWrapper() : this(Console.In) { }
+        public StdInWrapper()
+            : this(Console.In)
+        {
+        }
         public StdInWrapper(TextReader Reader)
         {
             this.Reader = Reader;

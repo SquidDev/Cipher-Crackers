@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -50,7 +50,7 @@ namespace Testing.Ciphers
 
         [Test]
         [Category("Cipher"), Category("Decode")]
-      	[TestCaseSource("CribItems")]
+        [TestCaseSource("CribItems")]
         public void HillCribCrack(string Ciphertext, string Plaintext, Matrix<float> Key, string plainCrib, string cipherCrib)
         {
             HillCribbed<NGramArray> hill = new HillCribbed<NGramArray>(Ciphertext);
@@ -63,30 +63,32 @@ namespace Testing.Ciphers
         
         public IEnumerable<Object[]> Items
         {
-        	get 
-        	{
-        		XDocument document = XDocument.Load(@"TestData\Cipher-Hill.xml");
-        		return document.Descendants("Cipher").Select(item => new Object[] {
-						item.Element("Ciphertext").Value,
-						item.Element("Plaintext").Value,
-						MatrixExtensions.ReadMatrix(item.Element("Key").Value),
-        			});
-        	}
+            get
+            {
+                XDocument document = XDocument.Load(@"TestData\Cipher-Hill.xml");
+                return document.Descendants("Cipher").Select(item => new Object[]
+                    {
+                        item.Element("Ciphertext").Value,
+                        item.Element("Plaintext").Value,
+                        MatrixExtensions.ReadMatrix(item.Element("Key").Value),
+                    });
+            }
         }
         
         public IEnumerable<Object[]> CribItems
         {
-        	get 
-        	{
-        		XDocument document = XDocument.Load(@"TestData\Cipher-Hill.xml");
-        		return document.Descendants("Cipher").Select(item => new Object[] {
-						item.Element("Ciphertext").Value,
-						item.Element("Plaintext").Value,
-						MatrixExtensions.ReadMatrix(item.Element("Key").Value),
-						item.Element("PlainCrib").Value,
-						item.Element("CipherCrib").Value,
-        			});
-        	}
+            get
+            {
+                XDocument document = XDocument.Load(@"TestData\Cipher-Hill.xml");
+                return document.Descendants("Cipher").Select(item => new Object[]
+                    {
+                        item.Element("Ciphertext").Value,
+                        item.Element("Plaintext").Value,
+                        MatrixExtensions.ReadMatrix(item.Element("Key").Value),
+                        item.Element("PlainCrib").Value,
+                        item.Element("CipherCrib").Value,
+                    });
+            }
         }
     }
 }

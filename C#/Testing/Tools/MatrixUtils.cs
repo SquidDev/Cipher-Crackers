@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -22,14 +22,15 @@ namespace Testing.Tools
         
         public IEnumerable<Object[]> Items
         {
-        	get 
-        	{
-        		XDocument document = XDocument.Load(@"TestData\Tools-MatrixUtils.xml");
-        		return document.Descendants("Item").Select(item => new Object[] {
-						MatrixExtensions.ReadMatrix(item.Element("Matrix").Value),
-						MatrixExtensions.ReadMatrix(item.Element("Adjugate").Value),
-        			});
-        	}
+            get
+            {
+                XDocument document = XDocument.Load(@"TestData\Tools-MatrixUtils.xml");
+                return document.Descendants("Item").Select(item => new Object[]
+                    {
+                        MatrixExtensions.ReadMatrix(item.Element("Matrix").Value),
+                        MatrixExtensions.ReadMatrix(item.Element("Adjugate").Value),
+                    });
+            }
         }
     }
 }

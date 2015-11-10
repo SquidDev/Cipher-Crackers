@@ -1,4 +1,4 @@
-﻿using Cipher.Text;
+using Cipher.Text;
 using Cipher.Utils;
 using System;
 using System.Collections.Generic;
@@ -47,7 +47,7 @@ namespace Cipher.Analysis.AutoSpace
             }
 
             Unseen = new double[UNSEEN_COUNT];
-            for(int L = 0; L < UNSEEN_COUNT; L++)
+            for (int L = 0; L < UNSEEN_COUNT; L++)
             {
                 Unseen[L] = Math.Log10(10 / (TOKEN_COUNT * Math.Pow(10, L)));
             }
@@ -58,11 +58,11 @@ namespace Cipher.Analysis.AutoSpace
             Assembly ThisAssembly = Assembly.GetExecutingAssembly();
 
             Dictionary<string, double> ToLoad = new Dictionary<string, double>();
-            using(Stream ResourceStream = ThisAssembly.GetManifestResourceStream("Cipher.Analysis.AutoSpace." + FileName + ".txt"))
+            using (Stream ResourceStream = ThisAssembly.GetManifestResourceStream("Cipher.Analysis.AutoSpace." + FileName + ".txt"))
             {
-                using(StreamReader Reader = new StreamReader(ResourceStream))
+                using (StreamReader Reader = new StreamReader(ResourceStream))
                 {
-                    while(Reader.Peek() >= 0)
+                    while (Reader.Peek() >= 0)
                     {
                         string[] Line = Reader.ReadLine().Split('\t');
                         if (Line.Length < 2) continue;
@@ -76,7 +76,9 @@ namespace Cipher.Analysis.AutoSpace
                             ToLoad.TryGetValue(Name, out OldScore);
                             ToLoad[Name] = Score + OldScore;
                         }
-                        catch { }
+                        catch
+                        {
+                        }
                     }
                 }
             }
@@ -106,16 +108,16 @@ namespace Cipher.Analysis.AutoSpace
             double[,] Probabilities = new double[TextLength, MaxWordLength];
             string[,][] Strings = new string[TextLength, MaxWordLength][];
 
-            for(int X = 1; X < TextLength; X++)
+            for (int X = 1; X < TextLength; X++)
             {
-                for(int Y = 0; Y < MaxWordLength; Y++)
+                for (int Y = 0; Y < MaxWordLength; Y++)
                 {
                     Probabilities[X, Y] = Double.NegativeInfinity;
                     Strings[X, Y] = new string[] { " " };
                 }
             }
 
-            for(int Y = 0; Y < MaxWordLength; Y++)
+            for (int Y = 0; Y < MaxWordLength; Y++)
             {
                 string Sub = Input.Substring(0, Y + 1);
                 Probabilities[0, Y] = ConditionalWordProbability(Sub);
@@ -126,23 +128,23 @@ namespace Cipher.Analysis.AutoSpace
             string[] BestStrings = null;
            
 
-            for(int I = 1; I < TextLength; I++)
+            for (int I = 1; I < TextLength; I++)
             {
                 int Min = Math.Min(I, MaxWordLength);
 
-                for(int J = 0; J < MaxWordLength; J++)
+                for (int J = 0; J < MaxWordLength; J++)
                 {
                     if (I + J + 1 > TextLength) break;
 
                     BestProbability = Double.NegativeInfinity;
 
-                    for(int K = 0; K < Min; K++)
+                    for (int K = 0; K < Min; K++)
                     {
-                        string[] OldStrings = Strings[I-K-1, K];
+                        string[] OldStrings = Strings[I - K - 1, K];
                         string ThisString = Input.Substring(I, J + 1);
                         double ThisProbability = Probabilities[I - K - 1, K] + ConditionalWordProbability(ThisString, OldStrings.LastValue());
 
-                        if(ThisProbability > BestProbability)
+                        if (ThisProbability > BestProbability)
                         {
                             int OldLength = OldStrings.Length;
                             BestProbability = ThisProbability;
@@ -164,7 +166,7 @@ namespace Cipher.Analysis.AutoSpace
             for (int I = 0; I < Minimum; I++)
             {
                 double ThisProbability = Probabilities[TextLength - I - 1, I];
-                if(ThisProbability > BestProbability)
+                if (ThisProbability > BestProbability)
                 {
                     BestStrings = Strings[TextLength - I - 1, I];
                     BestProbability = ThisProbability;

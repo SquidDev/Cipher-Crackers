@@ -1,4 +1,4 @@
-﻿using Cipher.Text;
+using Cipher.Text;
 using System;
 
 namespace Cipher.Ciphers
@@ -6,8 +6,14 @@ namespace Cipher.Ciphers
     public class RailFence<TArray, TArrayType> : BaseCipher<int, TArray, TArrayType>
         where TArray : TextArray<TArrayType>, new()
     {
-        public RailFence(string CipherText) : base(CipherText) { }
-        public RailFence(TArray CipherText) : base(CipherText) { }
+        public RailFence(string CipherText)
+            : base(CipherText)
+        {
+        }
+        public RailFence(TArray CipherText)
+            : base(CipherText)
+        {
+        }
 
         public override TArray Decode(int Key, TArray Decoded)
         {
@@ -16,11 +22,11 @@ namespace Cipher.Ciphers
 
             int K = 0;
             int Diff = 2 * Key;
-            for(int Line = 0; Line < Key; Line++)
+            for (int Line = 0; Line < Key; Line++)
             {
                 int Skip = 2 * (Key - Line);
                 int J = 0;
-                for (int I = Line; I < Length; )
+                for (int I = Line; I < Length;)
                 {
                     Decoded[I] = Text[K++];
                     if (Line == 0 || J % 2 == 0)
@@ -34,7 +40,7 @@ namespace Cipher.Ciphers
                     J++;
                 }
             }
-            for (int I = Key; I < Length; I+=Diff)
+            for (int I = Key; I < Length; I += Diff)
             {
                 Decoded[I] = Text[K++];
             }
