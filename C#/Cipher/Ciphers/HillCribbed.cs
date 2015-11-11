@@ -89,11 +89,13 @@ namespace Cipher.Ciphers
             if (Cribs.Count < NGramLength) throw new Exception("HillCribbed required at least two cribs");
 
             StringBuilder builder = new StringBuilder();
+            CipherResult best = null;
             foreach (KeyValuePair<string, string>[] pair in Cribs.Permutations(2))
             {
                 try
                 {
-                    return CrackSingle(pair[0].Key + pair[1].Key, pair[0].Value + pair[1].Value);
+                    CipherResult result = CrackSingle(pair[0].Key + pair[1].Key, pair[0].Value + pair[1].Value);
+                    if(best == null || result.Score > best.Score) best = result;
                 }
                 catch (Exception e)
                 {
@@ -101,7 +103,9 @@ namespace Cipher.Ciphers
                 }
             }
             
-            throw new ArgumentException("Cannot find permutation\n" + builder.ToString());
+            if(best == null) throw new ArgumentException("Cannot find permutation\n" + builder.ToString());
+            
+            return best;
         }
     }
 }

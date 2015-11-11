@@ -7,72 +7,96 @@ namespace Cipher.Utils
 {
     public static class ListUtilities
     {
-        public static void Swap<T>(this IList<T> Items, int A, int B)
+        public static void Swap<T>(this IList<T> items, int x, int y)
         {
-            if (A == B) return;
+            if (x == y) return;
 
-            T Temp = Items[A];
-            Items[A] = Items[B];
-            Items[B] = Temp;
+            T Temp = items[x];
+            items[x] = items[y];
+            items[y] = Temp;
+        }
+        
+        public static IEnumerable<T[]> PermutationsRepeat<T>(this IList<T> items, int count)
+        {
+        	return PermutationsRepeat(items, new T[count], count);
+        }
+        
+        public static IEnumerable<T[]> PermutationsRepeat<T>(IList<T> items, T[] results, int count)
+        {
+        	foreach(T item in items)
+        	{
+        		results[count] = item;
+        		if(count == 0)
+        		{
+        			yield return results;
+        		}
+        		else 
+        		{
+	        		foreach(T[] res in PermutationsRepeat(items, results, count - 1))
+	        		{
+	        			yield return res;
+	        		}
+        		}
+        	}
         }
 
         /// <summary>
         /// Permutations of a List
         /// </summary>
-        /// <param name="Items">List to use</param>
+        /// <param name="items">List to use</param>
         /// <returns>Enumerable of all permutations</returns>
-        public static IEnumerable<T[]> Permutations<T>(this IList<T> Items)
+        public static IEnumerable<T[]> Permutations<T>(this IList<T> items)
         {
-            return Items.Permutations(Items.Count);
+            return items.Permutations(items.Count);
         }
 
         /// <summary>
         /// Permutations of a List
         /// </summary>
-        /// <param name="Items">List to use</param>
-        /// <param name="R">Number to choose from</param>
+        /// <param name="items">List to use</param>
+        /// <param name="r">Number to choose from</param>
         /// <returns>Enumerable of all permutations</returns>
-        public static IEnumerable<T[]> Permutations<T>(this IList<T> Items, int R)
+        public static IEnumerable<T[]> Permutations<T>(this IList<T> items, int r)
         {
-            int N = Items.Count;
-            T[] Result = new T[N];
-            for (int I = 0; I < N; I++)
+            int n = items.Count;
+            T[] result = new T[n];
+            for (int I = 0; I < n; I++)
             {
-                Result[I] = Items[I];
+                result[I] = items[I];
             }
 
-            return Permutations(Result, 0, N - 1);
+            return Permutations(result, 0, n - 1);
         }
 
-        internal static IEnumerable<T[]> Permutations<T>(T[] Results, int K, int M)
+        private static IEnumerable<T[]> Permutations<T>(T[] results, int k, int m)
         {
-            if (K == M)
+            if (k == m)
             {
-                yield return Results;
+                yield return results;
             }
             else
             {
-                for (int I = K; I <= M; I++)
+                for (int i = k; i <= m; i++)
                 {
-                    Results.Swap(K, I);
-                    foreach (T[] Item in Permutations(Results, K + 1, M))
+                    results.Swap(k, i);
+                    foreach (T[] item in Permutations(results, k + 1, m))
                     {
-                        yield return Item;
+                        yield return item;
                     }
-                    Results.Swap(K, I);
+                    results.Swap(k, i);
                 }
 
             }
         }
 
-        public static byte[] Range(byte Count = 0)
+        public static byte[] Range(byte count = 0)
         {
-            byte[] Result = new byte[Count];
-            for (byte I = 0; I < Count; I++)
+            byte[] result = new byte[count];
+            for (byte i = 0; i < count; i++)
             {
-                Result[I] = I;
+                result[i] = i;
             }
-            return Result;
+            return result;
         }
     }
 }
