@@ -37,12 +37,11 @@ namespace Testing.Ciphers
         /// </summary>
         [Test]
         [Category("Cipher"), Category("Decode"), Category("Experimental")]
-        [TestCaseSource("Items")]
-        [Ignore]
+        [TestCaseSource("BruteItems")]
         public void HillBruteCrack(string Ciphertext, string Plaintext, Matrix<float> Key)
         {
-            HillBrute<QuadgramScoredNGramArray> hill = new HillBrute<QuadgramScoredNGramArray>(Ciphertext);
-            HillBrute<QuadgramScoredNGramArray>.CipherResult result = hill.Crack();
+            HillBrute<BigramScoredNGramArray> hill = new HillBrute<BigramScoredNGramArray>(Ciphertext);
+            HillBrute<BigramScoredNGramArray>.CipherResult result = hill.Crack();
 
             Assert.AreEqual(Plaintext, result.Text.ToString());
             Assert.AreEqual(Key, result.Key);
@@ -67,6 +66,22 @@ namespace Testing.Ciphers
             {
                 XDocument document = XDocument.Load(@"TestData\Cipher-Hill.xml");
                 return document.Descendants("Cipher").Select(item => new Object[]
+                    {
+                        item.Element("Ciphertext").Value,
+                        item.Element("Plaintext").Value,
+                        MatrixExtensions.ReadMatrix(item.Element("Key").Value),
+                    });
+            }
+        }
+        
+        public IEnumerable<Object[]> BruteItems
+        {
+            get
+            {
+                XDocument document = XDocument.Load(@"TestData\Cipher-Hill.xml");
+                return document.Descendants("Cipher")
+                	.Where(item => Boolean.Parse(item.Element("Brute").Value))
+                	.Select(item => new Object[]
                     {
                         item.Element("Ciphertext").Value,
                         item.Element("Plaintext").Value,

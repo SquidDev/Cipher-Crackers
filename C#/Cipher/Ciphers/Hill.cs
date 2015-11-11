@@ -53,22 +53,6 @@ namespace Cipher.Ciphers
         /// <returns></returns>
         public override TArray Decode(Matrix<float> key, TArray decoded)
         {
-
-            /*
-            inverse.Map(f =>
-            {
-                if (Single.IsInfinity(f) || Single.IsNaN(f))
-                {
-                    throw new ArgumentException("Non invertable matrix");
-                }
-                return (float)Math.Floor(f);
-            }, inverse);*/
-
-            //Console.WriteLine(key.ToMatrixString());
-            //Console.WriteLine(inverse.ToMatrixString());
-
-            //Console.WriteLine("Key: {0}", inverse);
-
             Matrix<float>[] text = Text.Characters;
             Matrix<float>[] decodedText = decoded.Characters;
             int length = text.Length;

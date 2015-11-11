@@ -18,10 +18,10 @@ namespace Cipher.Utils
         
         public static IEnumerable<T[]> PermutationsRepeat<T>(this IList<T> items, int count)
         {
-        	return PermutationsRepeat(items, new T[count], count);
+        	return PermutationsRepeat(items, new T[count], count - 1);
         }
         
-        public static IEnumerable<T[]> PermutationsRepeat<T>(IList<T> items, T[] results, int count)
+        private static IEnumerable<T[]> PermutationsRepeat<T>(IList<T> items, T[] results, int count)
         {
         	foreach(T item in items)
         	{
@@ -92,6 +92,16 @@ namespace Cipher.Utils
         public static byte[] Range(byte count = 0)
         {
             byte[] result = new byte[count];
+            for (byte i = 0; i < count; i++)
+            {
+                result[i] = i;
+            }
+            return result;
+        }
+        
+        public static float[] FloatRange(byte count = 0)
+        {
+            float[] result = new float[count];
             for (byte i = 0; i < count; i++)
             {
                 result[i] = i;

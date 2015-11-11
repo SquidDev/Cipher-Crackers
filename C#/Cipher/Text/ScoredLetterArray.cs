@@ -28,18 +28,18 @@ namespace Cipher.Text
         /// <returns>The score of the text</returns>
         public override double ScoreText()
         {
-            double Score = 0;
+            double score = 0;
 
-            int Length = Characters.Length - 3;
-            for (int I = 0; I < Length; I++)
+            int length = Characters.Length - 3;
+            for (int I = 0; I < length; I++)
             {
-                Score += LetterStatistics.Quadgrams[
+                score += LetterStatistics.Quadgrams[
                     (17576 * Characters[I]) + (676 * Characters[I + 1]) +
                     (26 * Characters[I + 2]) + Characters[I + 3]
                 ];
             }
 
-            return Score;
+            return score;
         }
     }
 
@@ -68,18 +68,18 @@ namespace Cipher.Text
         /// <returns></returns>
         public override double ScoreText()
         {
-            double Score = 0;
+            double score = 0;
 
-            int Length = this.Length;
-            int[] Frequency = Frequencies();
+            int length = Length;
+            int[] frequency = Frequencies();
 
-            for (byte Letter = 0; Letter < 26; Letter++)
+            for (byte letter = 0; letter < 26; letter++)
             {
-                Score += MathsUtilities.Chi(Frequency, Length, Letter);
+                score += MathsUtilities.Chi(frequency, length, letter);
             }
 
             // 'Invert' score so largest is better
-            return 1 / Score;
+            return 1 / score;
         }
 
         /// <summary>
@@ -87,13 +87,50 @@ namespace Cipher.Text
         /// </summary>
         public int[] Frequencies()
         {
-            int[] Frequency = new int[26];
-            foreach (byte Character in Characters)
+            int[] frequency = new int[26];
+            foreach (byte character in Characters)
             {
-                Frequency[Character]++;
+                frequency[character]++;
             }
 
-            return Frequency;
+            return frequency;
+        }
+    }
+    
+    public class BigramScoredLetterArray : LetterArray
+    {
+        public BigramScoredLetterArray()
+            : base()
+        {
+        }
+        public BigramScoredLetterArray(string Text)
+            : base(Text)
+        {
+        }
+        public BigramScoredLetterArray(int Length)
+            : base(Length)
+        {
+        }
+        public BigramScoredLetterArray(byte[] Characters)
+            : base(Characters)
+        {
+        }
+
+        /// <summary>
+        /// Scores this ciphertext using quadgrams
+        /// </summary>
+        /// <returns>The score of the text</returns>
+        public override double ScoreText()
+        {
+            double score = 0;
+
+            int length = Characters.Length - 1;
+            for (int i = 0; i < length; i++)
+            {
+                score += LetterStatistics.Bigrams[(26 * Characters[i + 1]) + Characters[i]];
+            }
+
+            return score;
         }
     }
 }
