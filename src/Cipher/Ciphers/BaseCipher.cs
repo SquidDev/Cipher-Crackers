@@ -67,6 +67,12 @@ namespace Cipher.Ciphers
             return new CipherResult(Decode(Key), Score, Key, KeyStringify);
         }
 
+        protected CipherResult GetResult(TKey Key)
+        {
+            TArray decoded = Decode(Key);
+            return new CipherResult(decoded, decoded.ScoreText(), Key, KeyStringify);
+        }
+
         /// <summary>
         /// The result of decryption
         /// </summary>

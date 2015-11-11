@@ -26,6 +26,41 @@ namespace Cipher.Utils
             return MaxIndex;
         }
 
+        public static T Max<T>(this IEnumerable<T> e, Comparison<T> comparer)
+        {
+            T max = default(T);
+            bool empty = true;
+            foreach (T value in e)
+            {
+                if (empty || comparer(value, max) > 0)
+                {
+                    empty = false;
+                    max = value;
+                }
+            }
+
+            return max;
+        }
+
+        public static T Max<T>(this IEnumerable<T> e)
+            where T : IComparable
+        {
+            T max = default(T);
+            bool empty = true;
+
+            foreach (T value in e)
+            {
+                if (empty || value.CompareTo(max) > 0)
+                {
+                    empty = false;
+                    max = value;
+                }
+
+            }
+
+            return max;
+        }
+
         public static KeyValuePair<int, T> MaxIndexValue<T>(this IEnumerable<T> Enumerable)
             where T : IComparable<T>
         {

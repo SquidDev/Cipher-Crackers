@@ -2,6 +2,8 @@ using Cipher.Text;
 using Cipher.Utils;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace Cipher.Ciphers
 {
@@ -16,84 +18,66 @@ namespace Cipher.Ciphers
         {
             KeyStringify = K => K.PrettyString();
         }
+
         public ColumnarTransposition(TArray Text)
             : base(Text)
         {
             KeyStringify = K => K.PrettyString();
         }
 
-        public override TArray Decode(byte[] Key, TArray Decoded)
+        public override TArray Decode(byte[] key, TArray decoded)
         {
-            int Length = Text.Length;
-            int KeyLength = Key.Length;
-            for (int Index = 0; Index < Length; Index++)
+            int length = Text.Length;
+            int keyLength = key.Length;
+            for (int index = 0; index < length; index++)
             {
-                int Mod = Index % KeyLength;
-                int Offset = Key[Mod];
-                int Row = Index - Mod;
+                int mod = index % keyLength;
+                int offset = key[mod];
+                int row = index - mod;
 
-                Decoded[Index] = Text[Offset + Row];
+                decoded[index] = Text[offset + row];
             }
 
-            return Decoded;
+            return decoded;
         }
 
         public override CipherResult Crack()
         {
-            byte[] BestKey = null;
-            double BestScore = Double.NegativeInfinity;
+            int length = Text.Length;
 
-            int Length = Text.Length;
-            TArray Decoded = Create(Length);
-
-            List<byte> TriedKeys = new List<byte>();
-            for (byte KeyLength = MaxKeyLength; KeyLength >= MinKeyLength; KeyLength--)
+            List<byte> keys = new List<byte>();
+            for (byte key = MaxKeyLength; key >= MinKeyLength; key--)
             {
                 // At the moment the key must be a factor of the string length;
-                if (Length % KeyLength != 0) continue;
+                if (length % key != 0) continue;
                 // Don't bother decoding for factors of this key
-                foreach (byte OldKey in TriedKeys)
-                {
-                    if (OldKey % KeyLength == 0) continue;
-                }
+                if (keys.Exists(old => old % key == 0)) continue;
 
-                TriedKeys.Add(KeyLength);
-
-                BaseCipher<byte[], TArray, TArrayType>.CipherResult Result = InternalCrack(KeyLength, Decoded);
-
-                if (Result.Score > BestScore)
-                {
-                    BestKey = Result.Key;
-                    BestScore = Result.Score;
-                }
+                keys.Add(key);
             }
 
-            return GetResult(BestScore, BestKey, Decoded);
+            return keys.RunAsync(Crack).Max((x, y) => x.Score.CompareTo(y.Score));
         }
 
-        public CipherResult Crack(byte KeyLength)
+        public CipherResult Crack(byte keyLength)
         {
-            return InternalCrack(KeyLength, Create(Text.Length));
-        }
+            TArray decoded = Create(Text.Length);
+            byte[] bestKey = new byte[keyLength];
+            double bestScore = Double.NegativeInfinity;
 
-        protected CipherResult InternalCrack(byte KeyLength, TArray Decoded)
-        {
-            byte[] BestKey = new byte[KeyLength];
-            double BestScore = Double.NegativeInfinity;
-
-            foreach (byte[] Key in ListUtilities.Range(KeyLength).Permutations())
+            foreach (byte[] key in ListUtilities.RangeByte(keyLength).Permutations())
             {
-                Decoded = Decode(Key, Decoded);
-                double Score = Decoded.ScoreText();
+                decoded = Decode(key, decoded);
+                double score = decoded.ScoreText();
 
-                if (Score > BestScore)
+                if (score > bestScore)
                 {
-                    Key.CopyTo(BestKey, 0);
-                    BestScore = Score;
+                    key.CopyTo(bestKey, 0);
+                    bestScore = score;
                 }
             }
 
-            return GetResult(BestScore, BestKey, Decoded);
+            return GetResult(bestScore, bestKey, decoded);
         }
     }
 }

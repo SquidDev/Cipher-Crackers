@@ -33,7 +33,7 @@ namespace Cipher.Ciphers
             Matrix<float> bestKey = key.Clone();
             double bestScore = Double.NegativeInfinity;
             
-            float[] combinations = ListUtilities.FloatRange(26);
+            float[] combinations = ListUtilities.RangeFloat(26);
 
             for (int rowIndex = 0; rowIndex < NGramLength; rowIndex++)
             {

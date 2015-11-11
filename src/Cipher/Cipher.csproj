@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Cipher</RootNamespace>
     <AssemblyName>Cipher</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -74,6 +74,7 @@
     <Compile Include="Text\TextArray.cs" />
     <Compile Include="Text\TextExtensions.cs" />
     <Compile Include="Utils\MatrixExtensions.cs" />
+    <Compile Include="Utils\AsyncUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Analysis\AutoSpace\1WordScores.txt" />
