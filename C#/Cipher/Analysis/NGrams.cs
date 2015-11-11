@@ -6,18 +6,19 @@ namespace Cipher.Analysis
 {
     public class NGrams
     {
-        public static Dictionary<string, int> GatherNGrams(string Value, int NGramLength = 2)
+        public static Dictionary<string, int> GatherNGrams(string value, int nGramLength = 2, bool stickBoundaries = false, int offset = 0)
         {
-            Value = Value.UpperNoSpace();
-            BasicDefaultDict<string, int> Frequencies = new BasicDefaultDict<string, int>();
-            int End = Value.Length - NGramLength + 1;
-            for (int Position = 0; Position < End; Position++)
+            value = value.UpperNoSpace();
+            Dictionary<string, int> frequencies = new Dictionary<string, int>();
+            int end = value.Length - nGramLength + 1;
+            int delta = stickBoundaries ? nGramLength : 1;
+            for (int position = offset; position < end; position += delta)
             {
-                string NGram = Value.Substring(Position, NGramLength);
-                Frequencies[NGram] = Frequencies.GetOrDefault(NGram) + 1;
+                string nGram = value.Substring(position, nGramLength);
+                frequencies[nGram] = frequencies.GetOrCreate(nGram) + 1;
             }
 
-            return Frequencies;
+            return frequencies;
         }
     }
 }

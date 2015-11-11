@@ -63,14 +63,14 @@ namespace Cipher.Ciphers
 
         public int GuessKeyLength()
         {
-            BasicDefaultDict<string, List<int>> Positions = new BasicDefaultDict<string, List<int>>();
+            Dictionary<string, List<int>> Positions = new Dictionary<string, List<int>>();
             int Length = Text.Length;
             for (int WordLength = MinWordLength; WordLength <= MaxWordLength; WordLength++)
             {
                 int End = Length - WordLength + 1;
                 for (int Position = 0; Position < End; Position++)
                 {
-                    Positions.GetOrDefault(Text.Substring(Position, WordLength)).Add(Position);
+                    Positions.GetOrCreate(Text.Substring(Position, WordLength)).Add(Position);
                 }
             }
 

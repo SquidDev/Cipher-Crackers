@@ -30,7 +30,7 @@ namespace Cipher.WPF.Controls.Analysis
 
         private void Go_Click(object sender, RoutedEventArgs e)
         {
-            Frequencies = NGrams.GatherNGrams(Input, (int)NGramLength.Value).OrderByDescending(A => A.Value).ToList();
+            Frequencies = NGrams.GatherNGrams(Input, (int)NGramLength.Value, Clamp.IsChecked.Value).OrderByDescending(A => A.Value).ToList();
             OnChanged("Frequencies");
         }
 

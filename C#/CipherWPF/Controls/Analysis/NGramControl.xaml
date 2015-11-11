@@ -19,7 +19,8 @@
         </Grid.RowDefinitions>
         
         <Grid Grid.Row="0">
-            <Metro:NumericUpDown x:Name="NGramLength" Minimum="1" Maximum="10" Value="2" VerticalAlignment="Stretch" Margin="0,5,125,5" />
+            <Metro:NumericUpDown x:Name="NGramLength" Minimum="1" Maximum="10" Value="2" VerticalAlignment="Stretch" Margin="0,5,240,0" />
+        	<CheckBox x:Name="Clamp" Content="On boundaries" HorizontalAlignment="Right" Margin="0,5,125,5" VerticalAlignment="Center" Width="110" IsChecked="False"/>
             <Button Content="Calculate Ngrams" HorizontalAlignment="Right" Margin="0,5" Click="Go_Click" Width="115" IsEnabled="{Binding Input, Converter={StaticResource StringLengthToBoolean}, ElementName=userControl}" />
         </Grid>
         <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding Frequencies}" AutoGenerateColumns="False" Margin="0,5">

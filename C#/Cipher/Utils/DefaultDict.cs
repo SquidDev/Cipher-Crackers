@@ -5,49 +5,32 @@ using System.Text;
 
 namespace Cipher.Utils
 {
-    public abstract class DefaultDict<TKey, TValue> : Dictionary<TKey, TValue>
-    {
-        public DefaultDict()
-            : base()
-        {
-        }
-        public DefaultDict(IDictionary<TKey, TValue> Dict)
-            : base(Dict)
-        {
-        }
+	public static class DefaultDict
+	{
+		public static TValue GetOrCreate<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, Func<TKey, TValue> creator)
+		{
+			TValue result;
+			if(!dict.TryGetValue(key, out result)) 
+			{
+				result = creator(key);
+				dict.Add(key, result);
+			}
 
-        public TValue GetOrDefault(TKey Key)
-        {
-            TValue Result;
-            if (TryGetValue(Key, out Result))
-            {
-                return Result;
-            }
+			return result;
+		}
+		
+		public static TValue GetOrCreate<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
+			where TValue : new()
+		{
+			TValue result;
+			if(!dict.TryGetValue(key, out result)) 
+			{
+				result = new TValue();
+				dict.Add(key, result);
+			}
 
-            Result = GetDefault(Key);
-            this[Key] = Result;
+			return result;
+		}
+	}
 
-            return Result;
-        }
-
-        public abstract TValue GetDefault(TKey Key);
-    }
-
-    public class BasicDefaultDict<TKey, TValue> : DefaultDict<TKey, TValue>
-        where TValue : new()
-    {
-        public BasicDefaultDict()
-            : base()
-        {
-        }
-        public BasicDefaultDict(IDictionary<TKey, TValue> Dict)
-            : base(Dict)
-        {
-        }
-
-        public override TValue GetDefault(TKey Key)
-        {
-            return new TValue();
-        }
-    }
 }
