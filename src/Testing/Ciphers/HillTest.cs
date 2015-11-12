@@ -25,7 +25,6 @@ namespace Testing.Ciphers
         [TestCaseSource("Items")]
         public void HillDecode(string ciphertext, string plaintext, Matrix<float> key)
         {
-            Console.WriteLine(key.Transpose());
             Hill cipher = new Hill(TextScorers.ScoreQuadgrams);
             NGramArray result = cipher.Decode(ciphertext, key);
 

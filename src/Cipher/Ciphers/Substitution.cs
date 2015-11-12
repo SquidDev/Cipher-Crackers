@@ -65,9 +65,7 @@ namespace Cipher.Ciphers
                 count++;
             }
             
-            var x = GetResult(cipher, bestScore, bestKey, decoded);
-            Console.WriteLine("Iteration: " + KeyConverters.String.ToString(bestKey) + " =>\n" + x.Contents.ToString());
-            return x;
+            return GetResult(cipher, bestScore, bestKey, decoded);
         }
 
         public override ICipherResult<byte[], TText> Crack(TText cipher)
