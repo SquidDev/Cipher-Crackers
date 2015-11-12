@@ -9,123 +9,49 @@ namespace Cipher.Ciphers
     /// <typeparam name="TKey">The type of key</typeparam>
     /// <typeparam name="TArray">The type of text array</typeparam>
     /// <typeparam name="TArrayType">The type the text array contains</typeparam>
-    public abstract class BaseCipher<TKey, TArray, TArrayType>
-        where TArray : TextArray<TArrayType>, new()
+    public abstract class BaseCipher<TKey, TText> : ICipher<TKey, TText>
+        where TText : ITextArray
     {
-        protected TArray Text;
+        protected readonly Formatter<TKey> keyFormatter;
+        protected readonly TextScorer scorer;
 
-        // Conversion function for custom keys
-        protected Func<TKey, string> KeyStringify = K => K.ToString();
-
-        public BaseCipher()
+        public BaseCipher(TextScorer scorer, Formatter<TKey> formatter = x => x.ToString())
         {
-        }
-        public BaseCipher(TArray CipherText)
-        {
-            Text = CipherText;
+            this.keyFormatter = formatter;
+            this.scorer = scorer;
         }
 
-        public BaseCipher(string CipherText)
+        public abstract TText Decode(TText cipher, TKey key, TText decoded);
+
+        public abstract ICipherResult<TKey, TText> Crack(TText cipher);
+
+        protected abstract TText Create(string text);
+
+        protected abstract TText Create(int length);
+
+        #region Shortcut functions
+
+        protected ICipherResult<TKey, TText> GetResult(double score, TKey key, TText decoded)
         {
-            Text = new TArray();
-            Text.Initalise(CipherText);
+            return new CipherResult<TKey, TText>(Decode(key, decoded), key, score, keyFormatter);
         }
 
-        public abstract TArray Decode(TKey Key, TArray Decoded);
-        public virtual TArray Decode(TKey Key)
+        protected ICipherResult<TKey, TText> GetResult(double score, TKey key)
         {
-            TArray Decoded = new TArray();
-            Decoded.Initalise(Text.Length);
-
-            return Decode(Key, Decoded);
-        }
-        public abstract CipherResult Crack();
-
-        #region TArray shortcuts
-        protected TArray Create(string Text)
-        {
-            TArray Arr = new TArray();
-            Arr.Initalise(Text);
-            return Arr;
+            return new CipherResult<TKey, TText>(Decode(key), key, score, keyFormatter);
         }
 
-        protected TArray Create(int Length)
+        protected ICipherResult<TKey, TText> GetResult(TKey key)
         {
-            TArray Arr = new TArray();
-            Arr.Initalise(Length);
-            return Arr;
+            TText decoded = Decode(key);
+            return new CipherResult<TKey, TText>(decoded, key, scorer, keyFormatter);
         }
+
+        public virtual TText Decode(TText cipher, TKey key)
+        {
+            return Decode(cipher, key, Create(cipher.Count));
+        }
+
         #endregion
-
-        protected CipherResult GetResult(double Score, TKey Key, TArray Decoded)
-        {
-            return new CipherResult(Decode(Key, Decoded), Score, Key, KeyStringify);
-        }
-
-        protected CipherResult GetResult(double Score, TKey Key)
-        {
-            return new CipherResult(Decode(Key), Score, Key, KeyStringify);
-        }
-
-        protected CipherResult GetResult(TKey Key)
-        {
-            TArray decoded = Decode(Key);
-            return new CipherResult(decoded, decoded.ScoreText(), Key, KeyStringify);
-        }
-
-        /// <summary>
-        /// The result of decryption
-        /// </summary>
-        public class CipherResult
-        {
-            public readonly TArray Text;
-            public readonly double Score;
-            public readonly TKey Key;
-
-            protected Func<TKey, string> KeyStringify;
-
-            public CipherResult(TArray Text, double Score, TKey Key)
-                : this(Text, Score, Key, K => K.ToString())
-            {
-            }
-
-            public CipherResult(TArray Text, double Score, TKey Key, Func<TKey, string> KeyStringify)
-            {
-                this.Text = Text;
-                this.Score = Score;
-                this.Key = Key;
-
-                this.KeyStringify = KeyStringify;
-            }
-
-            public override string ToString()
-            {
-                return Text.ToString();
-            }
-
-            public string KeyString()
-            {
-                return KeyStringify(Key);
-            }
-
-            public static explicit operator GenericCipherResult(CipherResult Result)
-            {
-                return new GenericCipherResult(Result.KeyString(), Result.Text.ToString(), Result.Score);
-            }
-        }
-    }
-
-    public class GenericCipherResult
-    {
-        public readonly string Key;
-        public readonly string Text;
-        public readonly double Score;
-
-        public GenericCipherResult(string Key, string Text, double Score)
-        {
-            this.Key = Key;
-            this.Score = Score;
-            this.Text = Text;
-        }
     }
 }

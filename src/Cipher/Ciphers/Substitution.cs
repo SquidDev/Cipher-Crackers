@@ -1,52 +1,49 @@
 using Cipher.Text;
 using Cipher.Utils;
 using System;
+using System.Linq;
 
 namespace Cipher.Ciphers
 {
-    public class Substitution<TArray> : BaseCipher<LetterArray, TArray, byte>
-        where TArray : TextArray<byte>, new()
+    public class Substitution<TText> : BaseCipher<byte[], TText>
+        where TText : ITextArray<byte>
     {
-        public int MaxIterations = 5;
-        public int InternalIterations = 1000;
+        public const int MaxIterations = 5;
+        public const int InternalIterations = 1000;
 
-        public Substitution(string Text)
-            : base(Text)
-        {
-        }
-        public Substitution(TArray Text)
-            : base(Text)
+        public Substitution(TextScorer scorer)
+            : base(scorer)
         {
         }
 
-        public override TArray Decode(LetterArray Key, TArray Decoded)
+        public override TText Decode(TText cipher, byte[] key, TText decoded)
         {
-            int Length = Text.Length;
-            for (int Index = 0; Index < Length; Index++)
+            int length = cipher.Count;
+            for (int index = 0; index < length; index++)
             {
-                Decoded[Index] = Key[Text[Index]];
+                decoded[index] = key[Text[index]];
             }
 
-            return Decoded;
+            return decoded;
         }
 
-        public override CipherResult Crack()
+        public override ICipherResult<byte[], TText> Crack(TText cipher)
         {
-            LetterArray BestKey = new LetterArray("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            byte[] BestKey = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToLetterArray();
             double BestScore = Double.NegativeInfinity;
 
-            LetterArray ParentKey = new LetterArray((byte[])BestKey.Characters.Clone());
+            byte[] ParentKey = BestKey.ToArray();
             double ParentScore = BestScore;
 
-            TArray Decoded = Create(Text.Length);
-            LetterArray ChildKey = new LetterArray(BestKey.Length);
+            TText Decoded = Create(cipher.Count);
+            byte[] ChildKey = new byte[BestKey.Count];
             double ChildScore;
 
             for (int Iteration = 0; Iteration < MaxIterations; Iteration++)
             {
-                ParentKey.Characters.Shuffle<byte>();
+                ParentKey.Shuffle<byte>();
                 Decoded = Decode(ParentKey, Decoded);
-                ParentScore = Decoded.ScoreText();
+                ParentScore = scorer(Decoded);
 
                 ParentKey.CopyTo(ChildKey);
 
@@ -57,7 +54,7 @@ namespace Cipher.Ciphers
                     ChildKey.Swap(MathsUtilities.RandomInstance.Next(26), MathsUtilities.RandomInstance.Next(26));
 
                     Decoded = Decode(ChildKey, Decoded);
-                    ChildScore = Decoded.ScoreText();
+                    ChildScore = scorer(Decoded);
 
                     //Reset parent score
                     if (ChildScore > ParentScore)

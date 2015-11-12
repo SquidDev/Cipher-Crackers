@@ -5,48 +5,46 @@ using System.Collections.Generic;
 
 namespace Cipher.Ciphers
 {
-    public class Vigenere<TArray> : BaseCipher<LetterArray, TArray, byte>
-        where TArray : TextArray<byte>, new()
+    public class Vigenere<TArray> : BaseCipher<byte[], TArray>
+        where TArray : ITextArray<byte>
     {
         #region Guessing variables
+
         /// <summary>
         /// Maximum length used for finding repeated sequences when guessing the key length
         /// </summary>
         /// /// <seealso cref="MinWordLength"/>
-        public int MaxWordLength = 5;
+        public const int MaxWordLength = 5;
 
         /// <summary>
         /// Minimum length used for finding repeated sequences when guessing the key length
         /// </summary>
         /// <seealso cref="MaxWordLength"/>
-        public int MinWordLength = 3;
+        public const int MinWordLength = 3;
 
         /// <summary>
         /// Minimum length used for key length the key length
         /// </summary>
         /// <seealso cref="MaxKeyLength"/>
-        public int MinKeyLength = 2;
+        public const int MinKeyLength = 2;
 
         /// <summary>
         /// Maximum length used for key length the key length
         /// </summary>
         /// <seealso cref="MaxKeyLength"/>
-        public int MaxKeyLength = 20;
+        public const int MaxKeyLength = 20;
+
         #endregion
 
-        public Vigenere(string Text)
-            : base(Text)
-        {
-        }
-        public Vigenere(TArray Text)
-            : base(Text)
+        public Vigenere(TextScorer scorer)
+            : base(scorer)
         {
         }
 
-        public override TArray Decode(LetterArray Key, TArray Decoded)
+        public override TArray Decode(TArray Text, byte[] Key, TArray Decoded)
         {
-            int Length = Text.Length;
-            int KeyLength = Key.Length;
+            int Length = Text.Count;
+            int KeyLength = Key.Count;
 
             for (int Index = 0; Index < Length; Index++)
             {
@@ -55,16 +53,11 @@ namespace Cipher.Ciphers
 
             return Decoded;
         }
-    
-        public override BaseCipher<LetterArray,TArray,byte>.CipherResult Crack()
-        {
-            throw new NotImplementedException();
-        }
 
-        public int GuessKeyLength()
+        public int GuessKeyLength(TArray Text)
         {
             Dictionary<string, List<int>> Positions = new Dictionary<string, List<int>>();
-            int Length = Text.Length;
+            int Length = Text.Count;
             for (int WordLength = MinWordLength; WordLength <= MaxWordLength; WordLength++)
             {
                 int End = Length - WordLength + 1;
@@ -103,25 +96,22 @@ namespace Cipher.Ciphers
         }
     }
 
-    public class MonogramVigenere : Vigenere<LetterArray>
+    public class MonogramVigenere<TText> : Vigenere<TText>
+        where TText : ITextArray<byte>
     {
-        public MonogramVigenere(string CipherText)
-            : base(CipherText)
-        {
-        }
-        public MonogramVigenere(LetterArray CipherText)
-            : base(CipherText)
+        public MonogramVigenere(TextScorer scorer)
+            : base(scorer)
         {
         }
 
-        public CipherResult Crack(int KeyLength = -1)
+        public ICipherResult<byte[], TText> Crack(TText Text, int KeyLength = -1)
         {
             if (KeyLength <= 0) KeyLength = GuessKeyLength();
             
-            LetterArray Key = new LetterArray(KeyLength);
-            int Length = Text.Length;
+            byte[] Key = new byte[KeyLength];
+            int Length = Text.Count;
 
-            LetterArray Decoded = new LetterArray(Length);
+            byte[] Decoded = new byte[Length];
 
             List<byte>[] Items = new List<byte>[KeyLength];
             // Fill array
@@ -136,21 +126,22 @@ namespace Cipher.Ciphers
                 Items[Index % KeyLength].Add(Text[Index]);
             }
 
+            MonogramCaeserShift<TText> Shift = new MonogramCaeserShift<TText>();
+
             // Solve ciphers and rebuild
             for (int KeyNo = 0; KeyNo < KeyLength; KeyNo++)
             {
-                MonogramCaeserShift Shift = new MonogramCaeserShift(new MonogramScoredLetterArray((byte[])Items[KeyNo].ToArray()));
-                MonogramCaeserShift.CipherResult Result = Shift.Crack();
+                ICipherResult<byte, TText> Result = Shift.Crack(Create(Items[KeyNo]));
 
                 Key[KeyNo] = Result.Key;
-                int ResultLength = Result.Text.Length;
+                int ResultLength = Result.Contents.Count;
                 for (int Index = 0; Index < ResultLength; Index++)
                 {
-                    Decoded[Index * KeyLength + KeyNo] = Result.Text[Index];
+                    Decoded[Index * KeyLength + KeyNo] = Result.Contents[Index];
                 }
             }
 
-            return new CipherResult(Decoded, 0, Key);
+            return GetResult(Key);
         }
     }
 }

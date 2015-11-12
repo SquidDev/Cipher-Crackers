@@ -45,8 +45,8 @@ namespace Testing.Ciphers
         [TestCaseSource("Items")]
         public void Decode(string Ciphertext, string Plaintext, byte Key)
         {
-            CaeserShift<LetterArray> Shift = new CaeserShift<LetterArray>(Ciphertext);
-            LetterArray Result = Shift.Decode(Key);
+            CaeserShift<LetterTextArray> Shift = new CaeserShift<LetterTextArray>(Ciphertext);
+            LetterTextArray Result = Shift.Decode(Key);
 
             Assert.AreEqual(Plaintext, Result.ToString());
         }

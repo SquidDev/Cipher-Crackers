@@ -12,97 +12,90 @@ namespace Cipher.Ciphers
     ///     <see cref="TextArray"/> to use to store the characters 
     ///     and score the result
     /// </typeparam>
-    public class CaeserShift<TArray> : BaseCipher<byte, TArray, byte>
-        where TArray : TextArray<byte>, new()
+    public class CaeserShift<TText> : BaseCipher<byte, TText>
+        where TText : ITextArray<byte>
     {
-        public CaeserShift(string CipherText)
-            : base(CipherText)
+        public CaeserShift(TextScorer scorer)
+            : base(scorer)
         {
         }
-        public CaeserShift(TArray CipherText)
-            : base(CipherText)
-        {
-        }
-    	
+
         /// <summary>
         /// Decode the CipherText
         /// </summary>
         /// <param name="Key"></param>
         /// <returns></returns>
-        public override TArray Decode(byte Key, TArray Decoded)
+        public override TText Decode(TText cipher, byte key, TText decoded)
         {
-            byte InverseKey = (byte)((26 - Key) % 26);
-            int Length = Text.Length;
-            for (int Index = 0; Index < Length; Index++)
+            byte inverseKey = (byte)((26 - key) % 26);
+            int length = cipher.Count;
+            for (int Index = 0; Index < length; Index++)
             {
-                Decoded[Index] = (byte)((Text[Index] + InverseKey) % 26);
+                decoded[Index] = (byte)((Text[Index] + inverseKey) % 26);
             }
             
-            return Decoded;
+            return decoded;
         }
 
-        public override CipherResult Crack()
+        public override ICipherResult<byte, TText> Crack(TText cipher)
         {
-            double BestScore = Double.NegativeInfinity;
-            byte BestKey = 0;
+            double bestScore = Double.NegativeInfinity;
+            byte bestKey = 0;
 
-            TArray Decoded = new TArray();
-            Decoded.Initalise(Text.Length);
+            TText decoded = new TText();
+            decoded.Initalise(cipher.Count);
 
             for (byte Key = 0; Key < 26; Key++)
             {
-                Decoded = Decode(Key, Decoded);
-                double Score = Decoded.ScoreText();
+                decoded = Decode(Key, decoded);
+                double score = scorer(decoded);
                 
-                if (Score > BestScore)
+                if (score > bestScore)
                 {
-                    BestScore = Score;
-                    BestKey = Key;
+                    bestScore = score;
+                    bestKey = Key;
                 }
             }
 
-            return GetResult(BestScore, BestKey, Decoded);
+            return GetResult(bestScore, bestKey, decoded);
         }
     }
 
     /// <summary>
     /// Optimised CaeserShift for monograms
     /// </summary>
-    public class MonogramCaeserShift : CaeserShift<MonogramScoredLetterArray>
+    public class MonogramCaeserShift<TText> : CaeserShift<TText>
+        where TText : ITextArray<byte>
     {
-        public MonogramCaeserShift(string CipherText)
-            : base(CipherText)
-        {
-        }
-        public MonogramCaeserShift(MonogramScoredLetterArray CipherText)
-            : base(CipherText)
+        public MonogramCaeserShift()
+            : base(TextScorers.ScoreMonograms)
         {
         }
 
-        public override CipherResult Crack()
+        public override ICipherResult<byte, TText> Crack(TText cipher)
         {
-            int[] Frequencies = Text.Frequencies();
+            int[] frequencies = cipher.Frequencies();
 
-            double BestScore = Double.PositiveInfinity;
-            byte BestKey = 0;
+            double bestScore = Double.PositiveInfinity;
+            byte bestKey = 0;
 
-            int Length = Text.Length;
-            for (byte Shift = 0; Shift < 26; Shift++)
+            int Length = cipher.Count;
+            for (byte shift = 0; shift < 26; shift++)
             {
-                double Score = 0;
+                double score = 0;
                 for (byte Letter = 0; Letter < 26; Letter++)
                 {
-                    Score += MathsUtilities.Chi(Frequencies[Letter], Length, LetterStatistics.Monograms[(Letter + Shift) % 26]);
+                    score += MathsUtilities.Chi(frequencies[Letter], Length, LetterStatistics.Monograms[(Letter + shift) % 26]);
                 }
                 
-                if (Score < BestScore)
+                if (score < bestScore)
                 {
-                    BestScore = Score;
-                    BestKey = Shift;
+                    bestScore = score;
+                    bestKey = shift;
                 }
             }
 
-            return GetResult(BestScore, (byte)((26 - BestKey) % 26));
+            return GetResult(bestScore, (byte)((26 - bestKey) % 26));
         }
     }
 }

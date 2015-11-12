@@ -8,59 +8,39 @@ namespace Cipher.Ciphers
     /// <summary>
     /// Implements the Hill Cipher
     /// </summary>
-    public class Hill<TArray> : BaseCipher<Matrix<float>, TArray, Matrix<float>>
-        where TArray : NGramArray, new()
+    public class Hill : BaseCipher<Matrix<float>, NGramArray>
     {
-        public Hill(string cipherText, int ngramLength = 2)
+        public readonly int NGramSize;
+
+        public Hill(TextScorer scorer, int nGramSize = 2)
+            : base(scorer)
         {
-            Text = new TArray();
-            Text.NGramLength = ngramLength;
-            Text.Initalise(cipherText);
-        }
-        public Hill(TArray cipherText)
-            : base(cipherText)
-        {
+            NGramSize = nGramSize;
         }
 
-        public int NGramLength
-        {
-            get { return Text.NGramLength; }
-        }
-
-        public override CipherResult Crack()
+        public override ICipherResult<Matrix<float>, NGramArray> Crack(NGramArray cipher)
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Decode the ciphertext
-        /// </summary>
-        /// <param name="key">The Key to use</param>
-        /// <returns>The decoded text</returns>
-        public override TArray Decode(Matrix<float> key)
+        protected override NGramArray Create(string text)
         {
-            TArray decoded = new TArray();
-            decoded.NGramLength = NGramLength;
-            decoded.Initalise(Text.Length);
-            return Decode(key, decoded);
+            return new NGramArray(text, NGramSize);
         }
 
-        /// <summary>
-        /// Decode the ciphertext
-        /// </summary>
-        /// <param name="key">The key to use</param>
-        /// <param name="decoded">The variable to </param>
-        /// <returns></returns>
-        public override TArray Decode(Matrix<float> key, TArray decoded)
+        protected override NGramArray Create(int length)
         {
-            Matrix<float>[] text = Text.Characters;
-            Matrix<float>[] decodedText = decoded.Characters;
-            int length = text.Length;
+            return new NGramArray(length, NGramSize);
+        }
+
+        public override NGramArray Decode(NGramArray cipher, Matrix<float> key, NGramArray decoded)
+        {
+            int length = cipher.Count;
 
             for (int pos = 0; pos < length; pos++)
             {
-                Matrix<float> thisDecoded = decodedText[pos];
-                key.Multiply(text[pos], thisDecoded);
+                Matrix<float> thisDecoded = decoded[pos];
+                key.Multiply(cipher[pos], thisDecoded);
                 thisDecoded.Modulus(26, thisDecoded);
             }
 

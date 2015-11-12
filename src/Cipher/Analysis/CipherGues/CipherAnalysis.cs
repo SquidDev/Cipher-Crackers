@@ -61,7 +61,7 @@ namespace Cipher.Analysis.CipherGuess
         /// </summary>
         protected double GetIC()
         {
-            int Length = Text.Length;
+            int Length = Text.Count;
             int[] CT = new int[LetterNumberArray.NUM_SYMBOLS];
 
             foreach (byte Character in Text.Characters)
@@ -78,7 +78,7 @@ namespace Cipher.Analysis.CipherGuess
         /// </summary>
         protected double GetMaxPeriodicIC()
         {
-            int Length = Text.Length;
+            int Length = Text.Count;
             int Size = MAX_PERIOD * LetterNumberArray.NUM_SYMBOLS;
             int[,] CT = new int[MAX_PERIOD, LetterNumberArray.NUM_SYMBOLS];
 
@@ -124,7 +124,7 @@ namespace Cipher.Analysis.CipherGuess
         protected double GetMaxKappa()
         {
             double Max = 0;
-            int Length = Text.Length;
+            int Length = Text.Count;
             for (byte Period = 1; Period < MAX_PERIOD; Period++)
             {
                 if (Period >= Length) break;
@@ -152,7 +152,7 @@ namespace Cipher.Analysis.CipherGuess
         protected double GetDIC()
         {
             int[] CT = new int[LetterNumberArray.NUM_SYMBOLS * LetterNumberArray.NUM_SYMBOLS];
-            int Length = Text.Length;
+            int Length = Text.Count;
 
             for (int Pos = 0; Pos < Length - 1; Pos++)
             {
@@ -170,7 +170,7 @@ namespace Cipher.Analysis.CipherGuess
         protected double GetEvenDIC()
         {
             int[] CT = new int[LetterNumberArray.NUM_SYMBOLS * LetterNumberArray.NUM_SYMBOLS];
-            int Length = Text.Length;
+            int Length = Text.Count;
 
             int N = 0;
             for (int Pos = 0; Pos < Length - 1; Pos += 2)
@@ -189,7 +189,7 @@ namespace Cipher.Analysis.CipherGuess
         protected double GetLR()
         {
             int[] Reps = new int[LR_COUNT];
-            int Length = Text.Length;
+            int Length = Text.Count;
             for (int I = 0; I < Length; I++)
             {
                 for (int J = I + 1; J < Length; J++)
@@ -219,7 +219,7 @@ namespace Cipher.Analysis.CipherGuess
             int SumAll = 0;
             int SumOdd = 0;
 
-            int Length = Text.Length;
+            int Length = Text.Count;
 
             for (int I = 0; I < Length; I++)
             {
@@ -251,7 +251,7 @@ namespace Cipher.Analysis.CipherGuess
         /// </summary>
         protected double GetLogDI()
         {
-            int Length = Text.Length - 1;
+            int Length = Text.Count - 1;
             int Score = 0;
 
             for (int I = 0; I < Length; I++)
@@ -274,7 +274,7 @@ namespace Cipher.Analysis.CipherGuess
         /// </remarks>
         protected double GetSDD()
         {
-            int Length = Text.Length - 1;
+            int Length = Text.Count - 1;
             int Score = 0;
 
             for (int I = 0; I < Length; I++)

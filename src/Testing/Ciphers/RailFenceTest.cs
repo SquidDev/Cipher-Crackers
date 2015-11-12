@@ -37,8 +37,8 @@ namespace Testing.Ciphers
         [TestCaseSource("Items")]
         public void RailFenceDecode(string Ciphertext, string Plaintext, int Key)
         {
-            RailFence<LetterArray, byte> Shift = new RailFence<LetterArray, byte>(Ciphertext);
-            LetterArray Result = Shift.Decode(Key);
+            RailFence<LetterTextArray, byte> Shift = new RailFence<LetterTextArray, byte>(Ciphertext);
+            LetterTextArray Result = Shift.Decode(Key);
 
             Assert.AreEqual(Plaintext, Result.ToString());
         }

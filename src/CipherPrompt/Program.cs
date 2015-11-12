@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LArray = Cipher.Text.LetterArray;
+using LArray = Cipher.Text.LetterTextArray;
 using QSLArray = Cipher.Text.QuadgramScoredLetterArray;
 using QSCArray = Cipher.Text.QuadgramScoredCharacterArray;
 
@@ -55,7 +55,7 @@ namespace Cipher.Prompt
                 {
                     Name = "substitution",
                     Description = "Crack the substitution cipher",
-                    Decode = (Enc, Key) => new Substitution<QSLArray>(Enc).Decode(new LArray(Key)).ToString(),
+                    Decode = (Enc, Key) => new Substitution<QSLArray>(Enc).Decode(new ByteTextArray(Key)).ToString(),
                     Crack = (Enc) => (GenericCipherResult)new Substitution<QSLArray>(Enc).Crack(),
                 });
 
@@ -63,7 +63,7 @@ namespace Cipher.Prompt
                 {
                     Name = "vigenere",
                     Description = "Crack the vigenere cipher",
-                    Decode = (Enc, Key) => new MonogramVigenere(Enc).Decode(new LArray(Key)).ToString(),
+                    Decode = (Enc, Key) => new MonogramVigenere(Enc).Decode(new ByteTextArray(Key)).ToString(),
                     Crack = (Enc) => (GenericCipherResult)new MonogramVigenere(Enc).Crack(),
                 });
 

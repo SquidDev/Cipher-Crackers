@@ -7,52 +7,42 @@ using MathNet.Numerics.LinearAlgebra;
 namespace Cipher.Ciphers
 {
     /// <summary>
-    /// Hacky class for solving 2x2 HillCiphers
+    /// Cracks the Hill cipher using brute force
     /// </summary>
-    /// <typeparam name="TArray"></typeparam>
-    public class HillBrute<TArray> : Hill<TArray>
-        where TArray : NGramArray, new()
+    public sealed class HillBrute : Hill
     {
-        public HillBrute(string text, int nGramLength = 2)
-            : base(text, nGramLength)
-        {
-        }
-        public HillBrute(TArray text)
-            : base(text)
+        public HillBrute(TextScorer scorer, int nGramSize = 2)
+            : base(scorer, nGramSize)
         {
         }
 
-        public override CipherResult Crack()
-        {
-            TArray decoded = new TArray();
-            decoded.NGramLength = NGramLength;
-            decoded.Initalise(Text.Length);
+        private readonly static float[] combinations = ListUtilities.RangeFloat(26);
 
-            Matrix<float> key = Matrix<float>.Build.Dense(NGramLength, NGramLength);
+        public override ICipherResult<Matrix<float>, NGramArray> Crack(NGramArray cipher)
+        {
+            NGramArray decoded = Create(cipher.Count);
+            Matrix<float> key = Matrix<float>.Build.Dense(NGramSize, NGramSize);
 
             Matrix<float> bestKey = key.Clone();
             double bestScore = Double.NegativeInfinity;
-            
-            float[] combinations = ListUtilities.RangeFloat(26);
 
-            for (int rowIndex = 0; rowIndex < NGramLength; rowIndex++)
+            for (int rowIndex = 0; rowIndex < NGramSize; rowIndex++)
             {
-            	bestKey.CopyTo(key);
-            	foreach(float[] currentRow in combinations.PermutationsRepeat(NGramLength))
-            	{
-            		key.SetRow(rowIndex, currentRow);
+                bestKey.CopyTo(key);
+                foreach (float[] currentRow in combinations.PermutationsRepeat(NGramSize))
+                {
+                    key.SetRow(rowIndex, currentRow);
             		
-            		decoded = Decode(key, decoded);
-            		double score = decoded.ScoreText();
-            		if(score > bestScore)
-            		{
-            			key.CopyTo(bestKey);
-            			bestScore = score;
-            		}
-            	}
+                    decoded = Decode(key, decoded);
+                    double score = scorer(decoded);
+                    if (score > bestScore)
+                    {
+                        key.CopyTo(bestKey);
+                        bestScore = score;
+                    }
+                }
             }
-
-            Console.WriteLine(bestKey);
+                
             return GetResult(bestScore, bestKey);
         }
     }

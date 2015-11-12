@@ -16,7 +16,7 @@ namespace Testing.Experimental.Tools
         [TestCaseSource("Items")]
         public void NGramArray(string A)
         {
-            LetterArray letters = new LetterArray(A);
+            LetterTextArray letters = new LetterTextArray(A);
             NGramArray nGrams = new NGramArray(A, 2);
 
             if (A.Count<char>(C => !Char.IsLetter(C)) == 0)

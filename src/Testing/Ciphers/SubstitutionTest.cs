@@ -36,8 +36,8 @@ namespace Testing.Ciphers
         [TestCaseSource("Items")]
         public void SubstitutionDecode(string Ciphertext, string Plaintext, string Key)
         {
-            Substitution<LetterArray> Shift = new Substitution<LetterArray>(Ciphertext);
-            LetterArray Result = Shift.Decode(new QuadgramScoredLetterArray(Key));
+            Substitution<LetterTextArray> Shift = new Substitution<LetterTextArray>(Ciphertext);
+            LetterTextArray Result = Shift.Decode(new QuadgramScoredLetterArray(Key));
 
             Assert.AreEqual(Plaintext, Result.ToString());
         }

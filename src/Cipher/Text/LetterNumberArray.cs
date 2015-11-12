@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Cipher.Text
 {
-    public class LetterNumberArray : LetterArray
+    public class LetterNumberArray : LetterTextArray
     {
         public const byte NUM_SYMBOLS = 26 + 1 + 10;
         // Letters, #, numbers
@@ -12,22 +12,25 @@ namespace Cipher.Text
             : base()
         {
         }
-        public LetterNumberArray(string Text)
-            : this(Text.ToLetterArray())
+
+        public LetterNumberArray(string text)
+            : base()
         {
         }
-        public LetterNumberArray(int Length)
-            : base(Length)
+
+        public LetterNumberArray(int length)
+            : base(length)
         {
         }
-        public LetterNumberArray(byte[] Characters)
-            : base(Characters)
+
+        public LetterNumberArray(byte[] characters)
+            : base(characters)
         {
         }
 
         public override void Initalise(string Text)
         {
-            Initalise(Text.ToLetterArray());
+            Initalise(Text.ToLetterNumber());
         }
 
         /// <summary>
@@ -36,8 +39,8 @@ namespace Cipher.Text
         /// <returns></returns>
         public override string ToString()
         {
-            StringBuilder Result = new StringBuilder(Characters.Length);
-            foreach (byte Character in Characters)
+            StringBuilder Result = new StringBuilder(Count);
+            foreach (byte Character in this)
             {
                 if (Character < 26)
                 {
@@ -51,21 +54,9 @@ namespace Cipher.Text
                 {
                     Result.Append((char)(Character + '0' - 27));
                 }
-                
             }
 
             return Result.ToString();
-        }
-
-        public override double ScoreText()
-        {
-            // Need to throw as errors
-            throw new NotImplementedException();
-        }
-
-        public override string Substring(int Start, int Length)
-        {
-            throw new NotImplementedException();
         }
     }
 }
