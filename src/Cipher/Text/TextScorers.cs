@@ -19,7 +19,7 @@ namespace Cipher.Text
             for (int i = 0; i < length - 1; i++)
             {
                 enumerator.MoveNext();
-                previous[i] = (int)(enumerator.Current * Math.Pow(26, 3 - i));
+                previous[i] = (int)(enumerator.Current * Math.Pow(26, length - 1 - i));
             }
 
             while (enumerator.MoveNext())
@@ -27,14 +27,14 @@ namespace Cipher.Text
                 int thisCharacter = (int)enumerator.Current;
 
                 int sum = thisCharacter;
-                for (int i = 0; i < length - 1; i++)
+                for (int i = 0; i < length - 2; i++)
                 {
                     sum += previous[i];
                     previous[i] = 26 * previous[i + 1];
                 }
 
                 score += quadgrams[sum];
-                previous[length - 1] = thisCharacter * 26;
+                previous[length - 2] = thisCharacter * 26;
             }
 
             return score;

@@ -19,13 +19,13 @@ namespace Testing.Ciphers
         [Test]
         [Category("Cipher"), Category("Crack")]
         [TestCaseSource("Items")]
-        public void SubstitutionCrack(string Ciphertext, string Plaintext, string Key)
+        public void SubstitutionCrack(string ciphertext, string Plaintext, string Key)
         {
-            Substitution<QuadgramScoredLetterArray> Cipher = new Substitution<QuadgramScoredLetterArray>(Ciphertext);
-            Substitution<QuadgramScoredLetterArray>.CipherResult Result = Cipher.Crack();
+            var cipher = new Substitution<LetterTextArray>(TextScorers.ScoreQuadgrams);
+            var result = cipher.Crack(ciphertext);
 
-            Assert.AreEqual(Plaintext, Result.Text.ToString());
-            Assert.AreEqual(Key, Result.Key.ToString());
+            Assert.AreEqual(Plaintext, result.Contents.ToString());
+            Assert.AreEqual(Key, result.Key.ToString());
         }
 
         /// <summary>
@@ -34,12 +34,12 @@ namespace Testing.Ciphers
         [Test]
         [Category("Cipher"), Category("Decode")]
         [TestCaseSource("Items")]
-        public void SubstitutionDecode(string Ciphertext, string Plaintext, string Key)
+        public void SubstitutionDecode(string ciphertext, string plaintext, string key)
         {
-            Substitution<LetterTextArray> Shift = new Substitution<LetterTextArray>(Ciphertext);
-            LetterTextArray Result = Shift.Decode(new QuadgramScoredLetterArray(Key));
+            var cipher = new Substitution<LetterTextArray>(TextScorers.ScoreQuadgrams);
+            LetterTextArray result = cipher.Decode(ciphertext, KeyConverters.String.FromString(key));
 
-            Assert.AreEqual(Plaintext, Result.ToString());
+            Assert.AreEqual(plaintext, result.ToString());
         }
         
         public IEnumerable<Object[]> Items

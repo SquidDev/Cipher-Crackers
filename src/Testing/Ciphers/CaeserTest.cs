@@ -15,14 +15,13 @@ namespace Testing.Ciphers
         [Test]
         [Category("Cipher"), Category("Crack")]
         [TestCaseSource("Items")]
-        public void Crack(string Ciphertext, string Plaintext, byte Key)
+        public void Crack(string ciphertext, string plaintext, byte key)
         {
-            CaeserShift<QuadgramScoredLetterArray> Shift = new CaeserShift<QuadgramScoredLetterArray>(Ciphertext);
-            CaeserShift<QuadgramScoredLetterArray>.CipherResult Result = Shift.Crack();
+            var shift = new CaeserShift<LetterTextArray>(TextScorers.ScoreQuadgrams);
+            var result = shift.Crack(ciphertext);
 
-
-            Assert.AreEqual(Plaintext, Result.Text.ToString());
-            Assert.AreEqual(Key, Result.Key);
+            Assert.AreEqual(plaintext, result.Contents.ToString());
+            Assert.AreEqual(key, result.Key);
         }
 
         /// <summary>
@@ -31,24 +30,24 @@ namespace Testing.Ciphers
         [Test]
         [Category("Cipher"), Category("Crack")]
         [TestCaseSource("Items")]
-        public void MonogramCrack(string Ciphertext, string Plaintext, byte Key)
+        public void MonogramCrack(string ciphertext, string plaintext, byte key)
         {
-            MonogramCaeserShift Shift = new MonogramCaeserShift(Ciphertext);
-            MonogramCaeserShift.CipherResult Result = Shift.Crack();
+            var shift = new MonogramCaeserShift<LetterTextArray>();
+            var result = shift.Crack(ciphertext);
 
-            Assert.AreEqual(Plaintext, Result.Text.ToString());
-            Assert.AreEqual(Key, Result.Key);
+            Assert.AreEqual(plaintext, result.Contents.ToString());
+            Assert.AreEqual(key, result.Key);
         }
 
         [Test]
         [Category("Cipher"), Category("Decode")]
         [TestCaseSource("Items")]
-        public void Decode(string Ciphertext, string Plaintext, byte Key)
+        public void Decode(string ciphertext, string plaintext, byte key)
         {
-            CaeserShift<LetterTextArray> Shift = new CaeserShift<LetterTextArray>(Ciphertext);
-            LetterTextArray Result = Shift.Decode(Key);
+            var shift = new CaeserShift<LetterTextArray>(TextScorers.ScoreQuadgrams);
+            var result = shift.Decode(ciphertext, key);
 
-            Assert.AreEqual(Plaintext, Result.ToString());
+            Assert.AreEqual(plaintext, result.ToString());
         }
         
         public IEnumerable<Object[]> Items

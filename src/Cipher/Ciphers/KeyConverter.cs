@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
+using Cipher.Text;
 using Cipher.Utils;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -17,7 +20,7 @@ namespace Cipher.Ciphers
     public class KeyConverters
     {
     	public static readonly IKeyConverter<byte> Letter = new LetterConverter();
-    	public static readonly IKeyConverter<byte[]> String = new ArrayConverter<byte>(false, Letter);
+    	public static readonly IKeyConverter<byte[]> String = new StringConverter();
     	
     	public static readonly IKeyConverter<int> Integer = new IntConverter();
     	
@@ -98,6 +101,25 @@ namespace Cipher.Ciphers
 		public string ToString(Matrix<float> key)
 		{
 			return String.Join(";", key.EnumerateColumns().Select(x => String.Join(",", x.Enumerate())));
+		}
+    }
+    
+    class StringConverter : IKeyConverter<byte[]>
+    {
+		public byte[] FromString(string key)
+		{
+			return key.Select(TextExtensions.ToLetterByte).ToArray();
+		}
+    	
+		public string ToString(byte[] key)
+		{
+			StringBuilder builder = new StringBuilder();
+			foreach(byte character in key)
+			{
+				builder.Append((char)(character + 'A'));
+			}
+			
+			return builder.ToString();
 		}
     }
 }

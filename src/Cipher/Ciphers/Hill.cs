@@ -35,7 +35,7 @@ namespace Cipher.Ciphers
 
         public override NGramArray Decode(NGramArray cipher, Matrix<float> key, NGramArray decoded)
         {
-            int length = cipher.Count;
+            int length = cipher.Count / NGramSize;
 
             for (int pos = 0; pos < length; pos++)
             {

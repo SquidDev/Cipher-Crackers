@@ -50,7 +50,7 @@ namespace Cipher.Text
             
             float[] values = new float[size];
             int offset = 0;
-            foreach (byte character in text.Select(TextExtensions.ToLetterByte).Where(x => x > 26))
+            foreach (byte character in text.Select(TextExtensions.ToLetterByte).Where(x => x < 26))
             {
                 values[offset] = character;
 
@@ -122,10 +122,8 @@ namespace Cipher.Text
         public IEnumerator<byte> GetEnumerator()
         {
             int nGramLength = NGramSize;
-            Matrix<float>[] characters = this.characters;
-            for (int offset = 0; offset < characters.Length; offset++)
+            foreach(Matrix<float> current in characters)
             {
-                Matrix<float> current = characters[offset];
                 for (int row = 0; row < nGramLength; row++)
                 {
                 	yield return (byte)current[row, 0];

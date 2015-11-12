@@ -49,6 +49,7 @@ namespace Cipher.Text
         	if (setup) throw new InvalidOperationException("Already setup");
 			setup = true;
 			
+			if(text == null) throw new ArgumentNullException("text");
             characters = text;
         }
 
