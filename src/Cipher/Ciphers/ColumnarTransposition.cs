@@ -2,98 +2,85 @@ using Cipher.Text;
 using Cipher.Utils;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace Cipher.Ciphers
 {
-    public class ColumnarTransposition<TArray, TArrayType> : BaseCipher<byte[], TArray, TArrayType>
-        where TArray : TextArray<TArrayType>, new()
+    public class ColumnarTransposition<TText, TTextType> : DefaultCipher<byte[], TText>
+    	where TText : ITextArray<TTextType>, new()
     {
-        public byte MaxKeyLength = 10;
-        public byte MinKeyLength = 2;
+        public const byte MaxLength = 10;
+        public const byte MinLength = 2;
 
-        public ColumnarTransposition(string Text)
-            : base(Text)
+        public readonly byte MaxKeyLength;
+        public readonly byte MinKeyLength;
+
+        public ColumnarTransposition(TextScorer scorer, byte maxLength = MaxLength, byte minLength = MinLength)
+            : base(scorer)
         {
-            KeyStringify = K => K.PrettyString();
-        }
-        public ColumnarTransposition(TArray Text)
-            : base(Text)
-        {
-            KeyStringify = K => K.PrettyString();
+            MaxKeyLength = maxLength;
+            MinKeyLength = minLength;
         }
 
-        public override TArray Decode(byte[] Key, TArray Decoded)
+        public override TText Decode(TText cipher, byte[] key, TText decoded)
         {
-            int Length = Text.Length;
-            int KeyLength = Key.Length;
-            for (int Index = 0; Index < Length; Index++)
+            int length = cipher.Count;
+            int keyLength = key.Length;
+            for (int index = 0; index < length; index++)
             {
-                int Mod = Index % KeyLength;
-                int Offset = Key[Mod];
-                int Row = Index - Mod;
+                int mod = index % keyLength;
+                int offset = key[mod];
+                int row = index - mod;
 
-                Decoded[Index] = Text[Offset + Row];
+                decoded[index] = cipher[offset + row];
             }
 
-            return Decoded;
+            return decoded;
         }
 
-        public override CipherResult Crack()
+        public override ICipherResult<byte[], TText> Crack(TText cipher)
         {
-            byte[] BestKey = null;
-            double BestScore = Double.NegativeInfinity;
+            int length = cipher.Count;
 
-            int Length = Text.Length;
-            TArray Decoded = Create(Length);
-
-            List<byte> TriedKeys = new List<byte>();
-            for (byte KeyLength = MaxKeyLength; KeyLength >= MinKeyLength; KeyLength--)
+            List<byte> keys = new List<byte>();
+            for (byte key = MaxKeyLength; key >= MinKeyLength; key--)
             {
                 // At the moment the key must be a factor of the string length;
-                if (Length % KeyLength != 0) continue;
+                if (length % key != 0) continue;
                 // Don't bother decoding for factors of this key
-                foreach (byte OldKey in TriedKeys)
-                {
-                    if (OldKey % KeyLength == 0) continue;
-                }
+                if (keys.Exists(old => old % key == 0)) continue;
 
-                TriedKeys.Add(KeyLength);
-
-                BaseCipher<byte[], TArray, TArrayType>.CipherResult Result = InternalCrack(KeyLength, Decoded);
-
-                if (Result.Score > BestScore)
-                {
-                    BestKey = Result.Key;
-                    BestScore = Result.Score;
-                }
+                keys.Add(key);
             }
 
-            return GetResult(BestScore, BestKey, Decoded);
+            return keys.RunAsync(k => Crack(cipher, k)).Max((x, y) => x.Score.CompareTo(y.Score));
+        }
+        
+        public ICipherResult<byte[], TText> Crack(string cipher, byte keyLength)
+        {
+        	return Crack(Create(cipher), keyLength);
         }
 
-        public CipherResult Crack(byte KeyLength)
+        public ICipherResult<byte[], TText> Crack(TText cipher, byte keyLength)
         {
-            return InternalCrack(KeyLength, Create(Text.Length));
-        }
+            TText decoded = Create(cipher.Count);
+            byte[] bestKey = new byte[keyLength];
+            double bestScore = Double.NegativeInfinity;
 
-        protected CipherResult InternalCrack(byte KeyLength, TArray Decoded)
-        {
-            byte[] BestKey = new byte[KeyLength];
-            double BestScore = Double.NegativeInfinity;
-
-            foreach (byte[] Key in ListUtilities.Range(KeyLength).Permutations())
+            foreach (byte[] key in ListUtilities.RangeByte(keyLength).Permutations())
             {
-                Decoded = Decode(Key, Decoded);
-                double Score = Decoded.ScoreText();
+                decoded = Decode(cipher, key, decoded);
+                double score = scorer(decoded);
 
-                if (Score > BestScore)
+                if (score > bestScore)
                 {
-                    Key.CopyTo(BestKey, 0);
-                    BestScore = Score;
+                    key.CopyTo(bestKey, 0);
+                    bestScore = score;
                 }
             }
 
-            return GetResult(BestScore, BestKey, Decoded);
+            return GetResult(cipher, bestScore, bestKey, decoded);
         }
     }
 }

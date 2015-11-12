@@ -9,7 +9,7 @@ namespace Cipher.Utils
         public static Random RandomInstance = new Random();
 
         /// <summary>
-        /// Fisher Yates shuffel
+        /// Fisher Yates shuffle
         /// </summary>
         public static void Shuffle<T>(this IList<T> Collection)
         {

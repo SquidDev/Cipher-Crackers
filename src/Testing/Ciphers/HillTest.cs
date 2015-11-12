@@ -23,13 +23,12 @@ namespace Testing.Ciphers
         [Test]
         [Category("Cipher"), Category("Decode")]
         [TestCaseSource("Items")]
-        public void HillDecode(string Ciphertext, string Plaintext, Matrix<float> Key)
+        public void HillDecode(string ciphertext, string plaintext, Matrix<float> key)
         {
-            Console.WriteLine(Key.Transpose());
-            Hill<NGramArray> shift = new Hill<NGramArray>(Ciphertext);
-            NGramArray result = shift.Decode(Key);
+            Hill cipher = new Hill(TextScorers.ScoreQuadgrams);
+            NGramArray result = cipher.Decode(ciphertext, key);
 
-            Assert.AreEqual(Plaintext, result.ToString());
+            Assert.AreEqual(plaintext, result.ToString());
         }
 
         /// <summary>
@@ -38,26 +37,27 @@ namespace Testing.Ciphers
         [Test]
         [Category("Cipher"), Category("Decode"), Category("Experimental")]
         [TestCaseSource("BruteItems")]
-        public void HillBruteCrack(string Ciphertext, string Plaintext, Matrix<float> Key)
+        public void HillBruteCrack(string ciphertext, string plaintext, Matrix<float> key)
         {
-            HillBrute<BigramScoredNGramArray> hill = new HillBrute<BigramScoredNGramArray>(Ciphertext);
-            HillBrute<BigramScoredNGramArray>.CipherResult result = hill.Crack();
+            HillBrute hill = new HillBrute(TextScorers.ScoreMonograms);
+            var result = hill.Crack(ciphertext);
 
-            Assert.AreEqual(Plaintext, result.Text.ToString());
-            Assert.AreEqual(Key, result.Key);
+            Assert.AreEqual(plaintext, result.Contents.ToString());
+            Assert.AreEqual(key, result.Key);
         }
 
         [Test]
         [Category("Cipher"), Category("Decode")]
         [TestCaseSource("CribItems")]
-        public void HillCribCrack(string Ciphertext, string Plaintext, Matrix<float> Key, string plainCrib, string cipherCrib)
+        public void HillCribCrack(string ciphertext, string plaintext, Matrix<float> key, string plainCrib, string cipherCrib)
         {
-            HillCribbed<NGramArray> hill = new HillCribbed<NGramArray>(Ciphertext);
-            hill.Add(cipherCrib, plainCrib);
-            HillCribbed<NGramArray>.CipherResult result = hill.Crack();
+            HillCribbed hill = new HillCribbed(TextScorers.ScoreQuadgrams);
+            CribSpace cribs = new CribSpace(2);
+            cribs.Add(cipherCrib, plainCrib);
+            var result = hill.Crack(ciphertext, cribs);
 
-            Assert.AreEqual(Key, result.Key);
-            Assert.AreEqual(Plaintext, result.Text.ToString());
+            Assert.AreEqual(key, result.Key);
+            Assert.AreEqual(plaintext, result.Contents.ToString());
         }
         
         public IEnumerable<Object[]> Items

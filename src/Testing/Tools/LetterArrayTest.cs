@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
+using Cipher.Text;
 using NUnit.Framework;
-using QSCArray = Cipher.Text.QuadgramScoredCharacterArray;
-using QSLArray = Cipher.Text.QuadgramScoredLetterArray;
 
 namespace Testing.Tools
 {
@@ -17,14 +16,14 @@ namespace Testing.Tools
         [TestCaseSource("Items")]
         public void QuadgramArrays(string A)
         {
-            QSCArray Characters = new QSCArray(A);
-            QSLArray Letters = new QSLArray(A);
+            var Characters = new CharacterTextArray(A);
+            var Letters = new LetterTextArray(A);
 
             if (A.Count<char>(C => !Char.IsLetter(C)) == 0)
             {
                 Assert.AreEqual(Letters.ToString(), Characters.ToString());
             }
-            Assert.AreEqual(Letters.ScoreText(), Characters.ScoreText());
+            Assert.AreEqual(TextScorers.ScoreQuadgrams(Letters), TextScorers.ScoreQuadgrams(Characters));
         }
         
         public IEnumerable<Object[]> Items
@@ -38,6 +37,5 @@ namespace Testing.Tools
                     });
             }
         }
-
     }
 }

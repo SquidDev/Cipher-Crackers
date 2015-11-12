@@ -15,29 +15,29 @@ namespace Cipher.Utils
             items[x] = items[y];
             items[y] = Temp;
         }
-        
-        public static IEnumerable<T[]> PermutationsRepeat<T>(this IList<T> items, int count)
+
+        public static IEnumerable<T[]> PermutationsRepeat<T>(this IEnumerable<T> items, int count)
         {
-        	return PermutationsRepeat(items, new T[count], count - 1);
+            return PermutationsRepeat(items, new T[count], count - 1);
         }
-        
-        private static IEnumerable<T[]> PermutationsRepeat<T>(IList<T> items, T[] results, int count)
+
+        private static IEnumerable<T[]> PermutationsRepeat<T>(IEnumerable<T> items, T[] results, int count)
         {
-        	foreach(T item in items)
-        	{
-        		results[count] = item;
-        		if(count == 0)
-        		{
-        			yield return results;
-        		}
-        		else 
-        		{
-	        		foreach(T[] res in PermutationsRepeat(items, results, count - 1))
-	        		{
-	        			yield return res;
-	        		}
-        		}
-        	}
+            foreach (T item in items)
+            {
+                results[count] = item;
+                if (count == 0)
+                {
+                    yield return results;
+                }
+                else
+                {
+                    foreach (T[] res in PermutationsRepeat(items, results, count - 1))
+                    {
+                        yield return res;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -56,16 +56,10 @@ namespace Cipher.Utils
         /// <param name="items">List to use</param>
         /// <param name="r">Number to choose from</param>
         /// <returns>Enumerable of all permutations</returns>
-        public static IEnumerable<T[]> Permutations<T>(this IList<T> items, int r)
+        public static IEnumerable<T[]> Permutations<T>(this IEnumerable<T> items, int r)
         {
-            int n = items.Count;
-            T[] result = new T[n];
-            for (int I = 0; I < n; I++)
-            {
-                result[I] = items[I];
-            }
-
-            return Permutations(result, 0, n - 1);
+        	T[] results = items.ToArray();
+            return Permutations(results, 0, results.Length - 1);
         }
 
         private static IEnumerable<T[]> Permutations<T>(T[] results, int k, int m)
@@ -89,7 +83,7 @@ namespace Cipher.Utils
             }
         }
 
-        public static byte[] Range(byte count = 0)
+        public static byte[] RangeByte(byte count = 0)
         {
             byte[] result = new byte[count];
             for (byte i = 0; i < count; i++)
@@ -98,8 +92,18 @@ namespace Cipher.Utils
             }
             return result;
         }
-        
-        public static float[] FloatRange(byte count = 0)
+
+        public static int[] RangeInt(int count = 0)
+        {
+            int[] result = new int[count];
+            for (byte i = 0; i < count; i++)
+            {
+                result[i] = i;
+            }
+            return result;
+        }
+
+        public static float[] RangeFloat(byte count = 0)
         {
             float[] result = new float[count];
             for (byte i = 0; i < count; i++)
@@ -107,6 +111,11 @@ namespace Cipher.Utils
                 result[i] = i;
             }
             return result;
+        }
+        
+        public static void CopyTo<T>(this T[] source, T[] destination)
+        {
+        	source.CopyTo(destination, 0);
         }
     }
 }

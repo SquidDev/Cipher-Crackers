@@ -24,28 +24,40 @@ namespace Cipher.WPF.Controls.Ciphers
             InitializeComponent();
         }
 		
-        public string Decode(string Input)
+        public string Decode(string input)
         {
-            Hill<NGramArray> cipher = new Hill<NGramArray>(Input, (int)KeyLength.Value);
-            return cipher.Decode(MatrixExtensions.ReadMatrix(Key.Text)).ToString();
+            Hill cipher = new Hill(TextScorers.ScoreQuadgrams, (int)KeyLength.Value);
+            return cipher.Decode(input, KeyConverters.Matrix.FromString(Key.Text)).ToString();
         }
 		
-        public async Task<string> Crack(string Input)
+        public async Task<string> Crack(string input)
         {
-            HillCribbed<NGramArray> hill = new HillCribbed<NGramArray>(Input);
-            if (Cribs.Text.Length == 0) throw new ArgumentException("No mappings");
-			
-            foreach (string item in Cribs.Text.Split(';'))
+        	Func<ICipherResult<Matrix<float>, NGramArray>> crack;
+            if (Cribs.Text.Length == 0) 
             {
-                int index = item.IndexOf(':');
-                if (index == -1) throw new ArgumentException("Invalid mapping: " + item);
-				
-                hill.Add(item.Substring(0, index), item.Substring(index + 1));
+            	HillBrute cipher = new HillBrute(TextScorers.ScoreMonograms, (int)KeyLength.Value);
+            	crack = () => cipher.Crack(input);
             }
-            HillCribbed<NGramArray>.CipherResult result = await Task<MonogramVigenere.CipherResult>.Run(() => hill.Crack());
+            else
+            {
+            	CribSpace space = new CribSpace((int)KeyLength.Value);
+            	HillCribbed cipher = new HillCribbed(TextScorers.ScoreMonograms, (int)KeyLength.Value);
+            	foreach (string item in Cribs.Text.Split(';'))
+	            {
+	                int index = item.IndexOf(':');
+	                if (index == -1) throw new ArgumentException("Invalid mapping: " + item);
+					
+	                space.Add(item.Substring(0, index), item.Substring(index + 1));
+	            }
+            	
+            	crack = () => cipher.Crack(input, space);
+            }
+			
+            
+            ICipherResult<Matrix<float>, NGramArray> result = await Task<ICipherResult<Matrix<float>, NGramArray>>.Run(crack);
 
-            Key.Text = String.Join(";", result.Key.EnumerateColumns().Select(x => String.Join(",", x.Enumerate())));
-            return result.Text.ToString();
+            Key.Text = KeyConverters.Matrix.ToString(result.Key);
+            return result.Contents.ToString();
         }
     }
 }

@@ -1,15 +1,15 @@
-using Cipher.Analysis.AutoSpace;
-using Cipher.Analysis.CipherGuess;
-using Cipher.Ciphers;
-using Cipher.Prompt.Commands;
-using NDesk.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using LArray = Cipher.Text.LetterArray;
-using QSLArray = Cipher.Text.QuadgramScoredLetterArray;
-using QSCArray = Cipher.Text.QuadgramScoredCharacterArray;
+
+using Cipher.Analysis.AutoSpace;
+using Cipher.Analysis.CipherGuess;
+using Cipher.Ciphers;
+using Cipher.Prompt.Commands;
+using Cipher.Text;
+using NDesk.Options;
+using LArray = Cipher.Text.LetterTextArray;
 
 namespace Cipher.Prompt
 {
@@ -43,44 +43,44 @@ namespace Cipher.Prompt
 
         public CipherPrompt()
         {
-            AddCommand(new CipherCommand()
+            AddCommand(new CipherCommand<byte, LetterTextArray>()
                 {
                     Name = "caeser",
                     Description = "Decode/crack the caeser shift cipher",
-                    Decode = (Enc, Key) => new CaeserShift<QSLArray>(Enc).Decode(Convert.ToByte(Key)).ToString(),
-                    Crack = (Enc) => (GenericCipherResult)new CaeserShift<QSLArray>(Enc).Crack(),
+                    Converter = KeyConverters.Byte,
+                    Cipher = new CaeserShift<LetterTextArray>(TextScorers.ScoreQuadgrams),
                 });
 
-            AddCommand(new CipherCommand()
+        	AddCommand(new CipherCommand<byte[], LetterTextArray>()
                 {
                     Name = "substitution",
                     Description = "Crack the substitution cipher",
-                    Decode = (Enc, Key) => new Substitution<QSLArray>(Enc).Decode(new LArray(Key)).ToString(),
-                    Crack = (Enc) => (GenericCipherResult)new Substitution<QSLArray>(Enc).Crack(),
+                    Converter = KeyConverters.String,
+                    Cipher = new Substitution<LetterTextArray>(TextScorers.ScoreQuadgrams),
                 });
 
-            AddCommand(new CipherCommand()
+        	AddCommand(new CipherCommand<byte[], LetterTextArray>()
                 {
                     Name = "vigenere",
                     Description = "Crack the vigenere cipher",
-                    Decode = (Enc, Key) => new MonogramVigenere(Enc).Decode(new LArray(Key)).ToString(),
-                    Crack = (Enc) => (GenericCipherResult)new MonogramVigenere(Enc).Crack(),
+                    Converter = KeyConverters.String,
+                    Cipher = new Vigenere<LetterTextArray>(),
                 });
 
-            AddCommand(new CipherCommand()
+            AddCommand(new CipherCommand<int, CharacterTextArray>()
                 {
                     Name = "railfence",
                     Description = "Decode/crack the railfence cipher",
-                    Decode = (Enc, Key) => new RailFence<QSCArray, char>(Enc).Decode(Convert.ToInt32(Key)).ToString(),
-                    Crack = (Enc) => (GenericCipherResult)new RailFence<QSCArray, char>(Enc).Crack(),
+                    Converter = KeyConverters.Integer,
+                    Cipher = new RailFence<CharacterTextArray, char>(TextScorers.ScoreQuadgrams),
                 });
 
-            AddCommand(new CipherCommand()
+        	AddCommand(new CipherCommand<byte[], CharacterTextArray>()
                 {
                     Name = "transposition",
                     Description = "Decode/crack the columnar transposition cipher (separate key with ';')",
-                    Decode = (Enc, Key) => new ColumnarTransposition<QSCArray, char>(Enc).Decode(Key.Split(';').Select(C => Convert.ToByte(C)).ToArray()).ToString(),
-                    Crack = (Enc) => (GenericCipherResult)new ColumnarTransposition<QSCArray, char>(Enc).Crack(),
+                    Converter = KeyConverters.ByteList,
+                    Cipher = new ColumnarTransposition<CharacterTextArray, char>(TextScorers.ScoreQuadgrams),
                 });
 
             AddCommand(new NGramCommand());
@@ -146,65 +146,51 @@ namespace Cipher.Prompt
         #endregion
         public OptionSet GlobalOptions;
 
-        public void Run(string[] Args)
+        public void Run(string[] args)
         {
-            if (Args.Length == 0)
+            if (args.Length == 0)
             {
                 Console.WriteLine("Run `CipherPrompt help` for usage");
                 return;
             }
 
-            string InputFile = null;
-            string OutputFile = null;
+            string inputFile = null;
+            string outputFile = null;
             
             GlobalOptions = new OptionSet()
             {
-                { "i|input-file=", "The {PATH} of the cipher text to decode", F => InputFile = F },
-                { "o|output-file=", "The {PATH} of where to save the plaintext to", F => OutputFile = F },
+                { "i|input-file=", "The {PATH} of the cipher text to decode", F => inputFile = F },
+                { "o|output-file=", "The {PATH} of where to save the plaintext to", F => outputFile = F },
             };
 
-            List<string> Extra = GlobalOptions.Parse(Args);
+            List<string> extra = GlobalOptions.Parse(args);
 
-            if (Extra.Count == 0)
+            if (extra.Count == 0)
             {
                 Console.WriteLine("Run `CipherPrompt help` for usage");
                 return;
             }
 
-            TextReader Input;
-            if (String.IsNullOrWhiteSpace(InputFile))
+            using(TextReader input = String.IsNullOrWhiteSpace(inputFile) ? (TextReader)new StdInWrapper(Console.In) : new StreamReader(inputFile))
             {
-                Input = new StdInWrapper(Console.In);
+            	using(TextWriter output = String.IsNullOrWhiteSpace(outputFile) ? Console.Out : new StreamWriter(outputFile))
+            	{
+            		ICommand command = GetCommand(extra[0]);
+		            if (command != null)
+		            {
+		                command.Run(extra.Skip(1), input, output);
+		            }
+		            else
+		            {
+		                Console.WriteLine("Unknown command {0}", extra[0]);
+		                Console.WriteLine("Run `CipherPrompt help` for usage");
+		            }
+		
+		            // Close streams
+		            input.Close();
+		            output.Close();
+            	}
             }
-            else
-            {
-                Input = new StreamReader(InputFile);
-            }
-
-            TextWriter Output;
-            if (String.IsNullOrWhiteSpace(OutputFile))
-            {
-                Output = Console.Out;
-            }
-            else
-            {
-                Output = new StreamWriter(OutputFile);
-            }
-
-            ICommand Command = GetCommand(Extra[0]);
-            if (Command != null)
-            {
-                Command.Run(Extra.Skip(1), Input, Output);
-            }
-            else
-            {
-                Console.WriteLine("Unknown command {0}", Extra[0]);
-                Console.WriteLine("Run `CipherPrompt help` for usage");
-            }
-
-            // Close streams
-            Input.Close();
-            Output.Close();
         }
     }
 }

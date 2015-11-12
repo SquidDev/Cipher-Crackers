@@ -3,75 +3,70 @@ using System;
 
 namespace Cipher.Ciphers
 {
-    public class RailFence<TArray, TArrayType> : BaseCipher<int, TArray, TArrayType>
-        where TArray : TextArray<TArrayType>, new()
+    public class RailFence<TText, TTextType> : DefaultCipher<int, TText>
+    	where TText : ITextArray<TTextType>, new()
     {
-        public RailFence(string CipherText)
-            : base(CipherText)
-        {
-        }
-        public RailFence(TArray CipherText)
-            : base(CipherText)
+        public RailFence(TextScorer scorer)
+            : base(scorer)
         {
         }
 
-        public override TArray Decode(int Key, TArray Decoded)
+        public override TText Decode(TText cipher, int key, TText decoded)
         {
-            int Length = Text.Length;
-            Key--;
+            int length = cipher.Count;
+            key--;
 
-            int K = 0;
-            int Diff = 2 * Key;
-            for (int Line = 0; Line < Key; Line++)
+            int k = 0;
+            int diff = 2 * key;
+            for (int line = 0; line < key; line++)
             {
-                int Skip = 2 * (Key - Line);
-                int J = 0;
-                for (int I = Line; I < Length;)
+                int skip = 2 * (key - line);
+                int j = 0;
+                for (int i = line; i < length;)
                 {
-                    Decoded[I] = Text[K++];
-                    if (Line == 0 || J % 2 == 0)
+                    decoded[i] = cipher[k++];
+                    if (line == 0 || j % 2 == 0)
                     {
-                        I += Skip;
+                        i += skip;
                     }
                     else
                     {
-                        I += Diff - Skip;
+                        i += diff - skip;
                     }
-                    J++;
+                    j++;
                 }
             }
-            for (int I = Key; I < Length; I += Diff)
+            for (int I = key; I < length; I += diff)
             {
-                Decoded[I] = Text[K++];
+                decoded[I] = cipher[k++];
             }
 
-            return Decoded;
+            return decoded;
         }
 
-        public override CipherResult Crack()
+        public override ICipherResult<int, TText> Crack(TText cipher)
         {
-            double BestScore = Double.NegativeInfinity;
-            int BestKey = 0;
+            double bestScore = Double.NegativeInfinity;
+            int bestKey = 0;
 
-            int Length = Text.Length;
+            int length = cipher.Count;
 
-            TArray Decoded = new TArray();
-            Decoded.Initalise(Length);
+            TText decoded = Create(length);
 
-            Length++;
-            for (int Key = 2; Key < Length; Key++)
+            length++;
+            for (int key = 2; key < length; key++)
             {
-                Decoded = Decode(Key, Decoded);
-                double Score = Decoded.ScoreText();
+                decoded = Decode(cipher, key, decoded);
+                double score = scorer(decoded);
 
-                if (Score > BestScore)
+                if (score > bestScore)
                 {
-                    BestScore = Score;
-                    BestKey = Key;
+                    bestScore = score;
+                    bestKey = key;
                 }
             }
 
-            return GetResult(BestScore, BestKey, Decoded);
+            return GetResult(cipher, bestScore, bestKey, decoded);
         }
     }
 }

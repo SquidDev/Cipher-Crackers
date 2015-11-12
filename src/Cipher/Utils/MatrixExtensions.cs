@@ -41,7 +41,6 @@ namespace Cipher.Utils
         {
             if (row < 0 || row >= value.RowCount || column < 0 || column >= value.ColumnCount)
             {
-                Console.WriteLine("{0}, {1}", row, column);
                 throw new ArgumentException("row and column must statisfy 0 <= row < rows and 0 <= column < columns");
             }
 

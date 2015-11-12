@@ -16,7 +16,7 @@ namespace Testing.Experimental.Tools
         [TestCaseSource("Items")]
         public void NGramArray(string A)
         {
-            LetterArray letters = new LetterArray(A);
+            LetterTextArray letters = new LetterTextArray(A);
             NGramArray nGrams = new NGramArray(A, 2);
 
             if (A.Count<char>(C => !Char.IsLetter(C)) == 0)
@@ -30,15 +30,15 @@ namespace Testing.Experimental.Tools
         [TestCaseSource("Items")]
         public void NGramArrayScoring(string A)
         {
-            QuadgramScoredLetterArray letters = new QuadgramScoredLetterArray(A);
-            QuadgramScoredNGramArray nGrams = new QuadgramScoredNGramArray(A, 2);
+            LetterTextArray letters = new LetterTextArray(A);
+            NGramArray nGrams = new NGramArray(A, 2);
 
             if (A.Count<char>(C => !Char.IsLetter(C)) == 0)
             {
                 Assert.AreEqual(nGrams.ToString(), letters.ToString());
             }
 
-            Assert.AreEqual(letters.ScoreText(), nGrams.ScoreText());
+            Assert.AreEqual(TextScorers.ScoreQuadgrams(letters), TextScorers.ScoreQuadgrams(nGrams));
         }
 
         public IEnumerable<Object[]> Items

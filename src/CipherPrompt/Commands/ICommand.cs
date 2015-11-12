@@ -8,6 +8,6 @@ namespace Cipher.Prompt.Commands
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public abstract void Run(IEnumerable<string> Args, TextReader Reader, TextWriter Writer);
+        public abstract void Run(IEnumerable<string> args, TextReader reader, TextWriter writer);
     }
 }

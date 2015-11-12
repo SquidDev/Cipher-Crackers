@@ -11,21 +11,16 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace Cipher.Ciphers
 {
-    /// <summary>
-    /// Cracks the hill cipher using a crib
-    /// </summary>
-    public class HillCribbed<TArray> : Hill<TArray>
-        where TArray : NGramArray, new()
+    public class CribSpace
     {
-        protected List<KeyValuePair<string, string>> Cribs = new List<KeyValuePair<string, string>>();
+        private readonly List<KeyValuePair<string, string>> cribs = new List<KeyValuePair<string, string>>();
+        public readonly int NGramSize;
 
-        public HillCribbed(string text, int nGramLength = 2)
-            : base(text, nGramLength)
+        public IReadOnlyList<KeyValuePair<string, string>> Cribs { get { return cribs; } }
+
+        public CribSpace(int size)
         {
-        }
-        public HillCribbed(TArray text)
-            : base(text)
-        {
+            NGramSize = size;
         }
 
         /// <summary>
@@ -36,8 +31,8 @@ namespace Cipher.Ciphers
         public void Add(string ciphertext, string plaintext)
         {
             if (
-                ciphertext.Length == 0 || ciphertext.Length % NGramLength != 0 ||
-                plaintext.Length == 0 || plaintext.Length % NGramLength != 0)
+                ciphertext.Length == 0 || ciphertext.Length % NGramSize != 0 ||
+                plaintext.Length == 0 || plaintext.Length % NGramSize != 0)
             {
                 throw new ArgumentException("Lengths must be a multiple of NGramLength");
             }
@@ -47,55 +42,65 @@ namespace Cipher.Ciphers
             }
 
             int length = ciphertext.Length;
-            int nGramLength = NGramLength;
+            int nGramLength = NGramSize;
             for (int index = 0; index < length; index += nGramLength)
             {
-                Cribs.Add(new KeyValuePair<string, string>(ciphertext.Substring(index, nGramLength), plaintext.Substring(index, nGramLength)));
+                cribs.Add(new KeyValuePair<string, string>(ciphertext.Substring(index, nGramLength), plaintext.Substring(index, nGramLength)));
             }
         }
-        
-        public CipherResult CrackSingle(string cribStr, string plainStr)
+    }
+
+    /// <summary>
+    /// Cracks the hill cipher using a crib
+    /// </summary>
+    public class HillCribbed : Hill
+    {
+        public HillCribbed(TextScorer scorer, int nGramSize = 2)
+            : base(scorer, nGramSize)
         {
-            int nGramLength = NGramLength;
-        	
+        }
+
+        public ICipherResult<Matrix<float>, NGramArray> CrackSingle(NGramArray cipherText, string cribStr, string plainStr)
+        {
             MatrixBuilder<float> builder = Matrix<float>.Build;
-            Matrix<float> plain = builder.Dense(nGramLength, nGramLength, plainStr.Select(x => (float)x.ToLetterByte()).ToArray());
-            Matrix<float> cipher = builder.Dense(nGramLength, nGramLength, cribStr.Select(x => (float)x.ToLetterByte()).ToArray());
+            Matrix<float> plain = builder.Dense(NGramSize, NGramSize, plainStr.Select(x => (float)x.ToLetterByte()).ToArray());
+            Matrix<float> cipher = builder.Dense(NGramSize, NGramSize, cribStr.Select(x => (float)x.ToLetterByte()).ToArray());
             
             BigInteger det = (BigInteger)cipher.Determinant();
             det = Euclid.Modulus(det, 26);
-            
-            // http://planetcalc.com/3311/
+
             BigInteger inverseDet, inverseMod;
             if (Euclid.ExtendedGreatestCommonDivisor(det, 26, out inverseDet, out inverseMod) != 1)
             {
                 throw new ArgumentException(det + " is not coprime with 26");
             }
             
-            Console.WriteLine("Inverses:");
-            Console.WriteLine(det);
-            Console.WriteLine(inverseDet);
-            
             Matrix<float> adjugate = cipher.Adjugate();
             Matrix<float> inverse = (adjugate * (float)inverseDet);
             inverse = inverse.Modulus(26);
 
             Matrix<float> key = (plain * inverse).Modulus(26);
-            return GetResult(0, key);
+            return GetResult(cipherText, key);
+        }
+        
+        public ICipherResult<Matrix<float>, NGramArray> Crack(string cipher, CribSpace cribs)
+        {
+        	return Crack(Create(cipher), cribs);
         }
 
-        public override CipherResult Crack()
+        public ICipherResult<Matrix<float>, NGramArray> Crack(NGramArray cipher, CribSpace cribs)
         {
-            if (Cribs.Count < NGramLength) throw new Exception("HillCribbed required at least two cribs");
+        	if(cribs.NGramSize != NGramSize) throw new ArgumentException("Incorrect NGram size for cribs");
+            if (cribs.Cribs.Count < NGramSize) throw new ArgumentException("Must have " + NGramSize + " cribs", "cribs");
 
             StringBuilder builder = new StringBuilder();
-            CipherResult best = null;
-            foreach (KeyValuePair<string, string>[] pair in Cribs.Permutations(2))
+            ICipherResult<Matrix<float>, NGramArray> best = null;
+            foreach (KeyValuePair<string, string>[] pair in cribs.Cribs.Permutations(2))
             {
                 try
                 {
-                    CipherResult result = CrackSingle(pair[0].Key + pair[1].Key, pair[0].Value + pair[1].Value);
-                    if(best == null || result.Score > best.Score) best = result;
+                    ICipherResult<Matrix<float>, NGramArray> result = CrackSingle(cipher, pair[0].Key + pair[1].Key, pair[0].Value + pair[1].Value);
+                    if (best == null || result.Score > best.Score) best = result;
                 }
                 catch (Exception e)
                 {
@@ -103,7 +108,7 @@ namespace Cipher.Ciphers
                 }
             }
             
-            if(best == null) throw new ArgumentException("Cannot find permutation\n" + builder.ToString());
+            if (best == null) throw new ArgumentException("Cannot find permutation\n" + builder.ToString());
             
             return best;
         }

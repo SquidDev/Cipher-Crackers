@@ -18,14 +18,13 @@ namespace Testing.Ciphers
         [Test]
         [Category("Cipher"), Category("Crack")]
         [TestCaseSource("Items")]
-        public void RailFenceCrack(string Ciphertext, string Plaintext, int Key)
+        public void RailFenceCrack(string ciphertext, string plaintext, int key)
         {
-            RailFence<QuadgramScoredLetterArray, byte> Shift = new RailFence<QuadgramScoredLetterArray, byte>(Ciphertext);
-            RailFence<QuadgramScoredLetterArray, byte>.CipherResult Result = Shift.Crack();
+            var cipher = new RailFence<CharacterTextArray, char>(TextScorers.ScoreQuadgrams);
+            var result = cipher.Crack(ciphertext);
 
-
-            Assert.AreEqual(Plaintext, Result.Text.ToString());
-            Assert.AreEqual(Key, Result.Key);
+            Assert.AreEqual(plaintext, result.Contents.ToString());
+            Assert.AreEqual(key, result.Key);
         }
 
 
@@ -35,12 +34,12 @@ namespace Testing.Ciphers
         [Test]
         [Category("Cipher"), Category("Decode")]
         [TestCaseSource("Items")]
-        public void RailFenceDecode(string Ciphertext, string Plaintext, int Key)
+        public void RailFenceDecode(string ciphertext, string plaintext, int key)
         {
-            RailFence<LetterArray, byte> Shift = new RailFence<LetterArray, byte>(Ciphertext);
-            LetterArray Result = Shift.Decode(Key);
+            var cipher = new RailFence<LetterTextArray, byte>(TextScorers.ScoreQuadgrams);
+            LetterTextArray result = cipher.Decode(ciphertext, key);
 
-            Assert.AreEqual(Plaintext, Result.ToString());
+            Assert.AreEqual(plaintext, result.ToString());
         }
         
         public IEnumerable<Object[]> Items

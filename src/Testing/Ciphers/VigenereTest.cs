@@ -18,24 +18,24 @@ namespace Testing.Ciphers
         [Test]
         [Category("Cipher"), Category("Crack")]
         [TestCaseSource("Items")]
-        public void VigenereDecode(string Ciphertext, string Plaintext, string Key)
+        public void VigenereDecode(string ciphertext, string plaintext, string key)
         {
-            Vigenere<QuadgramScoredLetterArray> Cipher = new Vigenere<QuadgramScoredLetterArray>(Ciphertext);
-            QuadgramScoredLetterArray Result = Cipher.Decode(new QuadgramScoredLetterArray(Key));
+            var Cipher = new Vigenere<LetterTextArray>();
+            var Result = Cipher.Decode(ciphertext, KeyConverters.String.FromString(key));
 
-            Assert.AreEqual(Plaintext, Result.ToString());
+            Assert.AreEqual(plaintext, Result.ToString());
         }
 
         [Test]
         [Category("Cipher"), Category("Decode")]
         [TestCaseSource("Items")]
-        public void VigenereMonogramCrack(string Ciphertext, string Plaintext, string Key)
+        public void VigenereCrack(string ciphertext, string plaintext, string key)
         {
-            MonogramVigenere Cipher = new MonogramVigenere(Ciphertext);
-            MonogramVigenere.CipherResult Result = Cipher.Crack();
+            var cipher = new Vigenere<LetterTextArray>();
+            var result = cipher.Crack(ciphertext);
 
-            Assert.AreEqual(Plaintext, Result.Text.ToString());
-            Assert.AreEqual(Key, Result.Key.ToString());
+            Assert.AreEqual(plaintext, result.Contents.ToString());
+            Assert.AreEqual(key, KeyConverters.String.ToString(result.Key));
         }
 
         public IEnumerable<Object[]> Items
