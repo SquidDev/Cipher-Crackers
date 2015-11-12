@@ -7,33 +7,47 @@ namespace Cipher.Text
 {
     public static class TextScorers
     {
+    	private const int MaxPower = 10;
+    	private static readonly int[] powers;
+    	
+    	static TextScorers()
+    	{
+    		powers = new int[MaxPower];
+    		for(int i = 0; i < MaxPower; i++)
+    		{
+    			powers[i] = (int)Math.Pow(26, i);
+    		}
+    	}
+
         public static double Score(this IEnumerable<byte> text, double[] scores, int length)
         {
             double score = 0;
-            double[] quadgrams = LetterStatistics.Quadgrams;
 
-            // Have to build up 'n' previous
             IEnumerator<byte> enumerator = text.GetEnumerator();
+            
+            // Have to build up 'n' previous
             int[] previous = new int[length - 1];
-
             for (int i = 0; i < length - 1; i++)
             {
                 enumerator.MoveNext();
-                previous[i] = (int)(enumerator.Current * Math.Pow(26, length - 1 - i));
+                previous[i] = (int)enumerator.Current * powers[length - 1 - i];
             }
 
             while (enumerator.MoveNext())
             {
+            	// The previous array is composed of [i * 26 * 26, (i + 1) * 26, i + 2] 
                 int thisCharacter = (int)enumerator.Current;
 
                 int sum = thisCharacter;
                 for (int i = 0; i < length - 2; i++)
                 {
                     sum += previous[i];
-                    previous[i] = 26 * previous[i + 1];
+                    previous[i] = previous[i + 1] * 26;                    
                 }
+                
+                sum += previous[length - 2];
 
-                score += quadgrams[sum];
+                score += scores[sum];
                 previous[length - 2] = thisCharacter * 26;
             }
 
@@ -43,6 +57,11 @@ namespace Cipher.Text
         public static double ScoreQuadgrams(this IEnumerable<byte> text)
         {
             return Score(text, LetterStatistics.Quadgrams, 4);
+        }
+        
+        public static double ScoreBigrams(this ITextArray text)
+        {
+            return Score(text, LetterStatistics.Bigrams, 2);
         }
 
         public static double ScoreMonograms(this ITextArray text)
@@ -70,11 +89,6 @@ namespace Cipher.Text
             }
 
             return frequency;
-        }
-
-        public static double ScoreBigrams(this ITextArray text)
-        {
-            return Score(text, LetterStatistics.Bigrams, 2);
         }
     }
 }

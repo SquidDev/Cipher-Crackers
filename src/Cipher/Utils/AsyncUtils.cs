@@ -20,6 +20,19 @@ namespace Cipher
 
             return tasks.Select(x => x.Result);
         }
+        
+        public static IEnumerable<TRes> RunAsync<TRes>(int size, Func<TRes> method)
+        {
+        	Task<TRes>[] tasks = new Task<TRes>[size];
+        	for(int i = 0; i < size; i++)
+            {
+        		tasks[i] = Task<TRes>.Run(method);
+            }
+
+            Task<TRes>.WaitAll(tasks);
+
+            return tasks.Select(x => x.Result);
+        }
     }
 }
 

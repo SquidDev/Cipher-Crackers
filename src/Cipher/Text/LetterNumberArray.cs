@@ -14,7 +14,7 @@ namespace Cipher.Text
         }
 
         public LetterNumberArray(string text)
-            : base()
+            : base(text)
         {
         }
 

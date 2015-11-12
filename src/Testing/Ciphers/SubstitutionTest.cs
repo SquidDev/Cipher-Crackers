@@ -12,20 +12,19 @@ namespace Testing.Ciphers
     [TestFixture]
     public class SubstitutionTest
     {
-
         /// <summary>
         /// Tests the crack method
         /// </summary>
         [Test]
         [Category("Cipher"), Category("Crack")]
         [TestCaseSource("Items")]
-        public void SubstitutionCrack(string ciphertext, string Plaintext, string Key)
+        public void SubstitutionCrack(string ciphertext, string plaintext, string key)
         {
             var cipher = new Substitution<LetterTextArray>(TextScorers.ScoreQuadgrams);
             var result = cipher.Crack(ciphertext);
 
-            Assert.AreEqual(Plaintext, result.Contents.ToString());
-            Assert.AreEqual(Key, result.Key.ToString());
+            Assert.AreEqual(plaintext, result.Contents.ToString());
+			Assert.AreEqual(key, KeyConverters.String.ToString(result.Key));            
         }
 
         /// <summary>

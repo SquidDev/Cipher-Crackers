@@ -113,9 +113,9 @@ namespace Cipher.Utils
             return result;
         }
         
-        public static void CopyTo<T>(this T[] from, T[] to)
+        public static void CopyTo<T>(this T[] source, T[] destination)
         {
-        	from.CopyTo(to, 0);
+        	source.CopyTo(destination, 0);
         }
     }
 }

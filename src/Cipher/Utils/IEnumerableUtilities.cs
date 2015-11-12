@@ -60,6 +60,28 @@ namespace Cipher.Utils
 
             return max;
         }
+        
+        public static T MaxWith<T, TComp>(this IEnumerable<T> e, Func<T, TComp> selector)
+            where TComp : IComparable
+        {
+            T max = default(T);
+            TComp maxValue = default(TComp);
+            bool empty = true;
+
+            foreach (T value in e)
+            {
+            	TComp comparable = selector(value);
+            	if (empty || comparable.CompareTo(maxValue) > 0)
+                {
+                    empty = false;
+                    max = value;
+                    maxValue = comparable;
+                }
+
+            }
+
+            return max;
+        }
 
         public static KeyValuePair<int, T> MaxIndexValue<T>(this IEnumerable<T> Enumerable)
             where T : IComparable<T>

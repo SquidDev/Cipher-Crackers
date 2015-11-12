@@ -26,60 +26,53 @@ namespace Cipher.Ciphers
 
             return decoded;
         }
+        
+        private ICipherResult<byte[], TText> CrackSingle(TText cipher)
+        {
+        	byte[] bestKey = ListUtilities.RangeByte(26);
+        	bestKey.Shuffle();
+        	
+        	TText decoded = Create(cipher.Count);
+        	Decode(cipher, bestKey, decoded);
+        	double bestScore = scorer(decoded);
+        	
+            byte[] currentKey = new byte[bestKey.Length];
+            bestKey.CopyTo(currentKey);
+            
+            int count = 0;
+            while (count < InternalIterations)
+            {
+                //Swap characters
+                currentKey.Swap(MathsUtilities.RandomInstance.Next(26), MathsUtilities.RandomInstance.Next(26));
+
+                Decode(cipher, currentKey, decoded);
+                double currentScore = scorer(decoded);
+
+                if (currentScore > bestScore)
+                {
+                	// Reset count, and set new key
+                	count = 0;
+                	
+                    bestScore = currentScore;
+                    currentKey.CopyTo(bestKey);
+                }
+                else
+                {
+                	// Revert to old key
+                    bestKey.CopyTo(currentKey);
+                }
+
+                count++;
+            }
+            
+            var x = GetResult(cipher, bestScore, bestKey, decoded);
+            Console.WriteLine("Iteration: " + KeyConverters.String.ToString(bestKey) + " =>\n" + x.Contents.ToString());
+            return x;
+        }
 
         public override ICipherResult<byte[], TText> Crack(TText cipher)
         {
-            byte[] bestKey = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToLetterArray();
-            double bestScore = Double.NegativeInfinity;
-
-            byte[] parentKey = bestKey.ToArray();
-            double parentScore = bestScore;
-
-            TText decoded = Create(cipher.Count);
-            byte[] childKey = new byte[bestKey.Length];
-            double childScore;
-
-            for (int iteration = 0; iteration < MaxIterations; iteration++)
-            {
-                parentKey.Shuffle<byte>();
-                decoded = Decode(cipher, parentKey, decoded);
-                parentScore = scorer(decoded);
-
-                parentKey.CopyTo(childKey);
-
-                int count = 0;
-                while (count < InternalIterations)
-                {
-                    //Swap characters
-                    childKey.Swap(MathsUtilities.RandomInstance.Next(26), MathsUtilities.RandomInstance.Next(26));
-
-                    decoded = Decode(cipher, childKey, decoded);
-                    childScore = scorer(decoded);
-
-                    //Reset parent score
-                    if (childScore > parentScore)
-                    {
-                        parentScore = childScore;
-                        count = 0;
-
-                        childKey.CopyTo(parentKey); //Backup this key
-                    }
-                    else
-                    {
-                        parentKey.CopyTo(childKey); // Reset ChildKey
-                    }
-
-                    count++;
-                }
-
-                if (parentScore > bestScore)
-                {
-                    bestScore = parentScore;
-                    parentKey.CopyTo(bestKey);
-                }
-            }
-
-            return GetResult(cipher, bestScore, bestKey, decoded);
+        	return AsyncUtils.RunAsync(MaxIterations, () => CrackSingle(cipher)).MaxWith(x => x.Score);
         }
     }
 }
