@@ -12,12 +12,10 @@ namespace Cipher.Ciphers
     public abstract class BaseCipher<TKey, TText> : ICipher<TKey, TText>
         where TText : ITextArray
     {
-        protected readonly Formatter<TKey> keyFormatter;
         protected readonly TextScorer scorer;
 
-        public BaseCipher(TextScorer scorer, Formatter<TKey> formatter = x => x.ToString())
+        public BaseCipher(TextScorer scorer)
         {
-            this.keyFormatter = formatter;
             this.scorer = scorer;
         }
 
@@ -31,27 +29,60 @@ namespace Cipher.Ciphers
 
         #region Shortcut functions
 
-        protected ICipherResult<TKey, TText> GetResult(double score, TKey key, TText decoded)
+        protected ICipherResult<TKey, TText> GetResult(TText cipher, double score, TKey key, TText decoded)
         {
-            return new CipherResult<TKey, TText>(Decode(key, decoded), key, score, keyFormatter);
+            return new CipherResult<TKey, TText>(key, Decode(cipher, key, decoded), score);
         }
 
-        protected ICipherResult<TKey, TText> GetResult(double score, TKey key)
+        protected ICipherResult<TKey, TText> GetResult(TText cipher, double score, TKey key)
         {
-            return new CipherResult<TKey, TText>(Decode(key), key, score, keyFormatter);
+            return new CipherResult<TKey, TText>(key, Decode(cipher, key), scorer);
         }
 
-        protected ICipherResult<TKey, TText> GetResult(TKey key)
+        protected ICipherResult<TKey, TText> GetResult(TText cipher, TKey key)
         {
-            TText decoded = Decode(key);
-            return new CipherResult<TKey, TText>(decoded, key, scorer, keyFormatter);
+            return new CipherResult<TKey, TText>(key, Decode(cipher, key), scorer);
         }
 
-        public virtual TText Decode(TText cipher, TKey key)
+        public TText Decode(TText cipher, TKey key)
         {
             return Decode(cipher, key, Create(cipher.Count));
         }
+        
+        public TText Decode(string cipher, TKey key)
+        {
+        	return Decode(Create(cipher), key);
+        }
+        
+        public ICipherResult<TKey, TText> Crack(string cipher)
+        {
+        	return Crack(Create(cipher));
+        }
 
         #endregion
+    }
+    
+    public abstract class DefaultCipher<TKey, TText> : BaseCipher<TKey, TText>
+    	where TText : ITextArray, new()
+    {
+    	public DefaultCipher(TextScorer scorer)
+            : base(scorer)
+        {
+        }
+    	
+
+		protected override TText Create(int length)
+		{
+			TText text = new TText();
+			text.Initalise(length);
+			return text;
+		}
+    	
+		protected override TText Create(string text)
+		{
+			TText array = new TText();
+			array.Initalise(text);
+			return array;
+		}
     }
 }

@@ -82,7 +82,18 @@ namespace Cipher.Text
                 characters[i] = builder.Dense(NGramSize, 1);
             }
         }
+        
+        public void Initalise(IReadOnlyList<Matrix<float>> text)
+        {
+        	Initalise(text.ToArray());
+        }
 
+        private void Initalise(Matrix<float>[] text)
+		{
+			if (setup) throw new InvalidOperationException("Already setup");
+            setup = true;
+            characters = text;
+		}
         #endregion
 
         /// <summary>
@@ -108,7 +119,7 @@ namespace Cipher.Text
             return result.ToString();
         }
 
-        public IEnumerator<float> GetEnumerator()
+        public IEnumerator<byte> GetEnumerator()
         {
             int nGramLength = NGramSize;
             Matrix<float>[] characters = this.characters;
@@ -117,14 +128,23 @@ namespace Cipher.Text
                 Matrix<float> current = characters[offset];
                 for (int row = 0; row < nGramLength; row++)
                 {
-                    yield return current[row, 0];
+                	yield return (byte)current[row, 0];
                 }
             }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+        	return GetEnumerator();
         }
+    	
+        public Matrix<float> this[int offset] {
+        	get { return characters[offset]; }
+        	set { characters[offset] = value; }
+		}
+    	
+        byte IReadOnlyList<byte>.this[int offset] {
+        	get { return (byte)characters[offset / NGramSize][offset % NGramSize, 0]; }
+		}
     }
 }

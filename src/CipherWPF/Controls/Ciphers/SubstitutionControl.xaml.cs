@@ -1,7 +1,7 @@
-using Cipher.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using Subs = Cipher.Ciphers.Substitution<Cipher.Text.QuadgramScoredLetterArray>;
+using Cipher.Ciphers;
+using Cipher.Text;
 
 namespace Cipher.WPF.Controls.Ciphers
 {
@@ -10,23 +10,24 @@ namespace Cipher.WPF.Controls.Ciphers
     /// </summary>
     public partial class SubstitutionControl : UserControl, IDecode
     {
+    	private readonly Substitution<LetterTextArray> Cipher = new Substitution<LetterTextArray>(TextScorers.ScoreQuadgrams);
+
         public SubstitutionControl()
         {
             this.InitializeComponent();
         }
 
-        public string Decode(string Input)
+        public string Decode(string input)
         {
-            Subs Cipher = new Subs(Input);
-            return Cipher.Decode(new LetterArray(Key.Text)).ToString();
+        	return Cipher.Decode(input, KeyConverters.String.FromString(Key.Text)).ToString();
         }
 
-        public async Task<string> Crack(string Input)
+        public async Task<string> Crack(string input)
         {
-            Subs.CipherResult Result = await Task<Subs.CipherResult>.Run(() => new Subs(Input).Crack());
+        	ICipherResult<byte[], LetterTextArray> result = await Task<ICipherResult<byte[], LetterTextArray>>.Run(() => Cipher.Crack(input));
 
-            Key.Text = Result.Key.ToString();
-            return Result.Text.ToString();
+            Key.Text = KeyConverters.String.ToString(result.Key);
+            return result.Contents.ToString();
         }
     }
 }

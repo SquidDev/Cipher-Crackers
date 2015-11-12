@@ -5,8 +5,8 @@ using System.Linq;
 
 namespace Cipher.Ciphers
 {
-    public class Substitution<TText> : BaseCipher<byte[], TText>
-        where TText : ITextArray<byte>
+    public class Substitution<TText> : DefaultCipher<byte[], TText>
+    	where TText : ITextArray<byte>, new()
     {
         public const int MaxIterations = 5;
         public const int InternalIterations = 1000;
@@ -21,7 +21,7 @@ namespace Cipher.Ciphers
             int length = cipher.Count;
             for (int index = 0; index < length; index++)
             {
-                decoded[index] = key[Text[index]];
+                decoded[index] = key[cipher[index]];
             }
 
             return decoded;
@@ -29,57 +29,57 @@ namespace Cipher.Ciphers
 
         public override ICipherResult<byte[], TText> Crack(TText cipher)
         {
-            byte[] BestKey = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToLetterArray();
-            double BestScore = Double.NegativeInfinity;
+            byte[] bestKey = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToLetterArray();
+            double bestScore = Double.NegativeInfinity;
 
-            byte[] ParentKey = BestKey.ToArray();
-            double ParentScore = BestScore;
+            byte[] parentKey = bestKey.ToArray();
+            double parentScore = bestScore;
 
-            TText Decoded = Create(cipher.Count);
-            byte[] ChildKey = new byte[BestKey.Count];
-            double ChildScore;
+            TText decoded = Create(cipher.Count);
+            byte[] childKey = new byte[bestKey.Length];
+            double childScore;
 
-            for (int Iteration = 0; Iteration < MaxIterations; Iteration++)
+            for (int iteration = 0; iteration < MaxIterations; iteration++)
             {
-                ParentKey.Shuffle<byte>();
-                Decoded = Decode(ParentKey, Decoded);
-                ParentScore = scorer(Decoded);
+                parentKey.Shuffle<byte>();
+                decoded = Decode(cipher, parentKey, decoded);
+                parentScore = scorer(decoded);
 
-                ParentKey.CopyTo(ChildKey);
+                parentKey.CopyTo(childKey);
 
-                int Count = 0;
-                while (Count < InternalIterations)
+                int count = 0;
+                while (count < InternalIterations)
                 {
                     //Swap characters
-                    ChildKey.Swap(MathsUtilities.RandomInstance.Next(26), MathsUtilities.RandomInstance.Next(26));
+                    childKey.Swap(MathsUtilities.RandomInstance.Next(26), MathsUtilities.RandomInstance.Next(26));
 
-                    Decoded = Decode(ChildKey, Decoded);
-                    ChildScore = scorer(Decoded);
+                    decoded = Decode(cipher, childKey, decoded);
+                    childScore = scorer(decoded);
 
                     //Reset parent score
-                    if (ChildScore > ParentScore)
+                    if (childScore > parentScore)
                     {
-                        ParentScore = ChildScore;
-                        Count = 0;
+                        parentScore = childScore;
+                        count = 0;
 
-                        ChildKey.CopyTo(ParentKey); //Backup this key
+                        childKey.CopyTo(parentKey); //Backup this key
                     }
                     else
                     {
-                        ParentKey.CopyTo(ChildKey); // Reset ChildKey
+                        parentKey.CopyTo(childKey); // Reset ChildKey
                     }
 
-                    Count++;
+                    count++;
                 }
 
-                if (ParentScore > BestScore)
+                if (parentScore > bestScore)
                 {
-                    BestScore = ParentScore;
-                    ParentKey.CopyTo(BestKey);
+                    bestScore = parentScore;
+                    parentKey.CopyTo(bestKey);
                 }
             }
 
-            return GetResult(BestScore, BestKey, Decoded);
+            return GetResult(cipher, bestScore, bestKey, decoded);
         }
     }
 }

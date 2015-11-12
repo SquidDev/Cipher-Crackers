@@ -12,8 +12,8 @@ namespace Cipher.Ciphers
     ///     <see cref="TextArray"/> to use to store the characters 
     ///     and score the result
     /// </typeparam>
-    public class CaeserShift<TText> : BaseCipher<byte, TText>
-        where TText : ITextArray<byte>
+    public class CaeserShift<TText> : DefaultCipher<byte, TText>
+    	where TText : ITextArray<byte>, new()
     {
         public CaeserShift(TextScorer scorer)
             : base(scorer)
@@ -31,7 +31,7 @@ namespace Cipher.Ciphers
             int length = cipher.Count;
             for (int Index = 0; Index < length; Index++)
             {
-                decoded[Index] = (byte)((Text[Index] + inverseKey) % 26);
+                decoded[Index] = (byte)((cipher[Index] + inverseKey) % 26);
             }
             
             return decoded;
@@ -45,19 +45,19 @@ namespace Cipher.Ciphers
             TText decoded = new TText();
             decoded.Initalise(cipher.Count);
 
-            for (byte Key = 0; Key < 26; Key++)
+            for (byte key = 0; key < 26; key++)
             {
-                decoded = Decode(Key, decoded);
+                decoded = Decode(cipher, key, decoded);
                 double score = scorer(decoded);
                 
                 if (score > bestScore)
                 {
                     bestScore = score;
-                    bestKey = Key;
+                    bestKey = key;
                 }
             }
 
-            return GetResult(bestScore, bestKey, decoded);
+            return GetResult(cipher, bestScore, bestKey, decoded);
         }
     }
 
@@ -65,7 +65,7 @@ namespace Cipher.Ciphers
     /// Optimised CaeserShift for monograms
     /// </summary>
     public class MonogramCaeserShift<TText> : CaeserShift<TText>
-        where TText : ITextArray<byte>
+    	where TText : ITextArray<byte>, new()
     {
         public MonogramCaeserShift()
             : base(TextScorers.ScoreMonograms)
@@ -95,7 +95,7 @@ namespace Cipher.Ciphers
                 }
             }
 
-            return GetResult(bestScore, (byte)((26 - bestKey) % 26));
+            return GetResult(cipher, bestScore, (byte)((26 - bestKey) % 26));
         }
     }
 }

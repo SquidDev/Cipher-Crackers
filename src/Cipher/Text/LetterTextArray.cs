@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Cipher.Text
@@ -36,13 +38,18 @@ namespace Cipher.Text
         {
             Initalise(text.ToLetterArray());
         }
-
-        protected void Initalise(byte[] characters)
+        
+        public void Initalise(IReadOnlyList<byte> text)
         {
-            if (setup) throw new InvalidOperationException("Already setup");
+        	Initalise(text.ToArray());
+        }
 
-            this.characters = characters;
-            setup = true;
+        public void Initalise(byte[] text)
+        {
+        	if (setup) throw new InvalidOperationException("Already setup");
+			setup = true;
+			
+            characters = text;
         }
 
         public override string ToString()
@@ -63,5 +70,15 @@ namespace Cipher.Text
             get { return characters[index]; }
             set { characters[index] = value; }
         }
+    	
+		public IEnumerator<byte> GetEnumerator()
+		{
+			return ((IEnumerable<byte>)characters).GetEnumerator();
+		}
+    	
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return characters.GetEnumerator();
+		}
     }
 }

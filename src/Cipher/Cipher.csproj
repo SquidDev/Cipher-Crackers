@@ -53,6 +53,7 @@
     <Compile Include="Ciphers\Hill.cs" />
     <Compile Include="Ciphers\HillBrute.cs" />
     <Compile Include="Ciphers\HillCribbed.cs" />
+    <Compile Include="Ciphers\KeyConverter.cs" />
     <Compile Include="Ciphers\RailFence.cs" />
     <Compile Include="Ciphers\ColumnarTransposition.cs" />
     <Compile Include="Ciphers\Substitution.cs" />

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Cipher.Text
 {
@@ -11,19 +12,17 @@ namespace Cipher.Text
         /// </summary>
         /// <param name="Text"></param>
         /// <returns></returns>
-        public static byte[] ToLetterArray(this String Text)
+        public static byte[] ToLetterArray(this IEnumerable<char> Text)
         {
-            List<byte> Chars = new List<byte>();
-            foreach (char Character in Text)
-            {
-                byte BChar = Character.ToLetterByte();
-                if (BChar != byte.MaxValue && BChar < 26) Chars.Add(BChar);
-            }
-
-            return Chars.ToArray();
+        	return Text.ToLetters().ToArray();
+        }
+        
+        public static IEnumerable<byte> ToLetters(this IEnumerable<char> Text)
+        {
+        	return Text.Select(x => x.ToLetterByte()).Where(x => x < 26);
         }
 
-        public static byte[] ToLetterNumber(this String Text)
+        public static byte[] ToLetterNumber(this IEnumerable<char> Text)
         {
             List<byte> Chars = new List<byte>();
             foreach (char Character in Text)
@@ -63,6 +62,18 @@ namespace Cipher.Text
         public static string UpperNoSpace(this string Text)
         {
             return new String(Text.Where(C => !Char.IsWhiteSpace(C)).Select(C => Char.ToUpper(C)).ToArray());
+        }
+        
+        public static string Substring(this ITextArray array, int start, int length)
+        {
+        	StringBuilder builder = new StringBuilder(length);
+        	for(int i = start; i < start + length; i++)
+        	{
+        		byte value = array[i];
+        		if(value < 26) builder.Append(value + 'A');
+        	}
+        	
+        	return builder.ToString();
         }
     }
 }

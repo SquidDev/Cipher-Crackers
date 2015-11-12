@@ -11,40 +11,38 @@ namespace Cipher.WPF.Controls.Ciphers
     /// </summary>
     public partial class VigenereControl : UserControl, IDecode
     {
+    	private readonly Vigenere<LetterTextArray> Cipher = new Vigenere<LetterTextArray>();
+    	
         public VigenereControl()
         {
             InitializeComponent();
 
-            // It is done on a per-instance basis.
-            MonogramVigenere Cipher = new MonogramVigenere("");
-            KeyLength.Minimum = Cipher.MinKeyLength;
-            KeyLength.Maximum = Cipher.MaxKeyLength;
-            KeyLength.Value = Math.Max(Cipher.MinKeyLength, (int)KeyLength.Value);
+            KeyLength.Minimum = Vigenere<LetterTextArray>.MinKeyLength;
+            KeyLength.Maximum = Vigenere<LetterTextArray>.MaxKeyLength;
+            KeyLength.Value = Math.Max(Vigenere<LetterTextArray>.MinKeyLength, (int)KeyLength.Value);
         }
 
-        public string Decode(string Input)
+        public string Decode(string input)
         {
-            MonogramVigenere Cipher = new MonogramVigenere(Input);
-            return Cipher.Decode(new LetterArray(Key.Text)).ToString();
+        	return Cipher.Decode(input, KeyConverters.String.FromString(input)).ToString();
         }
 
         public async Task<string> Crack(string Input)
         {
-            MonogramVigenere Cipher = new MonogramVigenere(Input);
-            MonogramVigenere.CipherResult Result;
+        	ICipherResult<byte[], LetterTextArray> result;
             if (UseKeyLength.IsChecked.HasValue && UseKeyLength.IsChecked.Value)
             {
                 int Length = (int)KeyLength.Value;
-                Result = await Task<MonogramVigenere.CipherResult>.Run(() => Cipher.Crack(Length));
+                result = await Task<ICipherResult<byte[], LetterTextArray>>.Run(() => Cipher.Crack(Input, Length));
             }
             else
             {
-                Result = await Task<MonogramVigenere.CipherResult>.Run(() => Cipher.Crack());
+                result = await Task<ICipherResult<byte[], LetterTextArray>>.Run(() => Cipher.Crack(Input));
             }
 
-            Key.Text = Result.Key.ToString();
-            KeyLength.Value = Result.Key.Length;
-            return Result.Text.ToString();
+            Key.Text = KeyConverters.String.ToString(result.Key);
+            KeyLength.Value = result.Key.Length;
+            return result.Contents.ToString();
         }
     }
 }

@@ -7,25 +7,26 @@ using System.Linq;
 
 namespace Cipher.Prompt.Commands
 {
-    public class CipherCommand : ICommand
+    public class CipherCommand<TKey, TText> : ICommand
+    	where TText : ITextArray
     {
-        public Func<string, GenericCipherResult> Crack;
-        public Func<string, string, string> Decode;
+    	public BaseCipher<TKey, TText> Cipher;
+        public IKeyConverter<TKey> Converter;
 
-        public override void Run(IEnumerable<string> Args, TextReader Reader, TextWriter Writer)
+        public override void Run(IEnumerable<string> args, TextReader reader, TextWriter writer)
         {
-            bool ShowHelp = false;
-            string Key = null;
+            bool showHelp = false;
+            string key = null;
 
             OptionSet Options = new OptionSet()
             {
-                { "h|?|help", "Show this message and exit", V => ShowHelp = (V != null) },
-                { "k|key=", "{KEY} of the cipher", V => Key = V },
+                { "h|?|help", "Show this message and exit", V => showHelp = (V != null) },
+                { "k|key=", "{KEY} of the cipher", V => key = V },
             };
 
-            IList<string> Extra = Options.Parse(Args);
+            IList<string> extra = Options.Parse(args);
 
-            if (ShowHelp)
+            if (showHelp)
             {
                 Console.WriteLine("Usage: CipherPrompt {0} [OPTIONS]", Name);
                 Console.WriteLine();
@@ -37,27 +38,27 @@ namespace Cipher.Prompt.Commands
                 return;
             }
 
-            if (Extra.Count > 0)
+            if (extra.Count > 0)
             {
-                Console.WriteLine("Unregognised options: {0}", String.Join(", ", Extra));
+                Console.WriteLine("Unregognised options: {0}", String.Join(", ", extra));
                 Console.WriteLine("Run `CipherPrompt help` and CipherPrompt help {0}` for more info", Name);
             }
 
-            string Cipher = Reader.ReadToEnd();
-            string Plaintext;
-            if (String.IsNullOrWhiteSpace(Key))
+            string cipher = reader.ReadToEnd();
+            string plaintext;
+            if (String.IsNullOrWhiteSpace(key))
             {
-                GenericCipherResult Result = Crack(Cipher);
-                Console.WriteLine("Key:   {0}", Result.Key);
-                Console.WriteLine("Score: {0}", Result.Score);
-                Plaintext = Result.Text;
+                ICipherResult<TKey, TText> result = Cipher.Crack(cipher);
+                Console.WriteLine("Key:   {0}", Converter.ToString(result.Key));
+                Console.WriteLine("Score: {0}", result.Score);
+                plaintext = result.Contents.ToString();
             }
             else
             {
-                Plaintext = Decode(Cipher, Key);
+            	plaintext = Cipher.Decode(cipher, Converter.FromString(key)).ToString();
             }
 
-            Writer.WriteLine(Plaintext);
+            writer.WriteLine(plaintext);
         }
     }
 }

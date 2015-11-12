@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cipher
+namespace Cipher.Ciphers
 {
     public interface ICipher<TKey, TText>
         where TText : ITextArray
@@ -19,7 +19,5 @@ namespace Cipher
 
         TText Contents { get; }
     }
-
-    public delegate string Formatter<T>(T value);
 }
 

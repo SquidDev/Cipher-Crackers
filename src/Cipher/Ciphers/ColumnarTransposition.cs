@@ -7,8 +7,8 @@ using System.Linq;
 
 namespace Cipher.Ciphers
 {
-    public class ColumnarTransposition<TText, TTextType> : BaseCipher<byte[], TText>
-        where TText : ITextArray<TTextType>
+    public class ColumnarTransposition<TText, TTextType> : DefaultCipher<byte[], TText>
+    	where TText : ITextArray<TTextType>, new()
     {
         public const byte MaxLength = 10;
         public const byte MinLength = 2;
@@ -17,7 +17,7 @@ namespace Cipher.Ciphers
         public readonly byte MinKeyLength;
 
         public ColumnarTransposition(TextScorer scorer, byte maxLength = MaxLength, byte minLength = MinLength)
-            : base(scorer, K => K.PrettyString())
+            : base(scorer)
         {
             MaxKeyLength = maxLength;
             MinKeyLength = minLength;
@@ -33,7 +33,7 @@ namespace Cipher.Ciphers
                 int offset = key[mod];
                 int row = index - mod;
 
-                decoded[index] = Text[offset + row];
+                decoded[index] = cipher[offset + row];
             }
 
             return decoded;
@@ -54,7 +54,12 @@ namespace Cipher.Ciphers
                 keys.Add(key);
             }
 
-            return keys.RunAsync(Crack).Max((x, y) => x.Score.CompareTo(y.Score));
+            return keys.RunAsync(k => Crack(cipher, k)).Max((x, y) => x.Score.CompareTo(y.Score));
+        }
+        
+        public ICipherResult<byte[], TText> Crack(string cipher, byte keyLength)
+        {
+        	return Crack(Create(cipher), keyLength);
         }
 
         public ICipherResult<byte[], TText> Crack(TText cipher, byte keyLength)
@@ -65,7 +70,7 @@ namespace Cipher.Ciphers
 
             foreach (byte[] key in ListUtilities.RangeByte(keyLength).Permutations())
             {
-                decoded = Decode(key, decoded);
+                decoded = Decode(cipher, key, decoded);
                 double score = scorer(decoded);
 
                 if (score > bestScore)
@@ -75,7 +80,7 @@ namespace Cipher.Ciphers
                 }
             }
 
-            return GetResult(bestScore, bestKey, decoded);
+            return GetResult(cipher, bestScore, bestKey, decoded);
         }
     }
 }

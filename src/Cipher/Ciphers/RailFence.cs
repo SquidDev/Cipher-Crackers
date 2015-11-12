@@ -3,8 +3,8 @@ using System;
 
 namespace Cipher.Ciphers
 {
-    public class RailFence<TText, TTextType> : BaseCipher<int, TText>
-        where TText : ITextArray<TTextType>
+    public class RailFence<TText, TTextType> : DefaultCipher<int, TText>
+    	where TText : ITextArray<TTextType>, new()
     {
         public RailFence(TextScorer scorer)
             : base(scorer)
@@ -56,7 +56,7 @@ namespace Cipher.Ciphers
             length++;
             for (int key = 2; key < length; key++)
             {
-                decoded = Decode(key, decoded);
+                decoded = Decode(cipher, key, decoded);
                 double score = scorer(decoded);
 
                 if (score > bestScore)
@@ -66,7 +66,7 @@ namespace Cipher.Ciphers
                 }
             }
 
-            return GetResult(bestScore, bestKey, decoded);
+            return GetResult(cipher, bestScore, bestKey, decoded);
         }
     }
 }

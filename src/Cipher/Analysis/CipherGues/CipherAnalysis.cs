@@ -64,7 +64,7 @@ namespace Cipher.Analysis.CipherGuess
             int Length = Text.Count;
             int[] CT = new int[LetterNumberArray.NUM_SYMBOLS];
 
-            foreach (byte Character in Text.Characters)
+            foreach (byte Character in Text)
             {
                 CT[Character]++;
             }
@@ -89,7 +89,7 @@ namespace Cipher.Analysis.CipherGuess
                 Array.Clear(CT, 0, Size);
 
                 int Index = 0;
-                foreach (char Character in Text.Characters)
+                foreach (char Character in Text)
                 {
                     CT[Index, Character]++;
                     Index = (Index + 1) % Period;

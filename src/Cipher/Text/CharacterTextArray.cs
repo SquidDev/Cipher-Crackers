@@ -1,6 +1,9 @@
-using Cipher.Frequency;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+
+using Cipher.Frequency;
 
 namespace Cipher.Text
 {
@@ -9,7 +12,7 @@ namespace Cipher.Text
     /// </summary>
     public class CharacterTextArray : ITextArray<char>
     {
-        private byte[] characters;
+        private char[] characters;
         private bool setup = false;
 
         public CharacterTextArray()
@@ -33,39 +36,58 @@ namespace Cipher.Text
 
         public void Initalise(int length)
         {
-            Initalise(new byte[length]);
+            Initalise(new char[length]);
         }
 
         public virtual void Initalise(string text)
         {
             Initalise(text.ToCharArray());
         }
-
-        protected void Initalise(char[] characters)
+        
+        protected void Initalise(char[] text)
         {
-            if (setup) throw new InvalidOperationException("Already setup");
-
-            this.characters = characters;
-            setup = true;
+        	if (setup) throw new InvalidOperationException("Already setup");
+			setup = true;
+        	
+			characters = text;            
         }
+
+        public void Initalise(IReadOnlyList<char> text)
+		{
+        	Initalise(text.ToArray());
+		}
 
         public override string ToString()
         {
-            StringBuilder Result = new StringBuilder(characters.Length);
-            foreach (byte Character in characters)
+            StringBuilder result = new StringBuilder(characters.Length);
+            foreach (char character in characters)
             {
-                Result.Append((char)(Character + 'A'));
+                result.Append(character);
             }
 
-            return Result.ToString();
+            return result.ToString();
         }
 
         public int Count { get { return characters.Length; } }
 
-        public byte this [int index]
+        byte IReadOnlyList<byte>.this[int index]
         {
-            get { return characters[index]; }
-            set { characters[index] = value; }
+        	get { return characters[index].ToLetterByte(); }
         }
+    	
+        public char this[int index] {
+        	get { return characters[index]; }
+        	set { characters[index] = value; }
+		}
+    	
+		public IEnumerator<byte> GetEnumerator()
+		{
+			return characters.ToLetters().GetEnumerator();
+		}
+    	
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return characters.ToLetters().GetEnumerator();
+		}
     }
 }

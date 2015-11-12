@@ -60,7 +60,7 @@ namespace Cipher.Ciphers
         {
         }
 
-        public ICipherResult<Matrix<float>, NGramArray> CrackSingle(string cribStr, string plainStr)
+        public ICipherResult<Matrix<float>, NGramArray> CrackSingle(NGramArray cipherText, string cribStr, string plainStr)
         {
             MatrixBuilder<float> builder = Matrix<float>.Build;
             Matrix<float> plain = builder.Dense(NGramSize, NGramSize, plainStr.Select(x => (float)x.ToLetterByte()).ToArray());
@@ -75,21 +75,23 @@ namespace Cipher.Ciphers
                 throw new ArgumentException(det + " is not coprime with 26");
             }
             
-            Console.WriteLine("Inverses:");
-            Console.WriteLine(det);
-            Console.WriteLine(inverseDet);
-            
             Matrix<float> adjugate = cipher.Adjugate();
             Matrix<float> inverse = (adjugate * (float)inverseDet);
             inverse = inverse.Modulus(26);
 
             Matrix<float> key = (plain * inverse).Modulus(26);
-            return GetResult(key);
+            return GetResult(cipherText, key);
+        }
+        
+        public ICipherResult<Matrix<float>, NGramArray> Crack(string cipher, CribSpace cribs)
+        {
+        	return Crack(Create(cipher), cribs);
         }
 
         public ICipherResult<Matrix<float>, NGramArray> Crack(NGramArray cipher, CribSpace cribs)
         {
-            if (cribs.Count < NGramSize) throw new Exception("HillCribbed required at least two cribs");
+        	if(cribs.NGramSize != NGramSize) throw new ArgumentException("Incorrect NGram size for cribs");
+            if (cribs.Cribs.Count < NGramSize) throw new ArgumentException("Must have " + NGramSize + " cribs", "cribs");
 
             StringBuilder builder = new StringBuilder();
             ICipherResult<Matrix<float>, NGramArray> best = null;
@@ -97,7 +99,7 @@ namespace Cipher.Ciphers
             {
                 try
                 {
-                    ICipherResult<Matrix<float>, NGramArray> result = CrackSingle(pair[0].Key + pair[1].Key, pair[0].Value + pair[1].Value);
+                    ICipherResult<Matrix<float>, NGramArray> result = CrackSingle(cipher, pair[0].Key + pair[1].Key, pair[0].Value + pair[1].Value);
                     if (best == null || result.Score > best.Score) best = result;
                 }
                 catch (Exception e)

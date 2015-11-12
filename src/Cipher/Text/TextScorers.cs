@@ -13,7 +13,7 @@ namespace Cipher.Text
             double[] quadgrams = LetterStatistics.Quadgrams;
 
             // Have to build up 'n' previous
-            IEnumerator<int> enumerator = text.GetEnumerator();
+            IEnumerator<byte> enumerator = text.GetEnumerator();
             int[] previous = new int[length - 1];
 
             for (int i = 0; i < length - 1; i++)

@@ -33,7 +33,7 @@ namespace Cipher.Ciphers
                 {
                     key.SetRow(rowIndex, currentRow);
             		
-                    decoded = Decode(key, decoded);
+                    decoded = Decode(cipher, key, decoded);
                     double score = scorer(decoded);
                     if (score > bestScore)
                     {
@@ -43,7 +43,7 @@ namespace Cipher.Ciphers
                 }
             }
                 
-            return GetResult(bestScore, bestKey);
+            return GetResult(cipher, bestScore, bestKey);
         }
     }
 }
