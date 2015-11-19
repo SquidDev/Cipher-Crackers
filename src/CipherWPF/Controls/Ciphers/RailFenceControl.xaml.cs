@@ -1,7 +1,9 @@
-using Cipher.Ciphers;
-using Cipher.Text;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+
+using Cipher.Ciphers;
+using Cipher.Text;
 
 namespace Cipher.WPF.Controls.Ciphers
 {
@@ -29,5 +31,15 @@ namespace Cipher.WPF.Controls.Ciphers
             Key.Value = result.Key;
             return result.Contents.ToString();
         }
+    	
+		public bool CanInvert()
+		{
+			return false;
+		}
+    	
+		public void Invert()
+		{
+			throw new NotImplementedException();
+		}
     }
 }

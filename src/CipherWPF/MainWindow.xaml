@@ -10,6 +10,7 @@
         Title="Cipher-Crackers" Height="400" Width="600" MinHeight="300" MinWidth="400">
     <Metro:MetroWindow.Resources>
         <Cipher:StringLengthToBooleanConverter x:Key="StringLengthToBoolean"/>
+		<Cipher:ActiveInvertable x:Key="ActiveInvertable"/>
     </Metro:MetroWindow.Resources>
     <Grid>
         <TabControl Padding="0">
@@ -46,6 +47,7 @@
                             </TabItem>
                         </TabControl>
 
+                    	<Button Content="Invert" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,5,5,65" Click="Invert_Click" IsEnabled="{Binding SelectedContent, Converter={StaticResource ActiveInvertable}, ElementName=CipherPanels}"/>
                         <Button Content="Decode" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,5,5,35" Click="Decode_Click" IsEnabled="{Binding Text, Converter={StaticResource StringLengthToBoolean}, ElementName=InputText}"/>
                         <Controls:RunningButton x:Name="Crack" Content="Crack" Grid.Column="1" VerticalAlignment="Bottom" Margin="5" Click="Crack_Click" IsEnabled="{Binding Text, Converter={StaticResource StringLengthToBoolean}, ElementName=InputText}" />
                     </Grid>

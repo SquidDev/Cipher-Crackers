@@ -19,5 +19,11 @@ namespace Cipher.Ciphers
 
         TText Contents { get; }
     }
+    
+    public interface IInvertableCipher<TKey, TText> : ICipher<TKey, TText>
+    	where TText : ITextArray
+    {
+    	TKey Invert(TKey key);
+    }
 }
 

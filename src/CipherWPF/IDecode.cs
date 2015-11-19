@@ -10,5 +10,8 @@ namespace Cipher.WPF
     {
         string Decode(string Input);
         Task<string> Crack(string Input);
+        
+        bool CanInvert();
+        void Invert();
     }
 }

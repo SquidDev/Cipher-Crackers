@@ -105,7 +105,7 @@
     </Compile>
     <Compile Include="Controls\ExtendedTextBox.cs" />
     <Compile Include="Controls\RunningButton.cs" />
-    <Compile Include="StringLengthToBooleanConverter.cs" />
+    <Compile Include="Converters.cs" />
     <Page Include="Controls\Analysis\AutoSpaceControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

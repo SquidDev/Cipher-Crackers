@@ -68,10 +68,28 @@ namespace Cipher.WPF
                 }
             }
         }
+        
+        private void Invert_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+        	IDecode decodable = (IDecode)CipherPanels.SelectedContent;
+        	if(decodable.CanInvert())
+        	{
+        		decodable.Invert();
+        	}
+        	else
+        	{
+        		ShowErrorMessage("Cannot invert this cipher");
+        	}
+        }
 
         public async void ShowErrorMessage(Exception Error)
         {
             await this.ShowMessageAsync("Whoah!", Error.Message);
+        }
+        
+        public async void ShowErrorMessage(String error)
+        {
+            await this.ShowMessageAsync("Whoah!", error);
         }
     }
 }

@@ -28,5 +28,15 @@ namespace Cipher.WPF.Controls.Ciphers
             Key.Value = result.Key;
             return result.Contents.ToString();
         }
+    	
+		public bool CanInvert()
+		{
+			return true;
+		}
+    	
+		public void Invert()
+		{
+			Key.Value = Cipher.Invert((byte)Key.Value);
+		}
     }
 }

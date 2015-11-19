@@ -12,7 +12,7 @@ namespace Cipher.Ciphers
     ///     <see cref="TextArray"/> to use to store the characters 
     ///     and score the result
     /// </typeparam>
-    public class CaeserShift<TText> : DefaultCipher<byte, TText>
+    public class CaeserShift<TText> : DefaultCipher<byte, TText>, IInvertableCipher<byte, TText>
     	where TText : ITextArray<byte>, new()
     {
         public CaeserShift(TextScorer scorer)
@@ -59,6 +59,11 @@ namespace Cipher.Ciphers
 
             return GetResult(cipher, bestScore, bestKey, decoded);
         }
+    	
+		public byte Invert(byte key)
+		{
+			return (byte)(26 - key);
+		}
     }
 
     /// <summary>

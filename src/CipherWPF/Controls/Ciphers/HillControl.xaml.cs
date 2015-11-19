@@ -59,5 +59,15 @@ namespace Cipher.WPF.Controls.Ciphers
             Key.Text = KeyConverters.Matrix.ToString(result.Key);
             return result.Contents.ToString();
         }
+    	
+		public bool CanInvert()
+		{
+			return false;
+		}
+    	
+		public void Invert()
+		{
+			throw new NotImplementedException();
+		}
     }
 }

@@ -48,5 +48,15 @@ namespace Cipher.WPF.Controls.Ciphers
             KeyLength.Value = result.Key.Length;
             return result.Contents.ToString();
         }
+    	
+		public bool CanInvert()
+		{
+			return false;
+		}
+    	
+		public void Invert()
+		{
+			throw new NotImplementedException();
+		}
     }
 }

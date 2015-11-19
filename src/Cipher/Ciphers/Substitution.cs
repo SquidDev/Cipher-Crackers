@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Cipher.Ciphers
 {
-    public class Substitution<TText> : DefaultCipher<byte[], TText>
+	public class Substitution<TText> : DefaultCipher<byte[], TText>, IInvertableCipher<byte[], TText>
     	where TText : ITextArray<byte>, new()
     {
         public const int MaxIterations = 5;
@@ -72,5 +72,16 @@ namespace Cipher.Ciphers
         {
         	return AsyncUtils.RunAsync(MaxIterations, () => CrackSingle(cipher)).MaxWith(x => x.Score);
         }
+		
+		public byte[] Invert(byte[] key)
+		{
+			byte[] result = new byte[26];
+			for(byte i = 0; i < 26; i++)
+			{
+				result[key[i]] = i;
+			}
+			
+			return result;
+		}
     }
 }

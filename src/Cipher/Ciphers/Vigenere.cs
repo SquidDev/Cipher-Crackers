@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Cipher.Ciphers
 {
-    public class Vigenere<TText> : DefaultCipher<byte[], TText>
+	public class Vigenere<TText> : DefaultCipher<byte[], TText>, IInvertableCipher<byte[], TText>
     	where TText : ITextArray<byte>, new()
     {
         #region Guessing variables
@@ -145,6 +145,17 @@ namespace Cipher.Ciphers
             }
 
             return GetResult(cipher, key);
+		}
+		
+		public byte[] Invert(byte[] key)
+		{
+			byte[] result = new byte[key.Length];
+			for(int i = 0; i < key.Length; i++)
+			{
+				result[i] = (byte)(26 - key[i]);
+			}
+			
+			return result;
 		}
     }
 }
