@@ -8,79 +8,56 @@ namespace Cipher.Ciphers.Keys
 {
     public class CachingGridArray : GridArray
     {
-        public Dictionary<byte, Vector> cache;
+    	public Vector[] Cache;
 
-        #region Constructors
-        /// <summary>
-        /// Create a GridArray from a 2 Dimensional Array
-        /// </summary>
-        /// <param name="Elements"></param>
-        public CachingGridArray(byte[,] Elements)
-            : base(Elements)
+        public CachingGridArray(byte[,] elements, int cacheSize)
+        	: base(elements)
         {
-            CreateCache();
+            CreateCache(cacheSize);
         }
 
-        /// <summary>
-        /// Create a GridArray from an array and width and height
-        /// </summary>
-        /// <param name="Width">Width of the grid</param>
-        /// <param name="Height">Height of the grid</param>
-        /// <param name="Elements">Values to populate with</param>
-        public CachingGridArray(byte Width, byte Height, IList<byte> Elements)
-            : base(Width, Height,Elements)
+        public CachingGridArray(byte width, byte height, IList<byte> elements, int cacheSize)
+            : base(width, height,elements)
         {
-            CreateCache();
+            CreateCache(cacheSize);
         }
 
-        /// <summary>
-        /// Create a GridArray from an array and width and height
-        /// </summary>
-        /// <param name="Width">Width of the grid</param>
-        /// <param name="Height">Height of the grid</param>
-        /// <param name="Elements">Values to populate with</param>
-        public CachingGridArray(byte Width, byte Height, IEnumerable<byte> Elements)
-            : base(Width, Height, Elements)
+        public CachingGridArray(byte width, byte height, IEnumerable<byte> elements, int cacheSize)
+            : base(width, height, elements)
         {
-            CreateCache();
+            CreateCache(cacheSize);
         }
 
-        /// <summary>
-        /// Create an empty GridArray
-        /// </summary>
-        /// <param name="Width">Width of the array</param>
-        /// <param name="Height">Height of the array</param>
-        public CachingGridArray(byte Width, byte Height)
-            : base(Width, Height)
-        { }
-        #endregion
+        public CachingGridArray(byte width, byte height, int cacheSize)
+            : base(width, height)
+        {
+        	CreateCache(cacheSize);
+        }
         
-        #region Cache
         public void RefreshCache()
         {
             for (byte x = 0; x < Width; x++)
             {
                 for (byte y = 0; y < Height; y++)
                 {
-                    Vector element = cache[Elements[x, y]];
+                    Vector element = Cache[Elements[x, y]];
                     element.X = x;
                     element.Y = y;
                 }
             }
         }
 
-        protected void CreateCache()
+        protected void CreateCache(int cacheSize)
         {
-            cache = new Dictionary<byte, Vector>();
-            for (byte X = 0; X < Width; X++)
+        	Cache = new Vector[cacheSize];
+            for (byte x = 0; x < Width; x++)
             {
-                for (byte Y = 0; Y < Height; Y++)
+                for (byte y = 0; y < Height; y++)
                 {
-                    cache.Add(Elements[X, Y], new Vector(X, Y));
+                	Cache[Elements[x, y]] = new Vector(x, y);
                 }
             }
         }
-        #endregion
 
         public override void Swap(byte aX, byte aY, byte bX, byte bY)
         {
@@ -89,13 +66,13 @@ namespace Cipher.Ciphers.Keys
             Elements[aX, aY] = b;
             Elements[bX, bY] = a;
 
-            Vector vector = cache[a];
-            vector.X = bX;
-            vector.Y = bY;
+            Vector aVector = Cache[a];
+            aVector.X = bX;
+            aVector.Y = bY;
 
-            vector = cache[b];
-            vector.X = aX;
-            vector.Y = aY;
+            Vector bVector = Cache[b];
+            bVector.X = aX;
+            bVector.Y = aY;
         }
 
         /// <summary>
@@ -106,7 +83,7 @@ namespace Cipher.Ciphers.Keys
         /// <param name="Y">Y Coordinate</param>
         public override bool IndexOf(byte item, out byte x, out byte y)
         {
-            Vector element = cache[item];
+            Vector element = Cache[item];
             x = element.X;
             y = element.Y;
             return true;
@@ -114,23 +91,27 @@ namespace Cipher.Ciphers.Keys
 
         public void CopyTo(CachingGridArray target)
         {
-            if(target.cache == null)
+        	base.CopyTo(target);
+            for(int i = 0; i < Cache.Length; i++)
             {
-                target.cache = new Dictionary<byte, Vector>();
-            }
-            base.CopyTo(target);
-            foreach(KeyValuePair<byte, Vector> item in cache)
-            {
-                Vector vec;
-                if(target.cache.TryGetValue(item.Key, out vec))
-                {
-                    vec.X = item.Value.X;
-                    vec.Y = item.Value.Y;
-                }
-                else
-                {
-                    target.cache.Add(item.Key, new Vector(item.Value.X, item.Value.Y));
-                }
+            	Vector item = Cache[i];
+            	if(item == null) 
+            	{
+            		target.Cache[i] = null;
+            	}
+            	else 
+            	{
+	                Vector vec = target.Cache[i];
+	                if(vec != null)
+	                {
+	                    vec.X = item.X;
+	                    vec.Y = item.Y;
+	                }
+	                else
+	                {
+	                	target.Cache[i] = new Vector(item.X, item.Y);
+	                }
+            	}
             }
         }
 
@@ -165,7 +146,6 @@ namespace Cipher.Ciphers.Keys
 					return 31 * X + Y;
 				}
 			}
-
 
             public override string ToString()
             {

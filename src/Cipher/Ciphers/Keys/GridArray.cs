@@ -85,10 +85,10 @@ namespace Cipher.Ciphers.Keys
         /// <summary>
         /// Swap to random rows
         /// </summary>
-        public void SwapRows()
+        public void SwapRows(Random random)
         {
-            byte rowA = (byte)MathsUtilities.RandomInstance.Next(Height);
-            byte rowB = (byte)MathsUtilities.RandomInstance.Next(Height);
+            byte rowA = (byte)random.Next(Height);
+            byte rowB = (byte)random.Next(Height);
 
             if (rowA == rowB) return;
             for (byte offset = 0; offset < Width; offset++)
@@ -100,10 +100,10 @@ namespace Cipher.Ciphers.Keys
         /// <summary>
         /// Swap two random columns
         /// </summary>
-        public void SwapColumns()
+        public void SwapColumns(Random random)
         {
-            byte colA = (byte)MathsUtilities.RandomInstance.Next(Width);
-            byte colB = (byte)MathsUtilities.RandomInstance.Next(Width);
+            byte colA = (byte)random.Next(Width);
+            byte colB = (byte)random.Next(Width);
 
             if (colA == colB) return;
             for (byte offset = 0; offset < Height; offset++)
@@ -176,11 +176,11 @@ namespace Cipher.Ciphers.Keys
         /// <summary>
         /// Swap two random elements in the array
         /// </summary>
-        public void Swap()
+        public void Swap(Random random)
         {
             Swap(
-                (byte)MathsUtilities.RandomInstance.Next(Width), (byte)MathsUtilities.RandomInstance.Next(Height),
-                (byte)MathsUtilities.RandomInstance.Next(Width), (byte)MathsUtilities.RandomInstance.Next(Height)
+                (byte)random.Next(Width), (byte)random.Next(Height),
+                (byte)random.Next(Width), (byte)random.Next(Height)
             );
         }
 
@@ -209,26 +209,26 @@ namespace Cipher.Ciphers.Keys
         /// </summary>
         public virtual void Shuffle()
         {
-            Random ThisRandom = MathsUtilities.RandomInstance;
-            for(byte Index = (byte)(Width * Height - 1); Index > 1; Index--)
+            Random random = MathsUtilities.RandomInstance;
+            for(byte i = (byte)(Width * Height - 1); i > 1; i--)
             {
-                byte SwapIndex = (byte)ThisRandom.Next(Index);
-                Index--;
-                Swap(Index % Width, Index / Width, SwapIndex % Width, SwapIndex / Width);
+                byte swap = (byte)random.Next(i);
+                i--;
+                Swap(i % Width, i / Width, swap % Width, swap / Width);
             }
         }
 
         /// <summary>
         /// Copy array to GridArray
         /// </summary>
-        /// <param name="Target">GridArray to copy to</param>
-        public virtual void CopyTo(GridArray Target)
+        /// <param name="target">GridArray to copy to</param>
+        public virtual void CopyTo(GridArray target)
         {
-            for(byte X = 0; X < Width; X++)
+            for(byte x = 0; x < Width; x++)
             {
-                for(byte Y = 0; Y < Height; Y++)
+                for(byte y = 0; y < Height; y++)
                 {
-                    Target.Elements[X, Y] = Elements[X, Y];
+                    target.Elements[x, y] = Elements[x, y];
                 }
             }
         }
@@ -237,9 +237,9 @@ namespace Cipher.Ciphers.Keys
         public override string ToString()
         {
             StringBuilder output = new StringBuilder(Width * Height);
-            foreach(byte Character in Elements)
+            foreach(byte character in Elements)
             {
-                output.Append((char)(Character + 'A'));
+                output.Append((char)(character + 'A'));
             }
 
             return output.ToString();

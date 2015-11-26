@@ -7,160 +7,187 @@ using System.Linq;
 
 namespace Cipher.Ciphers
 {
-    public class Playfair<TArray> : DefaultCipher<CachingGridArray, TArray>
-        where TArray : ITextArray<byte>, new()
+    public class Playfair : DefaultCipher<CachingGridArray, LetterTextArray>
 	{
-        public const byte WIDTH = 5;
-        public const byte HEIGHT = 5;
+        public const byte Width = 5;
+        public const byte Height = 5;
 
-		public int MaxIterations = 5;
+		public int MaxIterations = 10;
 		public int InternalIterations = 10000;
         public int OtherIterations = 20;
         public double OtherIterationsChange = 0.2;
 
 		public Playfair(TextScorer scorer) : base(scorer) { }
-
-        public override TArray Decode(TArray cipher, CachingGridArray key, TArray decoded)
-        {
-            return Decode(cipher, key, decoded, CreateCharacters(cipher, key));
-        }
-
-        public TArray Decode(TArray Text, CachingGridArray Key, TArray Decoded, CachingGridArray.Vector[] Characters)
+		
+		public CachingGridArray.Vector[] GenerateLookup(LetterTextArray text, CachingGridArray key)
 		{
-            int Length = Text.Count;
-            for (int Index = 0; Index < Length; Index += 2)
+			CachingGridArray.Vector[] lookup = new CachingGridArray.Vector[text.Count];
+			for(int i = 0; i < text.Count; i++)
 			{
-                CachingGridArray.Vector A = Characters[Index];
-                CachingGridArray.Vector B = Characters[Index + 1];
+				lookup[i] = key.Cache[text[i]];
+			}
+			
+			return lookup;
+		}
+		
+		public override LetterTextArray Decode(LetterTextArray text, CachingGridArray key, LetterTextArray decoded)
+		{
+			return Decode(GenerateLookup(text, key), key, decoded);
+		}
 
-                byte AColumn = A.X;
-                byte ARow = A.Y;
+		protected LetterTextArray Decode(CachingGridArray.Vector[] text, CachingGridArray key, LetterTextArray decoded)
+		{
+            for (int i = 0; i < text.Length; i += 2)
+			{
+            	CachingGridArray.Vector a = text[i];
+            	CachingGridArray.Vector b = text[i + 1];
 
-                byte BColumn = B.X;
-                byte BRow = B.Y;
+                byte aX = a.X;
+                byte aY = a.Y;
 
-                if(ARow == BRow)
+                byte bX = b.X;
+                byte bY = b.Y;
+
+                if(aY == bY)
                 {
                     // Modulus hack to work with negative number
-                    Decoded[Index] = Key.Elements[(AColumn - 1 + WIDTH) % WIDTH, ARow];
-                    Decoded[Index + 1] = Key.Elements[(BColumn - 1 + WIDTH) % WIDTH, BRow];
+                    decoded[i] = key.Elements[(aX - 1 + Width) % Width, aY];
+                    decoded[i + 1] = key.Elements[(bX - 1 + Width) % Width, bY];
                 }
-                else if (AColumn == BColumn)
+                else if (aX == bX)
                 {
-                    Decoded[Index] = Key.Elements[AColumn, (ARow - 1 + HEIGHT) % HEIGHT];
-                    Decoded[Index + 1] = Key.Elements[AColumn, (BRow - 1 + HEIGHT) % HEIGHT];
+                    decoded[i] = key.Elements[aX, (aY - 1 + Height) % Height];
+                    decoded[i + 1] = key.Elements[aX, (bY - 1 + Height) % Height];
                 }
                 else
                 {
-                    Decoded[Index] = Key.Elements[BColumn, ARow];
-                    Decoded[Index + 1] = Key.Elements[AColumn, BRow];
+                    decoded[i] = key.Elements[bX, aY];
+                    decoded[i + 1] = key.Elements[aX, bY];
                 }
 			}
-			return Decoded;
+			return decoded;
 		}
 
-		public override ICipherResult<CachingGridArray, TArray> Crack(TArray Text)
+		public override ICipherResult<CachingGridArray, LetterTextArray> Crack(LetterTextArray cipher)
 		{
-            byte[] Original = new byte[WIDTH * HEIGHT];
-            int OriginalLength = WIDTH * HEIGHT;
-            for (byte I = 0; I < OriginalLength; I++)
+			// We improve the key every time, so cannot run in parallel :(.
+
+			var result = CrackSingle(cipher, 0);
+        	for(int i = 1; i < MaxIterations; i++)
+        	{
+        		CachingGridArray currentKey = new CachingGridArray(Width, Height, 26);
+				result.Key.CopyTo(currentKey);
+        		var newRes = CrackSingle(cipher, i, currentKey);
+        		if(newRes.Score > result.Score) result = newRes;
+        	}
+        	
+        	return result;
+		}
+
+        protected void ModifyKey(Random random, CachingGridArray key)
+        {
+        	switch (random.Next(50))
+	        {
+	            case 0:
+	                key.SwapRows(random);
+	                break;
+	            case 1:
+	                key.SwapColumns(random);
+	                break;
+	            case 2:
+	                key.ReverseSquare();
+	                break;
+	            case 3:
+	                key.ReverseColumns();
+	                break;
+	            case 4:
+	                key.ReverseRows();
+	                break;
+	            default:
+	                key.Swap(random);
+	                break;
+	        }
+        }
+        
+        protected ICipherResult<CachingGridArray, LetterTextArray> CrackSingle(LetterTextArray text, int iter)
+        {
+        	byte[] original = new byte[Width * Height];
+            int originalLength = Width * Height;
+            for (byte i = 0; i < originalLength; i++)
             {
-                Original[I] = (byte)(I >= 9 ? I + 1 : I);
+                original[i] = (byte)(i >= 9 ? i + 1 : i);
             }
-            CachingGridArray BestKey = new CachingGridArray(WIDTH, HEIGHT, Original);
-			double BestScore = Double.NegativeInfinity;
+            
+        	CachingGridArray bestKey = new CachingGridArray(Width, Height, original, 26);
+            bestKey.Shuffle();
+            return CrackSingle(text, iter, bestKey);
+        }
+        
+        protected ICipherResult<CachingGridArray, LetterTextArray> CrackSingle(LetterTextArray text, int iter, CachingGridArray bestKey)
+        {
+        	Console.WriteLine("Starting " + iter + " with " + bestKey);
 
-            CachingGridArray ParentKey = new CachingGridArray((byte[,])BestKey.Elements.Clone());
-			double ParentScore = BestScore;
+        	CachingGridArray currentKey = new CachingGridArray(Width, Height, 26);
+			bestKey.CopyTo(currentKey);
+			CachingGridArray.Vector[] lookup = GenerateLookup(text, currentKey);
 
-			TArray Decoded = Create(Text.Count);
-            CachingGridArray ChildKey = new CachingGridArray(WIDTH, HEIGHT);
-            ParentKey.CopyTo(ChildKey);
-			double ChildScore;
-
-            CachingGridArray.Vector[] Characters = CreateCharacters(Text, ChildKey);
-
-			for (int Iteration = 0; Iteration < MaxIterations; Iteration++)
-			{
-				ParentKey.Shuffle();
-				Decoded = Decode(Text, ParentKey, Decoded);
-				ParentScore = scorer(Decoded);
-
-				ParentKey.CopyTo(ChildKey);
-
-                for(double Iter = OtherIterations; Iter >= 0; Iter -= OtherIterationsChange)
+			LetterTextArray decoded = new LetterTextArray(text.Count);
+			double bestScore = scorer(Decode(lookup, bestKey, decoded));
+			
+			CachingGridArray parentKey = new CachingGridArray(Width, Height, 26);
+			bestKey.CopyTo(parentKey);
+			double parentScore = bestScore; 
+			
+			Random random = MathsUtilities.RandomInstance;
+			for(double temp = OtherIterations; temp >= 0; temp -= OtherIterationsChange)
+            {
+                for(int i = 0; i < InternalIterations; i++)
                 {
-                    for(int Count = 0; Count < InternalIterations; Count++)
+                	ModifyKey(random, currentKey);
+
+                    double childScore = scorer(Decode(lookup, currentKey, decoded));
+                    double deltaScore = childScore - parentScore;
+
+                    if(deltaScore >= 0)
                     {
-                        switch (MathsUtilities.RandomInstance.Next(50))
+                    	// Improved score, copy over
+                        parentScore = childScore;
+                        currentKey.CopyTo(parentKey);
+                        
+                        // Best score so far
+                        if(parentScore > bestScore)
                         {
-                            case 0:
-                                ChildKey.SwapRows();
-                                break;
-                            case 1:
-                                ChildKey.SwapColumns();
-                                break;
-                            case 2:
-                                ChildKey.ReverseSquare();
-                                break;
-                            case 3:
-                                ChildKey.ReverseColumns();
-                                break;
-                            case 4:
-                                ChildKey.ReverseRows();
-                                break;
-                            default:
-                                ChildKey.Swap();
-                                break;
+                        	bestScore = parentScore;
+                        	parentKey.CopyTo(bestKey);
                         }
+                    }
+                    else if(temp > 0)
+                    {
+                        double probability = Math.Exp(deltaScore / temp);
 
-                        Decoded = Decode(Text, ChildKey, Decoded, Characters);
-                        ChildScore = scorer(Decoded);
-
-                        double DiffScore = ChildScore - ParentScore;
-                        if(DiffScore >= 0)
+                        // If random probability, keep it anyway
+                        if(probability > random.NextDouble())
                         {
-                            ParentScore = ChildScore;
-                            ChildKey.CopyTo(ParentKey);
-                        }
-                        else if(Iter > 0)
-                        {
-                            double Prob = Math.Exp(DiffScore / Iter);
-
-                            // If random probability
-                            if(Prob > MathsUtilities.RandomInstance.NextDouble())
-                            {
-                                ParentScore = ChildScore;
-                                ChildKey.CopyTo(ParentKey);
-                            }
+                            parentScore = childScore;
+                            currentKey.CopyTo(parentKey);
                         }
                         else
                         {
-                            ParentKey.CopyTo(ChildKey);
+                        	// Otherwise fall back to the previous key
+                        	parentKey.CopyTo(currentKey);
                         }
                     }
+                    else
+                    {
+                    	// Otherwise fall back to the previous key
+                        parentKey.CopyTo(currentKey);
+                    }
                 }
-
-				if (ParentScore > BestScore)
-				{
-					BestScore = ParentScore;
-					ParentKey.CopyTo(BestKey);
-				}
-			}
-
-			return GetResult(Text, BestScore, BestKey, Decoded);
-		}
-
-        public CachingGridArray.Vector[] CreateCharacters(TArray Text, CachingGridArray Key)
-        {
-            int Length = Text.Count;
-            CachingGridArray.Vector[] Characters = new CachingGridArray.Vector[Length];
-            for (int Index = 0; Index < Length; Index++)
-            {
-                Characters[Index] = Key.cache[Text[Index]];
             }
-
-            return Characters;
+			
+			Console.WriteLine("Got " + bestScore + " using " + bestKey + " => " + Decode(lookup, bestKey, decoded));
+            
+            return GetResult(text, bestScore, bestKey, decoded);
         }
     }
 }

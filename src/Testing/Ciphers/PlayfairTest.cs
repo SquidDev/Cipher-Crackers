@@ -16,25 +16,27 @@ namespace Testing.Ciphers
         [Test]
         [Category("Cipher"), Category("Crack")]
         [TestCaseSource("Items")]
-        public void PlayfairDecode(string ciphertext, string plaintext, string key)
+        public void PlayfairDecode(string ciphertext, string plaintext, IEnumerable<string> keys)
         {
-            var cipher = new Playfair<LetterTextArray>(TextScorers.ScoreQuadgrams);
+            var cipher = new Playfair(TextScorers.ScoreQuadgrams);
 
-            CachingGridArray gArray = new CachingGridArray(5, 5, key.ToLetterArray());
-            Assert.AreEqual(plaintext, cipher.Decode(ciphertext, gArray).ToString());
+            foreach(string key in keys)
+            {
+	            CachingGridArray gArray = new CachingGridArray(5, 5, key.ToLetterArray(), 26);
+	            Assert.AreEqual(plaintext, cipher.Decode(ciphertext, gArray).ToString());
+            }
         }
 
         [Test]
         [Category("Cipher"), Category("Crack")]
         [TestCaseSource("Items")]
-        [Ignore]
-        public void PlayfairCrack(string ciphertext, string plaintext, string key)
+        public void PlayfairCrack(string ciphertext, string plaintext, IEnumerable<string> keys)
         {
-            var cipher = new Playfair<LetterTextArray>(TextScorers.ScoreQuadgrams);
+            var cipher = new Playfair(TextScorers.ScoreQuadgrams);
             var result = cipher.Crack(ciphertext);
 
             Assert.AreEqual(plaintext, result.Contents.ToString());
-            Assert.AreEqual(key, result.Key.ToString());
+            Assert.Contains(result.Key.ToString(), keys.ToList());
         }
         
         public IEnumerable<Object[]> Items
@@ -46,7 +48,7 @@ namespace Testing.Ciphers
                     {
                         item.Element("Ciphertext").Value,
                         item.Element("Plaintext").Value,
-                        item.Element("Key").Value,
+                        item.Elements("Key").Select(x => x.Value),
                     });
             }
         }

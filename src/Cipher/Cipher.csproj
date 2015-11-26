@@ -72,7 +72,6 @@
     <Compile Include="Utils\MathsUtilities.cs" />
     <Compile Include="Text\TextExtensions.cs" />
     <Compile Include="Utils\MatrixExtensions.cs" />
-    <Compile Include="Utils\AsyncUtils.cs" />
     <Compile Include="Text\ITextArray.cs" />
     <Compile Include="Text\LetterTextArray.cs" />
     <Compile Include="Text\CharacterTextArray.cs" />
