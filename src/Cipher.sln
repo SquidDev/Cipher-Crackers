@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cipher", "Cipher\Cipher.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CipherWPF", "CipherWPF\CipherWPF.csproj", "{FD3AD71C-49CC-4C7E-9ADC-693F58F8C85E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerformanceApp", "PerformanceApp\PerformanceApp.csproj", "{581AE33A-A870-4CE4-AED1-1248BB685A85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{FD3AD71C-49CC-4C7E-9ADC-693F58F8C85E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD3AD71C-49CC-4C7E-9ADC-693F58F8C85E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD3AD71C-49CC-4C7E-9ADC-693F58F8C85E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{581AE33A-A870-4CE4-AED1-1248BB685A85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{581AE33A-A870-4CE4-AED1-1248BB685A85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{581AE33A-A870-4CE4-AED1-1248BB685A85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{581AE33A-A870-4CE4-AED1-1248BB685A85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

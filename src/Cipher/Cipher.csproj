@@ -54,11 +54,14 @@
     <Compile Include="Ciphers\HillBrute.cs" />
     <Compile Include="Ciphers\HillCribbed.cs" />
     <Compile Include="Ciphers\KeyConverter.cs" />
+    <Compile Include="Ciphers\Keys\CachingGridArray.cs" />
     <Compile Include="Ciphers\RailFence.cs" />
     <Compile Include="Ciphers\ColumnarTransposition.cs" />
+    <Compile Include="Ciphers\Playfair.cs" />
     <Compile Include="Ciphers\Substitution.cs" />
     <Compile Include="Frequency\BigramStatistics.cs" />
     <Compile Include="Frequency\MonogramStatistics.cs" />
+    <Compile Include="Ciphers\Keys\GridArray.cs" />
     <Compile Include="Text\LetterNumberArray.cs" />
     <Compile Include="Ciphers\Vigenere.cs" />
     <Compile Include="Frequency\QuadgramStatistics.cs" />
@@ -84,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Ciphers\Keys" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

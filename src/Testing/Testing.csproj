@@ -72,9 +72,11 @@
     <Compile Include="Ciphers\HillTest.cs" />
     <Compile Include="Ciphers\RailFenceTest.cs" />
     <Compile Include="Ciphers\TranspositionTest.cs" />
+    <Compile Include="Ciphers\PlayfairTest.cs" />
     <Compile Include="Ciphers\SubstitutionTest.cs" />
     <Compile Include="Ciphers\CaeserTest.cs" />
     <Compile Include="Ciphers\VigenereTest.cs" />
+    <Compile Include="Tools\GridArrayTest.cs" />
     <Compile Include="Tools\LetterArrayTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\MatrixUtils.cs" />
@@ -87,7 +89,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestData\Analysis-NGram.xml" />
+    <Content Include="TestData\Analysis-NGram.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\Cipher-Hill.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -95,9 +99,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\Tools-NgramArray.xml">
+    	<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Cipher-Playfair.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\Analysis-NGram.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Cipher-Playfair.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="TestData\Tools-LetterArrays.xml">
