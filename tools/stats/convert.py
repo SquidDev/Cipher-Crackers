@@ -38,7 +38,7 @@ for i in xrange(len(res)):
 
 with open(name + ".h", "w") as x:
 	x.write("#pragma once\n")
-	x.write("\tconst float" + name + "[] = {\n")
+	x.write("const double " + name + "[] = {\n")
 	for item in res:
-		x.write("\t\t" + str(item) + ",\n")
-	x.write("\t};\n")
+		x.write("\t" + str(item) + ",\n")
+	x.write("};\n")
