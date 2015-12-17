@@ -1,22 +1,16 @@
 #pragma once
 
 #include <array>
-#include <cmath>
-#include <cstdio>
-#include <stdexcept>
-
-#include "quadgrams.hpp"
+#include <math.h>
 
 #include "../cipher.hpp"
-
-using namespace std;
-using namespace Cipher;
+#include "quadgrams.hpp"
 
 namespace Cipher { namespace Statistics {
-	template<int N, int Pow, class T> double score(const T text, const array<double, Pow> scores) {
+	template<int N, int Pow, class T> inline double score(const T& text, const std::array<double, Pow> scores) {
 		double score = 0;
 
-		size_t size = text.length;
+		size_t size = text.size();
 		if(size < N) return 0;
 
 		// Have to build up 'n' previous
@@ -30,9 +24,8 @@ namespace Cipher { namespace Statistics {
 			// The previous array is composed of [i * 26 * 26, (i + 1) * 26, i + 2]
 			cipher_t thisCharacter = text[i];
 
-			int sum = thisCharacter;
-			for (int x = 0; x < N - 2; x++)
-			{
+			unsigned int sum = thisCharacter;
+			for (size_t x = 0; x < N - 2; x++) {
 				sum += previous[x];
 				previous[x] = previous[x + 1] * 26;
 			}
@@ -44,5 +37,9 @@ namespace Cipher { namespace Statistics {
 		}
 
 		return score;
+	}
+	
+	template<class T> double score_quadgrams(const T& text) {
+		return score<4, 456976, T>(text, quadgrams);
 	}
 }}
