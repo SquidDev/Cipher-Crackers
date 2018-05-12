@@ -54,7 +54,10 @@ namespace Cipher.Ciphers
                 keys.Add(key);
             }
 
-            return keys.RunAsync(k => Crack(cipher, k)).Max((x, y) => x.Score.CompareTo(y.Score));
+            return keys
+            	.AsParallel()
+            	.Select(x => Crack(cipher, x))
+            	.MaxWith(x => x.Score);
         }
         
         public ICipherResult<byte[], TText> Crack(string cipher, byte keyLength)

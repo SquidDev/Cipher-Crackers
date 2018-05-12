@@ -1,27 +1,35 @@
-using Cipher.Frequency;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+
+using Cipher.Frequency;
 
 namespace Cipher.Utils
 {
     public static class MathsUtilities
     {
-        public static Random RandomInstance = new Random();
+        private static int seed = Environment.TickCount;
+    	private static readonly ThreadLocal<Random> RandomFactory = new ThreadLocal<Random>(() => new Random(Interlocked.Increment(ref seed)));
+
+    	public static Random RandomInstance
+    	{
+    		get { return RandomFactory.Value; }
+    	}
 
         /// <summary>
         /// Fisher Yates shuffle
         /// </summary>
-        public static void Shuffle<T>(this IList<T> Collection)
+        public static void Shuffle<T>(this IList<T> collection)
         {
-            Random ThisRandom = RandomInstance;
-            for (int Index = Collection.Count; Index > 1; Index--)
+            Random thisRandom = RandomInstance;
+            for (int Index = collection.Count; Index > 1; Index--)
             {
                 // Pick random element to swap.
-                int SwapIndex = ThisRandom.Next(Index);
+                int SwapIndex = thisRandom.Next(Index);
                 // Swap.
-                T tmp = Collection[SwapIndex];
-                Collection[SwapIndex] = Collection[Index - 1];
-                Collection[Index - 1] = tmp;
+                T tmp = collection[SwapIndex];
+                collection[SwapIndex] = collection[Index - 1];
+                collection[Index - 1] = tmp;
             }
         }
 

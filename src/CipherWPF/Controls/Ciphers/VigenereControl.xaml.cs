@@ -24,7 +24,7 @@ namespace Cipher.WPF.Controls.Ciphers
 
         public string Decode(string input)
         {
-        	return Cipher.Decode(input, KeyConverters.String.FromString(input)).ToString();
+        	return Cipher.Decode(input, KeyConverters.String.FromString(Key.Text)).ToString();
         }
 
         public async Task<string> Crack(string Input)

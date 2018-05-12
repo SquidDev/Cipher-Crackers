@@ -40,10 +40,12 @@ namespace Cipher.Ciphers
             bestKey.CopyTo(currentKey);
             
             int count = 0;
+            Random random = MathsUtilities.RandomInstance;
             while (count < InternalIterations)
             {
                 //Swap characters
-                currentKey.Swap(MathsUtilities.RandomInstance.Next(26), MathsUtilities.RandomInstance.Next(26));
+                // TODO: Per-thread random
+                currentKey.Swap(random.Next(26), random.Next(26));
 
                 Decode(cipher, currentKey, decoded);
                 double currentScore = scorer(decoded);
@@ -70,7 +72,10 @@ namespace Cipher.Ciphers
 
         public override ICipherResult<byte[], TText> Crack(TText cipher)
         {
-        	return AsyncUtils.RunAsync(MaxIterations, () => CrackSingle(cipher)).MaxWith(x => x.Score);
+        	return Enumerable.Range(0, MaxIterations)
+        		.AsParallel()
+        		.Select(x => CrackSingle(cipher))
+        		.MaxWith(x => x.Score);
         }
 		
 		public byte[] Invert(byte[] key)
